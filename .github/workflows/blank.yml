@@ -1,0 +1,23 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main # 监听main分支
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup qshell
+        uses: foxundermoon/setup-qshell@v5
+        with:
+          version: '2.6.2'
+      - name: use qshell deploy
+        run: |
+          echo "The code is checked out to ${GITHUB_WORKSPACE}"
+          qshell account ${{ secrets.QINIU_AK }} ${{ secrets.QINIU_SK }} nodjoy
+          qshell qupload2 --src-dir=/home/runner/work/technod.cn/technod.cn --bucket=technod-cn --overwrite=true
+          curl -X GET 'https://api.day.app/${{ secrets.BARK_KEY }}/technod.cn同步至七牛云'

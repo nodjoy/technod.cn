@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>vue on TechNod</title>
+    <link>https://technod.cn/tags/vue/</link>
+    <description>Recent content in vue on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sat, 24 Dec 2022 17:53:34 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/vue/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用jspdf导出pdf 内容被截断的问题</title>
+      <link>https://technod.cn/note/20221224/jspdf.html</link>
+      <pubDate>Sat, 24 Dec 2022 17:53:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20221224/jspdf.html</guid>
+      <description>问题 分页时内容被截断 解决 环境 vue2 依赖包：jspdf html2canvas jspdf-autotable 第一种解决方案&amp;mdash;使用jspdf-autotable 适用于内容为表格的情况 js</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Portainer on TechNod</title>
+    <link>https://technod.cn/tags/portainer/</link>
+    <description>Recent content in Portainer on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 26 Dec 2022 09:25:15 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/portainer/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker可视化管理工具--Portainer的配置与使用</title>
+      <link>https://technod.cn/note/20221226/portainer.html</link>
+      <pubDate>Mon, 26 Dec 2022 09:25:15 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20221226/portainer.html</guid>
+      <description>安装部署portainer-ce # 创建目录 mkdir -p app/portainer/portainer_data # 修改权限 chmod -R 777 app/portainer/portainer_data # 进入目录 cd app/portainer # 启动容器 docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/portainer_data:/data portainer/portainer-ce:latest 访问portaine</description>
+    </item>
+    
+  </channel>
+</rss>

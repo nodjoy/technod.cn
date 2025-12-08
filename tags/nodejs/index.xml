@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>nodejs on TechNod</title>
+    <link>https://technod.cn/tags/nodejs/</link>
+    <description>Recent content in nodejs on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 25 Jul 2025 13:08:26 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OCR识别图片文字内容</title>
+      <link>https://technod.cn/note/20250725/ocr.html</link>
+      <pubDate>Fri, 25 Jul 2025 13:08:26 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20250725/ocr.html</guid>
+      <description>使用python-ddddocr库识别图片文字内容 环境： conda create -n py312 python=3.12 &amp;amp;&amp;amp; conda activate py312 依赖安装：pip install ddddocr flask Python代码: from flask import Flask, request import ddddocr import base64 import json from PIL</description>
+    </item>
+    
+    <item>
+      <title>使用docker-compose一键部署nodejs项目</title>
+      <link>https://technod.cn/leaf/202206/nodejs-docker.html</link>
+      <pubDate>Tue, 14 Jun 2022 16:51:33 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202206/nodejs-docker.html</guid>
+      <description>环境 OS: Ubuntu 软件: docker、docker-compose 目录结构 docker-compose.yml文件 version: &amp;#34;2&amp;#34; services: mysql: image: mysql:8.0.19 container_name: mysql restart: always volumes: - ./data/mysql:/var/lib/mysql # mysq</description>
+    </item>
+    
+  </channel>
+</rss>

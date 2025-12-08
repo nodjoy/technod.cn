@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Video on TechNod</title>
+    <link>https://technod.cn/tags/video/</link>
+    <description>Recent content in Video on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 30 Apr 2023 21:05:40 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/video/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Video player test(1080p)</title>
+      <link>https://technod.cn/part/20230430/video.html</link>
+      <pubDate>Sun, 30 Apr 2023 21:05:40 +0800</pubDate>
+      
+      <guid>https://technod.cn/part/20230430/video.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Video player test(4K)</title>
+      <link>https://technod.cn/part/20230430/video4k.html</link>
+      <pubDate>Sun, 30 Apr 2023 21:05:30 +0800</pubDate>
+      
+      <guid>https://technod.cn/part/20230430/video4k.html</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

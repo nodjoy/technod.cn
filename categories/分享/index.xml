@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>分享 on TechNod</title>
+    <link>https://technod.cn/categories/%E5%88%86%E4%BA%AB/</link>
+    <description>Recent content in 分享 on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 30 Apr 2023 21:05:40 +0800</lastBuildDate><atom:link href="https://technod.cn/categories/%E5%88%86%E4%BA%AB/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Video player test(1080p)</title>
+      <link>https://technod.cn/part/20230430/video.html</link>
+      <pubDate>Sun, 30 Apr 2023 21:05:40 +0800</pubDate>
+      
+      <guid>https://technod.cn/part/20230430/video.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Video player test(4K)</title>
+      <link>https://technod.cn/part/20230430/video4k.html</link>
+      <pubDate>Sun, 30 Apr 2023 21:05:30 +0800</pubDate>
+      
+      <guid>https://technod.cn/part/20230430/video4k.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Golang与PHP的AES加密解密互转</title>
+      <link>https://technod.cn/share/202208/aes-lib.html</link>
+      <pubDate>Thu, 11 Aug 2022 20:09:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/share/202208/aes-lib.html</guid>
+      <description>Golang与PHP的AES加密解密互转 使用Github上的mervick/aes-everywhere加密库 mervick/aes-eve</description>
+    </item>
+    
+    <item>
+      <title>SEO搜索引擎优化-常用的站长平台总结</title>
+      <link>https://technod.cn/share/202101/zhanzhangurl/</link>
+      <pubDate>Fri, 15 Jan 2021 13:24:58 +0800</pubDate>
+      
+      <guid>https://technod.cn/share/202101/zhanzhangurl/</guid>
+      <description>百度: https://ziyuan.baidu.com 谷歌: https://analytics.google.com 腾讯: https://mta.qq.com 搜狗: http://zhanzhang.sogou.com 360: http://zhanzhang.so.com 必应: https://www.bing.com/webmasters/homepage 头条: https://zhanzhang.toutiao.com 神马: https://zhanzhang.sm.cn</description>
+    </item>
+    
+  </channel>
+</rss>

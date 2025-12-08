@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>VM on TechNod</title>
+    <link>https://technod.cn/tags/vm/</link>
+    <description>Recent content in VM on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 17 May 2024 09:12:55 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/vm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Proxmox虚拟机配置NAT网络</title>
+      <link>https://technod.cn/note/20240517/vm-nat.html</link>
+      <pubDate>Fri, 17 May 2024 09:12:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20240517/vm-nat.html</guid>
+      <description>环境准备 OS: Proxmox 7.4(Debian 11) 软件: dnsmasq 配置 新建网络 新建一个网络,例如 vmbr2 编辑网络配置 编辑网络配置： vi /etc/network/interfaces 末尾添加以下内容： post-up echo 1 &amp;gt; /proc/sys/net/ipv4/ip_forward post-up iptables -t nat -A POSTROUTING -s &amp;#39;192.168.100.0/24&amp;#39; -o vmbr0 -j MASQUERADE post-down</description>
+    </item>
+    
+  </channel>
+</rss>

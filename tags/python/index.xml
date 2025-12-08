@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>python on TechNod</title>
+    <link>https://technod.cn/tags/python/</link>
+    <description>Recent content in python on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 25 Jul 2025 13:08:26 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OCR识别图片文字内容</title>
+      <link>https://technod.cn/note/20250725/ocr.html</link>
+      <pubDate>Fri, 25 Jul 2025 13:08:26 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20250725/ocr.html</guid>
+      <description>使用python-ddddocr库识别图片文字内容 环境： conda create -n py312 python=3.12 &amp;amp;&amp;amp; conda activate py312 依赖安装：pip install ddddocr flask Python代码: from flask import Flask, request import ddddocr import base64 import json from PIL</description>
+    </item>
+    
+  </channel>
+</rss>

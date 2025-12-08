@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>LNMP on TechNod</title>
+    <link>https://technod.cn/tags/lnmp/</link>
+    <description>Recent content in LNMP on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sat, 21 May 2022 20:56:46 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/lnmp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用docker-compose一键搭建LNMP环境</title>
+      <link>https://technod.cn/leaf/202205/lnmp-docker.html</link>
+      <pubDate>Sat, 21 May 2022 20:56:46 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202205/lnmp-docker.html</guid>
+      <description>环境 OS: Ubuntu 软件: docker、docker-compose 目录结构 我的目录结构 创建docker-compose.yml文件 version: &amp;#34;2&amp;#34; services: php-fpm: image: phpdockerio/php74-fpm container_name: php74 working_dir: /application</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu搭建LNMP环境</title>
+      <link>https://technod.cn/leaf/20211110/lnmp.html</link>
+      <pubDate>Wed, 10 Nov 2021 16:59:27 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/20211110/lnmp.html</guid>
+      <description>安装Nginx sudo apt install nginx 安装MySQL sudo apt install mysql-server-5.7 添加php源 sudo add-apt-repository ppa:ondrej/php sudo apt update 也可以使用ppa国内源 deb https://launchpad.proxy.ustclug.org/ondrej/php/ubuntu focal main 安装PHP sudo apt install php7.4 sudo apt install php7.4-fpm 安装PHP扩展 sudo</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>技术 on TechNod</title>
+    <link>https://technod.cn/categories/%E6%8A%80%E6%9C%AF/</link>
+    <description>Recent content in 技术 on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 06 Mar 2024 10:23:55 +0800</lastBuildDate><atom:link href="https://technod.cn/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用tcconfig为ipv6限速实践</title>
+      <link>https://technod.cn/tech/202403/tc_ipv6.html</link>
+      <pubDate>Wed, 06 Mar 2024 10:23:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tech/202403/tc_ipv6.html</guid>
+      <description>环境准备 OS: Ubuntu 软件: iperf tcconfig 安装iperf和tcconfig 在服务端A 安装iperf和tcconfig 在客户端B 安装iperf iperf apt install iperf tcconfig 下载tcc</description>
+    </item>
+    
+    <item>
+      <title>Proxmox升级openssh版本</title>
+      <link>https://technod.cn/tech/20240207/proxmox.html</link>
+      <pubDate>Wed, 07 Feb 2024 13:48:06 +0800</pubDate>
+      
+      <guid>https://technod.cn/tech/20240207/proxmox.html</guid>
+      <description>openssh版本升级至9.6p1 环境 OS: Proxmox7.4 (Debian11) 设置apt源 sed -i &amp;#39;s@deb.debian.org@mirrors.huaweicloud.com@g&amp;#39; /etc/apt/sources.list sed -i &amp;#39;s@ftp.debian.org@mirrors.huaweicloud.com@g&amp;#39; /etc/apt/sources.list apt update 取消proxmox对软件卸载的限制(暂时移除pve-apt-ho</description>
+    </item>
+    
+    <item>
+      <title>Harbor的安装配置与使用</title>
+      <link>https://technod.cn/leaf/202207/harbor.html</link>
+      <pubDate>Thu, 07 Jul 2022 17:03:45 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202207/harbor.html</guid>
+      <description>准备工作 环境 OS: CentOS 7.6 安装所需软件 Docker Docker-Compose 其它 域名 https证书 安装Harbor 下载安装包 解压安装包并进入安装目录 tar -zxvf harbor-offline-installer-v2.5.2.tgz cd harbor 编辑harbor.yam</description>
+    </item>
+    
+    <item>
+      <title>使用docker-compose一键部署nodejs项目</title>
+      <link>https://technod.cn/leaf/202206/nodejs-docker.html</link>
+      <pubDate>Tue, 14 Jun 2022 16:51:33 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202206/nodejs-docker.html</guid>
+      <description>环境 OS: Ubuntu 软件: docker、docker-compose 目录结构 docker-compose.yml文件 version: &amp;#34;2&amp;#34; services: mysql: image: mysql:8.0.19 container_name: mysql restart: always volumes: - ./data/mysql:/var/lib/mysql # mysq</description>
+    </item>
+    
+    <item>
+      <title>使用docker-compose一键搭建LNMP环境</title>
+      <link>https://technod.cn/leaf/202205/lnmp-docker.html</link>
+      <pubDate>Sat, 21 May 2022 20:56:46 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202205/lnmp-docker.html</guid>
+      <description>环境 OS: Ubuntu 软件: docker、docker-compose 目录结构 我的目录结构 创建docker-compose.yml文件 version: &amp;#34;2&amp;#34; services: php-fpm: image: phpdockerio/php74-fpm container_name: php74 working_dir: /application</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu搭建LNMP环境</title>
+      <link>https://technod.cn/leaf/20211110/lnmp.html</link>
+      <pubDate>Wed, 10 Nov 2021 16:59:27 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/20211110/lnmp.html</guid>
+      <description>安装Nginx sudo apt install nginx 安装MySQL sudo apt install mysql-server-5.7 添加php源 sudo add-apt-repository ppa:ondrej/php sudo apt update 也可以使用ppa国内源 deb https://launchpad.proxy.ustclug.org/ondrej/php/ubuntu focal main 安装PHP sudo apt install php7.4 sudo apt install php7.4-fpm 安装PHP扩展 sudo</description>
+    </item>
+    
+    <item>
+      <title>记一次Docker mysql容器在windows虚拟机无法启动问题</title>
+      <link>https://technod.cn/leaf/202109/docker_err.html</link>
+      <pubDate>Sat, 11 Sep 2021 00:22:13 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202109/docker_err.html</guid>
+      <description>环境 使用的环境是Windows10+homestead(VirtualBox) 启动过程 运行sudo docker-compose up -d 容器可以正常启动 运行sudo docker exec -it db-mysql</description>
+    </item>
+    
+    <item>
+      <title>Node-Koa2之axios请求云之讯短信发送接口和soap请求WebService</title>
+      <link>https://technod.cn/leaf/202103/axios-soap.html</link>
+      <pubDate>Wed, 10 Mar 2021 11:24:18 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202103/axios-soap.html</guid>
+      <description>axios请求云之讯短信接口实现短信发送 安装axios npm install axios --save 方法实现 static async sendMessage(ctx){ let param = Math.random().toString().substr(2, 4); //生成四位随机数 let phone = &amp;#39;157********&amp;#39;; const url = &amp;#39;https://open.ucpaas.com/ol/sms/sendsms&amp;#39;; const axios = require(&amp;#39;axios&amp;#39;); let sendRe = await axios({ method:</description>
+    </item>
+    
+    <item>
+      <title>Linux开启bbr加速</title>
+      <link>https://technod.cn/leaf/202102/bbr.html</link>
+      <pubDate>Tue, 09 Feb 2021 13:09:10 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202102/bbr.html</guid>
+      <description>安装bbr加速 进入/usr/local/src目录，下载bbr.sh文件 cd /usr/local/src sudo wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh 添加可执行权限 sudo chmod +x bbr.sh 执行该脚本文件,安装完成后提示按y</description>
+    </item>
+    
+    <item>
+      <title>PHP&amp;kuaidi.com实现快递查询</title>
+      <link>https://technod.cn/leaf/202101/kuaidiapi.html</link>
+      <pubDate>Tue, 26 Jan 2021 16:14:21 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202101/kuaidiapi.html</guid>
+      <description>申请快递查询API授权key kuaidi.com SDK文件KDApi.php /** * 物流信息查询接口SDK */ class KDAPI{ private $_APPKEY = &amp;#39;twde5d8ef***********&amp;#39;; //改为您自己的key private $_APIURL = &amp;#34;https://highapi.kuaidi.com/openapi-querycountordernumber.html?&amp;#34;; private $_show = 0; private $_muti</description>
+    </item>
+    
+    <item>
+      <title>Linux-使用防火墙firewalld开放端口</title>
+      <link>https://technod.cn/leaf/20210122/linux-firewalld.html</link>
+      <pubDate>Fri, 22 Jan 2021 14:58:14 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/20210122/linux-firewalld.html</guid>
+      <description>查看当前开了哪些端口其实一个服务对应一个端口，每个服务对应/usr/lib/firewalld/services下面一个xml文件 firewall-cmd --list-services 通过f</description>
+    </item>
+    
+    <item>
+      <title>使用Linux定时任务-Crontab 完成MySQL数据库的备份和表操作</title>
+      <link>https://technod.cn/leaf/202101/crontab_linux.html</link>
+      <pubDate>Tue, 19 Jan 2021 17:39:31 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202101/crontab_linux.html</guid>
+      <description>crontab基本命令 crontab -l //查看定时任务 crontab -e //编辑定时任务 crontab -r //删除定时任务 crontab常用写法 每分钟执行 */1 * * * * command 每小时0分执行</description>
+    </item>
+    
+  </channel>
+</rss>

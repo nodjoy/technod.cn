@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>deb on TechNod</title>
+    <link>https://technod.cn/tags/deb/</link>
+    <description>Recent content in deb on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 11 Aug 2022 21:23:57 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/deb/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>deb包的打包流程</title>
+      <link>https://technod.cn/note/202208/make-deb.html</link>
+      <pubDate>Thu, 11 Aug 2022 21:23:57 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/202208/make-deb.html</guid>
+      <description>deb包的打包流程 以打包二进制文件为例 创建目录 mkdir make-deb cd make-deb mkdir -p opt/mydeb/bin 将准备好的二进制文件放入opt/mydeb/bin目录 创建DEBIAN目录 mkdir DEBIAN 创</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on TechNod</title>
+    <link>https://technod.cn/tags/</link>
+    <description>Recent content in Tags on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 25 Jul 2025 13:08:26 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ddddocr</title>
+      <link>https://technod.cn/tags/ddddocr/</link>
+      <pubDate>Fri, 25 Jul 2025 13:08:26 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/ddddocr/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>flask</title>
+      <link>https://technod.cn/tags/flask/</link>
+      <pubDate>Fri, 25 Jul 2025 13:08:26 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/flask/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nodejs</title>
+      <link>https://technod.cn/tags/nodejs/</link>
+      <pubDate>Fri, 25 Jul 2025 13:08:26 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/nodejs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ocr</title>
+      <link>https://technod.cn/tags/ocr/</link>
+      <pubDate>Fri, 25 Jul 2025 13:08:26 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/ocr/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://technod.cn/tags/python/</link>
+      <pubDate>Fri, 25 Jul 2025 13:08:26 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>DHCP</title>
+      <link>https://technod.cn/tags/dhcp/</link>
+      <pubDate>Fri, 17 May 2024 09:12:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/dhcp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Proxmox</title>
+      <link>https://technod.cn/tags/proxmox/</link>
+      <pubDate>Fri, 17 May 2024 09:12:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/proxmox/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>VM</title>
+      <link>https://technod.cn/tags/vm/</link>
+      <pubDate>Fri, 17 May 2024 09:12:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/vm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>网络</title>
+      <link>https://technod.cn/tags/%E7%BD%91%E7%BB%9C/</link>
+      <pubDate>Fri, 17 May 2024 09:12:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/%E7%BD%91%E7%BB%9C/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>iperf</title>
+      <link>https://technod.cn/tags/iperf/</link>
+      <pubDate>Wed, 06 Mar 2024 10:23:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/iperf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ipv6</title>
+      <link>https://technod.cn/tags/ipv6/</link>
+      <pubDate>Wed, 06 Mar 2024 10:23:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/ipv6/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tc</title>
+      <link>https://technod.cn/tags/tc/</link>
+      <pubDate>Wed, 06 Mar 2024 10:23:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/tc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Debian</title>
+      <link>https://technod.cn/tags/debian/</link>
+      <pubDate>Wed, 07 Feb 2024 13:48:06 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/debian/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Linux</title>
+      <link>https://technod.cn/tags/linux/</link>
+      <pubDate>Wed, 07 Feb 2024 13:48:06 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OpenSSH</title>
+      <link>https://technod.cn/tags/openssh/</link>
+      <pubDate>Wed, 07 Feb 2024 13:48:06 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/openssh/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://technod.cn/tags/docker/</link>
+      <pubDate>Thu, 24 Aug 2023 19:58:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>wsl</title>
+      <link>https://technod.cn/tags/wsl/</link>
+      <pubDate>Thu, 24 Aug 2023 19:58:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/wsl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Video</title>
+      <link>https://technod.cn/tags/video/</link>
+      <pubDate>Sun, 30 Apr 2023 21:05:40 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/video/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Portainer</title>
+      <link>https://technod.cn/tags/portainer/</link>
+      <pubDate>Mon, 26 Dec 2022 09:25:15 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/portainer/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jspdf</title>
+      <link>https://technod.cn/tags/jspdf/</link>
+      <pubDate>Sat, 24 Dec 2022 17:53:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/jspdf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pdf</title>
+      <link>https://technod.cn/tags/pdf/</link>
+      <pubDate>Sat, 24 Dec 2022 17:53:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/pdf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vue</title>
+      <link>https://technod.cn/tags/vue/</link>
+      <pubDate>Sat, 24 Dec 2022 17:53:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/vue/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>deb</title>
+      <link>https://technod.cn/tags/deb/</link>
+      <pubDate>Thu, 11 Aug 2022 21:23:57 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/deb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>https</title>
+      <link>https://technod.cn/tags/https/</link>
+      <pubDate>Thu, 11 Aug 2022 20:49:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/https/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>openssl</title>
+      <link>https://technod.cn/tags/openssl/</link>
+      <pubDate>Thu, 11 Aug 2022 20:49:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/openssl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>AES</title>
+      <link>https://technod.cn/tags/aes/</link>
+      <pubDate>Thu, 11 Aug 2022 20:09:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/aes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>m3u8</title>
+      <link>https://technod.cn/tags/m3u8/</link>
+      <pubDate>Sun, 17 Jul 2022 19:38:37 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/m3u8/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MP4</title>
+      <link>https://technod.cn/tags/mp4/</link>
+      <pubDate>Sun, 17 Jul 2022 19:38:37 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/mp4/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PHP</title>
+      <link>https://technod.cn/tags/php/</link>
+      <pubDate>Sun, 17 Jul 2022 19:38:37 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/php/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker-compose</title>
+      <link>https://technod.cn/tags/docker-compose/</link>
+      <pubDate>Thu, 07 Jul 2022 17:03:45 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/docker-compose/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Harbor</title>
+      <link>https://technod.cn/tags/harbor/</link>
+      <pubDate>Thu, 07 Jul 2022 17:03:45 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/harbor/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>LNMP</title>
+      <link>https://technod.cn/tags/lnmp/</link>
+      <pubDate>Sat, 21 May 2022 20:56:46 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/lnmp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rpm</title>
+      <link>https://technod.cn/tags/rpm/</link>
+      <pubDate>Thu, 24 Mar 2022 21:06:46 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/rpm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rpmrebuild</title>
+      <link>https://technod.cn/tags/rpmrebuild/</link>
+      <pubDate>Thu, 24 Mar 2022 21:06:46 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/rpmrebuild/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rpmbuild</title>
+      <link>https://technod.cn/tags/rpmbuild/</link>
+      <pubDate>Thu, 24 Mar 2022 19:48:46 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/rpmbuild/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mysql</title>
+      <link>https://technod.cn/tags/mysql/</link>
+      <pubDate>Sat, 11 Sep 2021 00:22:13 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/mysql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Homestead</title>
+      <link>https://technod.cn/tags/homestead/</link>
+      <pubDate>Tue, 18 May 2021 15:20:48 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/homestead/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Laravel</title>
+      <link>https://technod.cn/tags/laravel/</link>
+      <pubDate>Tue, 18 May 2021 15:20:48 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/laravel/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ubuntu</title>
+      <link>https://technod.cn/tags/ubuntu/</link>
+      <pubDate>Thu, 29 Apr 2021 12:34:31 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/ubuntu/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>JavaScript</title>
+      <link>https://technod.cn/tags/javascript/</link>
+      <pubDate>Thu, 08 Apr 2021 14:28:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/javascript/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>JS</title>
+      <link>https://technod.cn/tags/js/</link>
+      <pubDate>Thu, 08 Apr 2021 14:28:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/js/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>数组</title>
+      <link>https://technod.cn/tags/%E6%95%B0%E7%BB%84/</link>
+      <pubDate>Thu, 08 Apr 2021 14:28:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/%E6%95%B0%E7%BB%84/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>api</title>
+      <link>https://technod.cn/tags/api/</link>
+      <pubDate>Wed, 10 Mar 2021 11:24:18 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/api/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>axios</title>
+      <link>https://technod.cn/tags/axios/</link>
+      <pubDate>Wed, 10 Mar 2021 11:24:18 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/axios/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>koa2</title>
+      <link>https://technod.cn/tags/koa2/</link>
+      <pubDate>Wed, 10 Mar 2021 11:24:18 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/koa2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>node.js</title>
+      <link>https://technod.cn/tags/node.js/</link>
+      <pubDate>Wed, 10 Mar 2021 11:24:18 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/node.js/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>soap</title>
+      <link>https://technod.cn/tags/soap/</link>
+      <pubDate>Wed, 10 Mar 2021 11:24:18 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/soap/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>koa</title>
+      <link>https://technod.cn/tags/koa/</link>
+      <pubDate>Wed, 03 Mar 2021 14:00:49 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/koa/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>lincms</title>
+      <link>https://technod.cn/tags/lincms/</link>
+      <pubDate>Wed, 03 Mar 2021 14:00:49 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/lincms/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sequelize</title>
+      <link>https://technod.cn/tags/sequelize/</link>
+      <pubDate>Wed, 03 Mar 2021 14:00:49 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/sequelize/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>bbr</title>
+      <link>https://technod.cn/tags/bbr/</link>
+      <pubDate>Tue, 09 Feb 2021 13:09:10 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/bbr/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>快递API</title>
+      <link>https://technod.cn/tags/%E5%BF%AB%E9%80%92api/</link>
+      <pubDate>Tue, 26 Jan 2021 16:14:21 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/%E5%BF%AB%E9%80%92api/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>快递接口</title>
+      <link>https://technod.cn/tags/%E5%BF%AB%E9%80%92%E6%8E%A5%E5%8F%A3/</link>
+      <pubDate>Tue, 26 Jan 2021 16:14:21 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/%E5%BF%AB%E9%80%92%E6%8E%A5%E5%8F%A3/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>firewalld</title>
+      <link>https://technod.cn/tags/firewalld/</link>
+      <pubDate>Fri, 22 Jan 2021 14:58:14 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/firewalld/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>防火墙</title>
+      <link>https://technod.cn/tags/%E9%98%B2%E7%81%AB%E5%A2%99/</link>
+      <pubDate>Fri, 22 Jan 2021 14:58:14 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/%E9%98%B2%E7%81%AB%E5%A2%99/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>crontab</title>
+      <link>https://technod.cn/tags/crontab/</link>
+      <pubDate>Tue, 19 Jan 2021 17:39:31 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/crontab/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>定时任务</title>
+      <link>https://technod.cn/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/</link>
+      <pubDate>Tue, 19 Jan 2021 17:39:31 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>SEO</title>
+      <link>https://technod.cn/tags/seo/</link>
+      <pubDate>Fri, 15 Jan 2021 13:24:58 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/seo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>模板消息</title>
+      <link>https://technod.cn/tags/%E6%A8%A1%E6%9D%BF%E6%B6%88%E6%81%AF/</link>
+      <pubDate>Tue, 15 Dec 2020 11:19:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/%E6%A8%A1%E6%9D%BF%E6%B6%88%E6%81%AF/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>微信开发</title>
+      <link>https://technod.cn/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/</link>
+      <pubDate>Tue, 15 Dec 2020 11:19:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Command</title>
+      <link>https://technod.cn/tags/command/</link>
+      <pubDate>Fri, 07 Aug 2020 11:44:45 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/command/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Git</title>
+      <link>https://technod.cn/tags/git/</link>
+      <pubDate>Fri, 07 Aug 2020 11:44:45 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/git/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MongoDB</title>
+      <link>https://technod.cn/tags/mongodb/</link>
+      <pubDate>Thu, 30 Jul 2020 16:57:57 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/mongodb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nosql</title>
+      <link>https://technod.cn/tags/nosql/</link>
+      <pubDate>Thu, 30 Jul 2020 16:57:57 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/nosql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>数据库</title>
+      <link>https://technod.cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+      <pubDate>Thu, 30 Jul 2020 16:57:57 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PHPstorm</title>
+      <link>https://technod.cn/tags/phpstorm/</link>
+      <pubDate>Thu, 23 Jul 2020 10:35:48 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/phpstorm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hugo</title>
+      <link>https://technod.cn/tags/hugo/</link>
+      <pubDate>Fri, 10 Jul 2020 14:52:58 +0800</pubDate>
+      
+      <guid>https://technod.cn/tags/hugo/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

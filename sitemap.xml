@@ -1,0 +1,813 @@
+<search>
+    
+     <entry>
+        <title>OCR识别图片文字内容</title>
+        <url>https://technod.cn/note/20250725/ocr.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>python</tag><tag>flask</tag><tag>ddddocr</tag><tag>ocr</tag><tag>nodejs</tag>
+        </tags>
+        <content type="html"> 使用python-ddddocr库识别图片文字内容 环境： conda create -n py312 python=3.12 &amp;amp;&amp;amp; conda activate py312
+依赖安装：pip install ddddocr flask
+Python代码:
+from flask import Flask, request import ddddocr import base64 import json from PIL import Image import io app = Flask(__name__) @app.route(&amp;#39;/&amp;#39;) def index(): return &amp;#34;Hello, Flask!&amp;#34; @app.route(&amp;#39;/ocr&amp;#39;, methods=[&amp;#39;POST&amp;#39;]) def ocr(): # get json data from body &amp;#39;&amp;#39;&amp;#39;Request example { &amp;#34;type&amp;#34;: &amp;#34;file&amp;#34;, &amp;#34;image&amp;#34;: &amp;#34;./public/images/test.png&amp;#34; } OR { &amp;#34;type&amp;#34;: &amp;#34;base64&amp;#34;, &amp;#34;image&amp;#34;: &amp;#34;data:image/png;base64,/9j/4AAQSkZJRgAB...&amp;#34; } &amp;#39;&amp;#39;&amp;#39; data = request.json # print(data) img_str = data.get(&amp;#39;image&amp;#39;, &amp;#39;&amp;#39;) if not img_str: return json.dumps({&amp;#34;error&amp;#34;: &amp;#34;No image data provided&amp;#34;}), 400, {&amp;#39;Content-Type&amp;#39;: &amp;#39;application/json&amp;#39;} # Decode the base64 string to an image if data.get(&amp;#39;type&amp;#39;, &amp;#39;&amp;#39;) == &amp;#39;base64&amp;#39;: img_data = decode_base64_to_img(img_str) # Read the image from a file if data.get(&amp;#39;type&amp;#39;, &amp;#39;&amp;#39;) == &amp;#39;file&amp;#39;: with open(img_str, &amp;#39;rb&amp;#39;) as f: img_data = f.read() # Perform OCR on the image ocr = ddddocr.DdddOcr() result = ocr.classification(img_data) # Return the OCR result # print(result) return json.dumps({&amp;#34;result&amp;#34;: result}), 200, {&amp;#39;Content-Type&amp;#39;: &amp;#39;application/json&amp;#39;} # Base64 conversion to image def decode_base64_to_img(base64_str): # Remove the prefix if it exists if base64_str.startswith(&amp;#34;data:image/png;base64,&amp;#34;): base64_str = base64_str.replace(&amp;#34;data:image/png;base64,&amp;#34;, &amp;#34;&amp;#34;) # Decode the base64 string img_data = base64.b64decode(base64_str) # Convert bytes to an image img = Image.open(io.BytesIO(img_data)) return img if __name__ == &amp;#39;__main__&amp;#39;: app.run(debug=True, host=&amp;#39;0.0.0.0&amp;#39;, port=5002) 使用阿里云OCR识别 https://ai.aliyun.com/ocr
+import ocr_api20210707 from &amp;#39;@alicloud/ocr-api20210707&amp;#39;; import OpenApi from &amp;#39;@alicloud/openapi-client&amp;#39;; import Credential, { Config } from &amp;#39;@alicloud/credentials&amp;#39;; import Util from &amp;#39;@alicloud/tea-util&amp;#39;; import Stream from &amp;#39;@alicloud/darabonba-stream&amp;#39; class OCRClient { static createClient() { const credentialsConfig = new Credential.Config({ type: &amp;#39;access_key&amp;#39;, accessKeyId: &amp;#39;YourAccessKeyId&amp;#39;, accessKeySecret: &amp;#39;YourAccessKeySecret&amp;#39;, }); const credential = new Credential.default(credentialsConfig); let config = new OpenApi.Config({ credential: credential, }); config.endpoint = `ocr-api.cn-hangzhou.aliyuncs.com`; return new ocr_api20210707.default(config); } static async main(img_type, value) { let client = OCRClient.createClient(); let reqData if (img_type === &amp;#39;url&amp;#39;) { reqData = { url: value, type: &amp;#39;General&amp;#39;, } } if (img_type === &amp;#39;file&amp;#39;) { let img_path = value ? value : &amp;#39;./public/captcha.png&amp;#39;; let bodyStream = Stream.default.readFromFilePath(img_path); reqData = { body: bodyStream, type: &amp;#39;General&amp;#39; } } let recognizeAllTextRequest = new ocr_api20210707.RecognizeAllTextRequest(reqData); let runtime = new Util.RuntimeOptions({ }); try { let resp = await client.recognizeAllTextWithOptions(recognizeAllTextRequest, runtime); const response = JSON.parse(Util.default.toJSONString(resp)); return response.body.data; } catch (error) { console.log(error.message); Util.default.assertAsString(error.message); } } } // exports.OCRClient = OCRClient; // commonjs export export default OCRClient; // es6 module export // Call example: // OCRClient.main(&amp;#39;url&amp;#39;,&amp;#39;https://cdn.technod.cn/temp/author.jpg&amp;#39;); // OCRClient.main(&amp;#39;file&amp;#39;,&amp;#39;./public/captcha.png&amp;#39;); 使用tesseract.js识别图片内容 npm install express tesseract.js sharp svg-captcha
+import express from &amp;#34;express&amp;#34;; import sharp from &amp;#34;sharp&amp;#34;; import path from &amp;#34;path&amp;#34;; import fs from &amp;#34;fs&amp;#34;; import svgCaptcha from &amp;#39;svg-captcha&amp;#39;; const app = express(); // 生成图片验证码 app.get(&amp;#39;/captcha&amp;#39;, async (req, res) =&amp;gt; { const captcha = svgCaptcha.create({ size: 4, noise: 2, color: true, background: &amp;#39;#ccf&amp;#39; }); // console.log(captcha.data); // &amp;lt;svg&amp;gt;...&amp;lt;/svg&amp;gt; // console.log(captcha.text); // &amp;#39;b3j5&amp;#39; const pngBuffer = await sharp(Buffer.from(captcha.data)).png().toBuffer(); const base64 = pngBuffer.toString(&amp;#39;base64&amp;#39;); // save image file to folder // const fileName = &amp;#39;captcha_&amp;#39; &#43; Date.now() &#43; (Math.floor(Math.random() * 1000) &#43; 1000) &#43; &amp;#39;.png&amp;#39;; // const filePath = path.join(&amp;#39;./public&amp;#39;, fileName); // fs.writeFileSync(filePath, pngBuffer); res.json({ image: `data:image/png;base64,${base64}`, success: true }); }); app.listen(3000, () =&amp;gt; { console.log(`Server running...`); }); // 识别 import Tesseract from &amp;#34;tesseract.js&amp;#34;; const imageBase64 = &amp;#34;data:image/png;base64,iVBORw...&amp;#34; try { // 识别文字 const result = await Tesseract.recognize( imageBase64, // 图片数据 &amp;#39;eng&amp;#39;, // 可替换为 &amp;#39;chi_sim&amp;#39; 等语言 { // logger: m =&amp;gt; console.log(m) // 可选：输出识别进度 } ); console.log(&amp;#39;tesseractOCR识别结果:&amp;#39;, result.data.text); } catch (err) { console.log(&amp;#39;tesseractOCR识别出错&amp;#39;); } </content>
+    </entry>
+    
+     <entry>
+        <title>Proxmox虚拟机配置NAT网络</title>
+        <url>https://technod.cn/note/20240517/vm-nat.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Proxmox</tag><tag>DHCP</tag><tag>VM</tag><tag>网络</tag>
+        </tags>
+        <content type="html"> 环境准备 OS: Proxmox 7.4(Debian 11) 软件: dnsmasq 配置 新建网络 新建一个网络,例如 vmbr2
+编辑网络配置 编辑网络配置： vi /etc/network/interfaces
+末尾添加以下内容：
+post-up echo 1 &amp;gt; /proc/sys/net/ipv4/ip_forward post-up iptables -t nat -A POSTROUTING -s &amp;#39;192.168.100.0/24&amp;#39; -o vmbr0 -j MASQUERADE post-down iptables -t nat -D POSTROUTING -s &amp;#39;192.168.100.0/24&amp;#39; -o vmbr0 -j MASQUERADE 安装并配置dnsmasq,使连接到vmbr2的虚拟机能够自动获取IP地址 安装： apt install dnsmasq
+编辑配置文件： vi /etc/dnsmasq.d/vmbr2.conf
+interface=vmbr2 dhcp-range=192.168.100.2,192.168.100.254,12h # 设置dhcp范围 dhcp-option=option:router,192.168.100.1 # 设置网关 dhcp-option=option:dns-server,192.168.100.1 # 设置DNS 配置/etc/sysctl.conf(部分机型可能需要配置) 编辑配置文件： vi /etc/sysctl.conf
+末尾添加以下内容(下方enp3s0修改成实际网卡名称)：
+#IPV4转发 net.ipv4.ip_forward=1 net.ipv4.conf.all.rp_filter=1 net.ipv4.icmp_echo_ignore_broadcasts=1 net.ipv4.conf.default.forwarding=1 net.ipv4.conf.default.proxy_arp = 0 net.ipv4.conf.default.send_redirects = 1 net.ipv4.conf.all.send_redirects = 0 #IPV6转发 net.ipv6.conf.enp3s0.autoconf=0 net.ipv6.conf.enp3s0.accept_ra=2 net.ipv6.conf.default.forwarding=1 net.ipv6.conf.all.forwarding=1 net.ipv6.conf.default.proxy_ndp=1 net.ipv6.conf.all.proxy_ndp=1 重启网络及dnsmasq服务 ifreload -a systemctl restart networking systemctl restart dnsmasq 参考：Proxmox虚拟机配置NAT网络、proxmox虚拟机使用nat网络
+</content>
+    </entry>
+    
+     <entry>
+        <title>使用tcconfig为ipv6限速实践</title>
+        <url>https://technod.cn/tech/202403/tc_ipv6.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>tc</tag><tag>网络</tag><tag>iperf</tag><tag>ipv6</tag>
+        </tags>
+        <content type="html"> 环境准备 OS: Ubuntu 软件: iperf tcconfig 安装iperf和tcconfig 在服务端A 安装iperf和tcconfig 在客户端B 安装iperf iperf apt install iperf tcconfig 下载tcconfig: https://github.com/thombashi/tcconfig/releases
+参考文档: https://tcconfig.readthedocs.io/en/latest/index.html
+使用ping6测试ipv6地址,保证客户端与服务端可以互通 ping6 -I ens33 ipv6 使用iperf连接 在客户端B 开启iperf服务 iperf -s -V 在服务端A 向客户端B发送数据 iperf -c [客户端B IPv6地址]%[当前设备的网卡] -V -t 60 -i 1 -b 20M -r 这将在服务器与客户端之间执行带宽测试，发送20M的数据，并且测试时间为60秒
+限速 在服务端A使用tcconfig执行限速 tcset ens33 --rate 1Mbps --network [ipv6_addr] --ipv6 重新发送数据测试,并观察网络带宽 </content>
+    </entry>
+    
+     <entry>
+        <title>Proxmox升级openssh版本</title>
+        <url>https://technod.cn/tech/20240207/proxmox.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>Proxmox</tag><tag>Debian</tag><tag>Linux</tag><tag>OpenSSH</tag>
+        </tags>
+        <content type="html">  openssh版本升级至9.6p1
+环境 OS: Proxmox7.4 (Debian11) 设置apt源 sed -i &amp;#39;s@deb.debian.org@mirrors.huaweicloud.com@g&amp;#39; /etc/apt/sources.list sed -i &amp;#39;s@ftp.debian.org@mirrors.huaweicloud.com@g&amp;#39; /etc/apt/sources.list apt update 取消proxmox对软件卸载的限制(暂时移除pve-apt-hook) mv /usr/share/proxmox-ve/pve-apt-hook /usr/share/proxmox-ve/pve-apt-hook.bak touch /usr/share/proxmox-ve/pve-apt-hook &amp;amp;&amp;amp; chmod 777 /usr/share/proxmox-ve/pve-apt-hook 备份相关配置文件并卸载ssh systemctl stop ssh mv /etc/ssh /etc/ssh-bak &amp;amp;&amp;amp; mv /etc/pam.d/sshd /etc/pam.d/sshd-bak apt remove openssh-server 恢复pve-apt-hook mv /usr/share/proxmox-ve/pve-apt-hook.bak /usr/share/proxmox-ve/pve-apt-hook 安装依赖 apt install libssl-dev gcc g&#43;&#43; gdb cpp make cmake libtool libc6 autoconf automake pkg-config build-essential gettext apt install libzstd1 zlib1g libssh-4 libssh-dev libc6-dev libc6 libcrypt-dev libpam0g-dev Other helpful tools for debugging server issues apt install netcat lsof wget diffutils Download the 9.6 archive cd /opt VER=9.6p1 wget https://mirrors.aliyun.com/pub/OpenBSD/OpenSSH/portable/openssh-${VER}.tar.gz Verify the download using gpg # Import the public signing key wget https://mirrors.aliyun.com/pub/OpenBSD/OpenSSH/RELEASE_KEY.asc gpg --import RELEASE_KEY.asc # Verify wget https://mirrors.aliyun.com/pub/OpenBSD/OpenSSH/portable/openssh-${VER}.tar.gz.asc gpg --verbose --verify openssh-${VER}.tar.gz.asc Build tar -xvf openssh-${VER}.tar.gz cd openssh-${VER} ./configure --prefix=/usr --sysconfdir=/etc/ssh --with-zlib --with-md5-passwords --with-pam make make install 还原配置文件 mv /etc/ssh /etc/ssh-9.6 &amp;amp;&amp;amp; mv /etc/ssh-bak /etc/ssh mv /etc/pam.d/sshd-bak /etc/pam.d/sshd 查看版本并启动 ssh -V systemctl unmask ssh systemctl start ssh </content>
+    </entry>
+    
+     <entry>
+        <title>Windows 10 WSL2 安装配置</title>
+        <url>https://technod.cn/leaf/202308/wsl.html</url>
+        <categories>
+          <category>杂记</category>
+        </categories>
+        <tags>
+          <tag>wsl</tag><tag>docker</tag>
+        </tags>
+        <content type="html"> Windows 10 WSL2 安装配置 安装 WSL2 启用适用于 Linux 的 Windows 子系统 和 虚拟机平台 选项 microsoft store 搜索并安装 ubuntu22.04 设置默认版本为 WSL2 wsl --set-default-version 2 wsl2 内核更新 下载地址
+Docker无法启动问题解决 由于新的ubuntu系统使用了iptables-nft，而WSL2不支持导致的 sudo update-alternatives --set iptables /usr/sbin/iptables-legacy sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy 重启docker sudo service docker restart </content>
+    </entry>
+    
+     <entry>
+        <title>Video player test(1080p)</title>
+        <url>https://technod.cn/part/20230430/video.html</url>
+        <categories>
+          <category>分享</category>
+        </categories>
+        <tags>
+          <tag>Video</tag>
+        </tags>
+        <content type="html">  </content>
+    </entry>
+    
+     <entry>
+        <title>Video player test(4K)</title>
+        <url>https://technod.cn/part/20230430/video4k.html</url>
+        <categories>
+          <category>分享</category>
+        </categories>
+        <tags>
+          <tag>Video</tag>
+        </tags>
+        <content type="html">  </content>
+    </entry>
+    
+     <entry>
+        <title>Docker可视化管理工具--Portainer的配置与使用</title>
+        <url>https://technod.cn/note/20221226/portainer.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Docker</tag><tag>Portainer</tag>
+        </tags>
+        <content type="html"> 安装部署portainer-ce # 创建目录 mkdir -p app/portainer/portainer_data # 修改权限 chmod -R 777 app/portainer/portainer_data # 进入目录 cd app/portainer # 启动容器 docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/portainer_data:/data portainer/portainer-ce:latest 访问portainer https://ip:9443
+创建管理员账号密码，登录即可
+配置portainer-agent,管理其他主机 在agent主机上安装portainer-agent docker run -d -p 9001:9001 --name portainer_agent --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker/volumes:/var/lib/docker/volumes portainer/agent:latest 在portainer主机上添加agent主机 点击左侧菜单栏的Endpoints
+点击右上角的Add endpoint
+选择Docker Standalone
+输入Agent主机的IP地址和端口号
+点击Connect
+Docker Standalone是指单机版的Docker。在Docker Standalone中，您可以在单个主机上运行一个或多个Docker容器。
+Docker Swarm是Docker的分布式集群管理系统。它允许您将多个主机组成一个集群，然后在集群中运行和管理Docker容器。 Docker Swarm提供了一组工具，可用于在集群中的多个主机上部署和管理容器，并为容器提供负载平衡和高可用性。
+总的来说，Docker Standalone是用于在单个主机上运行Docker容器的简单工具，而Docker Swarm是用于在多个主机的集群中运行和管理Docker容器的分布式系统。
+</content>
+    </entry>
+    
+     <entry>
+        <title>使用jspdf导出pdf 内容被截断的问题</title>
+        <url>https://technod.cn/note/20221224/jspdf.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>vue</tag><tag>jspdf</tag><tag>pdf</tag>
+        </tags>
+        <content type="html"> 问题 分页时内容被截断
+解决 环境 vue2 依赖包：jspdf html2canvas jspdf-autotable 第一种解决方案&amp;mdash;使用jspdf-autotable 适用于内容为表格的情况 jspdf-autotable会自动处理分页
+&amp;lt;script&amp;gt; import jsPDF from &amp;#34;jspdf&amp;#34;; import &amp;#34;jspdf-autotable&amp;#34;; // import html2canvas from &amp;#34;html2canvas&amp;#34;; export default { name: &amp;#34;HelloWorld&amp;#34;, props: { msg: String, }, methods: { jspdf() { let doc = new jsPDF(); let columns = [&amp;#34;ID&amp;#34;, &amp;#34;Name&amp;#34;, &amp;#34;Country&amp;#34;]; let rows = [ [1, &amp;#34;Shaw&amp;#34;, &amp;#34;Tanzania&amp;#34;], [2, &amp;#34;Nelson&amp;#34;, &amp;#34;Kazakhstan&amp;#34;], [3, &amp;#34;Garcia&amp;#34;, &amp;#34;Madagascar&amp;#34;], [4, &amp;#34;Shaw&amp;#34;, &amp;#34;Tanzania&amp;#34;], [5, &amp;#34;Nelson&amp;#34;, &amp;#34;Kazakhstan&amp;#34;], [6, &amp;#34;Garcia&amp;#34;, &amp;#34;Madagascar&amp;#34;], ]; doc.autoTable(columns, rows); doc.save(&amp;#34;table.pdf&amp;#34;); }, }, }; &amp;lt;/script&amp;gt; 第二种解决方案&amp;mdash;使用html2canvas a. 适用于内容为html的情况
+b. html2canvas的原理：将html转换为canvas，再将canvas转换为图片，最后将图片添加到pdf中
+c. 实现原理：限制html内容的大小，让元素内容占pdf的一页，然后合并pdf
+&amp;lt;template&amp;gt; &amp;lt;div class=&amp;#34;hello&amp;#34;&amp;gt; &amp;lt;button @click=&amp;#34;jspdf&amp;#34;&amp;gt;jspdf&amp;lt;/button&amp;gt; &amp;lt;div id=&amp;#34;myPage&amp;#34;&amp;gt; &amp;lt;!--每n行填充一次表格--&amp;gt; &amp;lt;div v-for=&amp;#34;p in pageCount&amp;#34; :key=&amp;#34;p&amp;#34; :id=&amp;#34;&amp;#39;page&amp;#39; &#43; p&amp;#34; class=&amp;#34;table&amp;#34;&amp;gt; &amp;lt;table style=&amp;#34;font-size: 62px&amp;#34; border=&amp;#34;1&amp;#34; cellspacing=&amp;#34;0&amp;#34; cellpadding=&amp;#34;1&amp;#34; &amp;gt; &amp;lt;thead&amp;gt; &amp;lt;tr&amp;gt; &amp;lt;th v-for=&amp;#34;column in columns&amp;#34; :key=&amp;#34;column.title&amp;#34;&amp;gt; {{ column.title }} &amp;lt;/th&amp;gt; &amp;lt;/tr&amp;gt; &amp;lt;/thead&amp;gt; &amp;lt;tbody&amp;gt; &amp;lt;!--rows pageSize行--&amp;gt; &amp;lt;tr v-for=&amp;#34;row in rows.slice((p - 1) * pageSize, p * pageSize)&amp;#34; :key=&amp;#34;row.id&amp;#34; &amp;gt; &amp;lt;td v-for=&amp;#34;column in columns&amp;#34; :key=&amp;#34;column.title&amp;#34;&amp;gt; {{ row[column.dataKey] }} &amp;lt;/td&amp;gt; &amp;lt;/tr&amp;gt; &amp;lt;/tbody&amp;gt; &amp;lt;/table&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; &amp;lt;script&amp;gt; import jsPDF from &amp;#34;jspdf&amp;#34;; import &amp;#34;jspdf-autotable&amp;#34;; import html2canvas from &amp;#34;html2canvas&amp;#34;; export default { name: &amp;#34;HelloWorld&amp;#34;, data() { return { columns: [ { title: &amp;#34;ID&amp;#34;, dataKey: &amp;#34;id&amp;#34; }, { title: &amp;#34;Name&amp;#34;, dataKey: &amp;#34;name&amp;#34; }, { title: &amp;#34;Country&amp;#34;, dataKey: &amp;#34;country&amp;#34; }, ], rows: [ { id: 1, name: &amp;#34;Shaw&amp;#34;, country: &amp;#34;Tanzania&amp;#34; }, { id: 2, name: &amp;#34;Nelson&amp;#34;, country: &amp;#34;Kazakhstan&amp;#34; }, { id: 3, name: &amp;#34;Garcia&amp;#34;, country: &amp;#34;Madagascar&amp;#34; }, { id: 4, name: &amp;#34;Shaw&amp;#34;, country: &amp;#34;Tanzania&amp;#34; }, { id: 5, name: &amp;#34;Nelson&amp;#34;, country: &amp;#34;Kazakhstan&amp;#34; }, { id: 6, name: &amp;#34;Garcia&amp;#34;, country: &amp;#34;Madagascar&amp;#34; }, ], tableCount: 0, pageSize: 20, }; }, props: { msg: String, }, computed: { // 总记录数 tableCounts() { return this.rows.length; }, // 总页数 pageCount() { return Math.ceil(this.tableCounts / this.pageSize); }, }, methods: { // 导出pdf async jspdf() { let arrData = []; for (let i = this.pageCount; i &amp;gt; 0; i--) { let idName = &amp;#34;page&amp;#34; &#43; i; let imageData = await this.html2c(idName); arrData.unshift(imageData); } let PDF = new jsPDF(&amp;#34;&amp;#34;, &amp;#34;pt&amp;#34;, &amp;#34;a4&amp;#34;); //A4纸，纵向 for (let i = 0; i &amp;lt; arrData.length; i&#43;&#43;) { PDF.addImage (arrData[i].pageData, &amp;#34;JPEG&amp;#34;, 20, 20, arrData[i].imgWidth, arrData[i].imgHeight ); //添加图片 if (arrData.length - i &amp;gt; 1) { PDF.addPage(); } } PDF.save(&amp;#34;hello&amp;#34; &#43; &amp;#34;.pdf&amp;#34;); }, // html转canvas async html2c(idName) { return new html2canvas(document.getElementById(idName), { // allowTaint: true //跨域图片 useCORS: true, //跨域图片， }).then(function (canvas) { let contentWidth = canvas.width; //内容宽度 let contentHeight = canvas.height; //内容高度 // let pageHeight = (contentWidth / 555.28) * 841.89; //一页pdf显示html页面生成的canvas高度; // let leftHeight = contentHeight; //剩余内容高度 // let position = 20; //距离顶部位置 let imgWidth = 555.28; //img宽度 let imgHeight = (555.28 / contentWidth) * contentHeight; //img高度 let pageData = canvas.toDataURL(&amp;#34;image/jpeg&amp;#34;, 1.0); //生成一张图片 let pageObject = { pageData: pageData, imgWidth: imgWidth, imgHeight: imgHeight, }; return pageObject; }); }, }, }; &amp;lt;/script&amp;gt; &amp;lt;style scoped&amp;gt; h3 { margin: 40px 0 0; } ul { list-style-type: none; padding: 0; } li { display: inline-block; margin: 0 10px; } a { color: #42b983; } .table { margin-top: 60px; } &amp;lt;/style&amp;gt; 参考： &amp;lt;script&amp;gt; import jsPDF from &amp;#34;jspdf&amp;#34;; import &amp;#34;jspdf-autotable&amp;#34;; import html2canvas from &amp;#34;html2canvas&amp;#34;; export default { name: &amp;#34;HelloWorld&amp;#34;, data() { return { columns: [ { title: &amp;#34;ID&amp;#34;, dataKey: &amp;#34;id&amp;#34; }, { title: &amp;#34;Name&amp;#34;, dataKey: &amp;#34;name&amp;#34; }, { title: &amp;#34;Country&amp;#34;, dataKey: &amp;#34;country&amp;#34; }, ], rows: [ { id: 1, name: &amp;#34;Shaw&amp;#34;, country: &amp;#34;Tanzania&amp;#34; }, { id: 2, name: &amp;#34;Nelson&amp;#34;, country: &amp;#34;Kazakhstan&amp;#34; }, { id: 3, name: &amp;#34;Garcia&amp;#34;, country: &amp;#34;Madagascar&amp;#34; }, { id: 4, name: &amp;#34;Shaw&amp;#34;, country: &amp;#34;Tanzania&amp;#34; }, { id: 5, name: &amp;#34;Nelson&amp;#34;, country: &amp;#34;Kazakhstan&amp;#34; }, { id: 6, name: &amp;#34;Garcia&amp;#34;, country: &amp;#34;Madagascar&amp;#34; }, { id: 7, name: &amp;#34;Shaw&amp;#34;, country: &amp;#34;Tanzania&amp;#34; }, { id: 8, name: &amp;#34;Nelson&amp;#34;, country: &amp;#34;Kazakhstan&amp;#34; }, { id: 9, name: &amp;#34;Garcia&amp;#34;, country: &amp;#34;Madagascar&amp;#34; }, { id: 10, name: &amp;#34;Shaw&amp;#34;, country: &amp;#34;Tanzania&amp;#34; }, { id: 11, name: &amp;#34;Nelson&amp;#34;, country: &amp;#34;Kazakhstan&amp;#34; }, { id: 12, name: &amp;#34;Garcia&amp;#34;, country: &amp;#34;Madagascar&amp;#34; }, ], }; }, props: { msg: String, }, methods: { jspdf() { html2canvas(document.getElementById(&amp;#34;myPage&amp;#34;), { // allowTaint: true //跨域图片 useCORS: true, //跨域图片， }).then(function (canvas) { let contentWidth = canvas.width; //内容宽度 let contentHeight = canvas.height; //内容高度 let pageHeight = (contentWidth / 555.28) * 841.89; //一页pdf显示html页面生成的canvas高度; let leftHeight = contentHeight; //剩余内容高度 let position = 20; //距离顶部位置 let imgWidth = 555.28; //img宽度 let imgHeight = (555.28 / contentWidth) * contentHeight; //img高度 let pageData = canvas.toDataURL(&amp;#34;image/jpeg&amp;#34;, 1.0); //生成一张图片 let PDF = new jsPDF(&amp;#34;&amp;#34;, &amp;#34;pt&amp;#34;, &amp;#34;a4&amp;#34;); //A4纸，纵向 if (leftHeight &amp;lt; pageHeight) { //内容未超过一页 PDF.addImage(pageData, &amp;#34;JPEG&amp;#34;, 20, 20, imgWidth, imgHeight); //添加图片 } else { while (leftHeight &amp;gt; 0) { PDF.addImage(pageData, &amp;#34;JPEG&amp;#34;, 20, position, imgWidth, imgHeight); leftHeight -= pageHeight; position -= 841.89; if (leftHeight &amp;gt; 0) { PDF.addPage(); } } } PDF.save(&amp;#34;hello&amp;#34; &#43; &amp;#34;.pdf&amp;#34;); }); }, }, }; &amp;lt;/script&amp;gt; </content>
+    </entry>
+    
+     <entry>
+        <title>deb包的打包流程</title>
+        <url>https://technod.cn/note/202208/make-deb.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>deb</tag>
+        </tags>
+        <content type="html"> deb包的打包流程 以打包二进制文件为例 创建目录 mkdir make-deb cd make-deb mkdir -p opt/mydeb/bin 将准备好的二进制文件放入opt/mydeb/bin目录 创建DEBIAN目录 mkdir DEBIAN 创建DEBIAN/control文件 cat &amp;gt; DEBIAN/control &amp;lt;&amp;lt; EOF Package: mydeb Version: 1.0.0 Section: base Priority: optional Architecture: amd64 Depends: Maintainer: zhangyong &amp;lt; Description: mydeb EOF 创建DEBIAN/postinst文件 cat &amp;gt; DEBIAN/postinst &amp;lt;&amp;lt; EOF #!/bin/bash echo &amp;#34;postinst&amp;#34; EOF 创建DEBIAN/postrm文件 cat &amp;gt; DEBIAN/postrm &amp;lt;&amp;lt; EOF #!/bin/bash echo &amp;#34;postrm&amp;#34; EOF 创建DEBIAN/preinst文件 cat &amp;gt; DEBIAN/preinst &amp;lt;&amp;lt; EOF #!/bin/bash echo &amp;#34;preinst&amp;#34; EOF 创建DEBIAN/prerm文件 cat &amp;gt; DEBIAN/prerm &amp;lt;&amp;lt; EOF #!/bin/bash echo &amp;#34;prerm&amp;#34; EOF 说明：
+DEBIAN/control文件：包的基本信息 DEBIAN/preinst文件：安装前执行的脚本 DEBIAN/postinst文件：安装后执行的脚本 DEBIAN/prerm文件：卸载前执行的脚本 DEBIAN/postrm文件：卸载后执行的脚本 打包 sudo dpkg -b make-deb mydeb.deb </content>
+    </entry>
+    
+     <entry>
+        <title>Ubuntu/Debian环境下使浏览器信任自签名证书</title>
+        <url>https://technod.cn/note/202208/ssl.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>openssl</tag><tag>https</tag>
+        </tags>
+        <content type="html"> 准备工作 环境 OS: Ubuntu/Debian 软件: openssl libnss3-tools certutil 浏览器: Chrome Edge 360安全浏览器 生成自签名证书 1.使用廖雪峰的脚本 2.参考这篇文章中的脚本 证书导入 1.安装certutil sudo apt install libnss3-tools 2.导入根证书 sudo certutil -d sql:$HOME/.pki/nssdb -A -t &amp;#34;C,,&amp;#34; -n NodJoy -i ~/your/ca/path/CA.crt 3.certutil的其它命令 # 查看证书列表 certutil -L -d sql:$HOME/.pki/nssdb # 删除证书 certutil -D -d sql:$HOME/.pki/nssdb -n NodJoy 服务端nginx配置 server { listen 443 ssl; server_name technod.cn; ssl_certificate /etc/nginx/ssl/technod.cn.crt; ssl_certificate_key /etc/nginx/ssl/technod.cn.key; ssl_session_timeout 5m; ssl_protocols TLSv1 TLSv1.1 TLSv1.2; ssl_ciphers HIGH:!aNULL:!MD5; ssl_prefer_server_ciphers on; location / { root /var/www/technod.cn; index index.html index.htm; } } 编辑hosts文件,添加域名解析 sudo vim /etc/hosts 浏览器访问站点 </content>
+    </entry>
+    
+     <entry>
+        <title>Golang与PHP的AES加密解密互转</title>
+        <url>https://technod.cn/share/202208/aes-lib.html</url>
+        <categories>
+          <category>分享</category>
+        </categories>
+        <tags>
+          <tag>AES</tag>
+        </tags>
+        <content type="html"> Golang与PHP的AES加密解密互转 使用Github上的mervick/aes-everywhere加密库 mervick/aes-everywhere还支持Python、javascript等其它语言
+Golang的使用 go get github.com/mervick/aes-everywhere import &amp;#34;github.com/mervick/aes-everywhere/go/aes256&amp;#34; // encryption encrypted := aes256.Encrypt(&amp;#34;TEXT&amp;#34;, &amp;#34;PASSWORD&amp;#34;) // decryption decrypted := aes256.Decrypt(encrypted, &amp;#34;PASSWORD&amp;#34;) PHP的使用 composer require mervick/aes-everywhere use mervick\aesEverywhere\AES256; // encryption $encrypted = AES256::encrypt(&amp;#34;TEXT&amp;#34;, &amp;#34;PASSWORD&amp;#34;); // decryption $decrypted = AES256::decrypt($encrypted, &amp;#34;PASSWORD&amp;#34;); </content>
+    </entry>
+    
+     <entry>
+        <title>PHP获取mp4和m3u8视频时长的方法</title>
+        <url>https://technod.cn/note/202207/duration.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>PHP</tag><tag>m3u8</tag><tag>MP4</tag>
+        </tags>
+        <content type="html"> PHP获取mp4视频时长 使用getid3获取mp4视频时长(同样适用于mp3等其他媒体文件) $getid3 = new getID3; $file = &amp;#39;./test.mp4&amp;#39;; $info = $getid3-&amp;gt;analyze($file); $playtime_seconds = $info[&amp;#39;playtime_seconds&amp;#39;]; $duration = gmdate(&amp;#34;H:i:s&amp;#34;, $playtime_seconds); //将秒换算为分钟 PHP获取m3u8视频时长 读取m3u8文件获取视频时长 $file_url = &amp;#39;https://example.com/test.m3u8&amp;#39;; //m3u8视频地址 $vtime = $this-&amp;gt;getDuration($file_url); //获取文件时长 $duration = gmdate(&amp;#34;H:i:s&amp;#34;, $vtime); //将秒换算为分钟 function getDuration($file_url) { try { // 忽略ssl证书验证 $stream_opts = [ &amp;#34;ssl&amp;#34; =&amp;gt; [ &amp;#34;verify_peer&amp;#34; =&amp;gt; false, &amp;#34;verify_peer_name&amp;#34; =&amp;gt; false, ] ]; $res = file_get_contents($file, false, stream_context_create($stream_opts)); } catch (\ErrorException $e) { return 0; } // preg_match_all(&amp;#34;/\EXTINF:(.*?)\,/i&amp;#34;, $res, $arr); // $res = array_sum($arr[1]); preg_match_all(&amp;#39;/\d&#43;[.]\d&#43;/&amp;#39;, $res, $arr); $res = array_sum($arr[0]); return (int)$res; } </content>
+    </entry>
+    
+     <entry>
+        <title>Harbor的安装配置与使用</title>
+        <url>https://technod.cn/leaf/202207/harbor.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>Harbor</tag><tag>docker</tag><tag>docker-compose</tag>
+        </tags>
+        <content type="html"> 准备工作 环境 OS: CentOS 7.6 安装所需软件 Docker Docker-Compose 其它 域名 https证书 安装Harbor 下载安装包 解压安装包并进入安装目录 tar -zxvf harbor-offline-installer-v2.5.2.tgz cd harbor 编辑harbor.yaml文件 cp harbor.yml.tmpl harbor.yml vi harbor.yml 根据实际情况修改harbor.yaml文件中的配置项,主要是https相关： hostname: hub.technod.cn # https related config https: # https port for harbor, default is 443 port: 443 # The path of cert and key files for nginx certificate: /opt/certs/hub.technod.cn.pem private_key: /opt/certs/hub.technod.cn.key # ------其它配置已省略------- 执行安装并启动Harbor ./prepare &amp;amp;&amp;amp; ./install.sh 启动成功后即可使用域名访问Harbor 构建镜像并push到自己的私有Harbor 构建一个简单的ubuntu镜像并push到自己的私有Harbor 创建Dockerfile文件 FROM ubuntu:22.04 WORKDIR &amp;#34;/application&amp;#34; COPY [&amp;#34;./sources.list&amp;#34;, &amp;#34;/etc/apt/&amp;#34;] RUN apt-get update \ &amp;amp;&amp;amp; apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* 构建镜像 docker build -t nodjoy/myubuntu:1.0.0 . 标记镜像 docker tag nodjoy/myubuntu:1.0.0 hub.technod.cn/myhub/myubuntu:1.0.0 登录Harbor并push镜像 docker login -u admin -p Harbor12345 hub.technod.cn docker push hub.technod.cn/myhub/myubuntu:1.0.0 推送成功后即可在管理后台查看镜像 </content>
+    </entry>
+    
+     <entry>
+        <title>使用docker-compose一键部署nodejs项目</title>
+        <url>https://technod.cn/leaf/202206/nodejs-docker.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>nodejs</tag><tag>docker</tag><tag>docker-compose</tag>
+        </tags>
+        <content type="html"> 环境 OS: Ubuntu 软件: docker、docker-compose 目录结构 docker-compose.yml文件 version: &amp;#34;2&amp;#34; services: mysql: image: mysql:8.0.19 container_name: mysql restart: always volumes: - ./data/mysql:/var/lib/mysql # mysql数据文件目录 ports: - 33066:3306 environment: - MYSQL_ROOT_PASSWORD=123456 nodejs: image: node:latest container_name: nodejs working_dir: /application restart: always volumes: - ./application:/application command: bash -c &amp;#34;cd /application/lincms-koa/ &amp;amp;&amp;amp; npm run start:dev&amp;#34; # 进入项目目录并使用npm运行 depends_on: - mysql # 依赖mysql服务 ports: - 5000:5000 部署nodejs项目-以lincms-koa为例 进入到application目录 cd application 获取工程项目 git clone https://github.com/TaleLin/lin-cms-koa.git lincms-koa 安装依赖 cd lincms-koa npm install 修改数据库配置项app/config/secure.js,根据自己实际情况修改以下配置: module.exports = { db: { database: &amp;#34;lin-cms&amp;#34;, host: &amp;#34;192.168.153.128&amp;#34;, port: 33066, username: &amp;#34;root&amp;#34;, password: &amp;#34;123456&amp;#34;, logging: false } }; 启动项目 sudo docker-compose up -d 导入数据 新建数据库lin-cms并导入lincms-koa目录下的schema.sql文件
+访问5000端口测试是否部署成功 </content>
+    </entry>
+    
+     <entry>
+        <title>使用docker-compose一键搭建LNMP环境</title>
+        <url>https://technod.cn/leaf/202205/lnmp-docker.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>LNMP</tag><tag>docker</tag><tag>docker-compose</tag>
+        </tags>
+        <content type="html"> 环境 OS: Ubuntu 软件: docker、docker-compose 目录结构 我的目录结构 创建docker-compose.yml文件 version: &amp;#34;2&amp;#34; services: php-fpm: image: phpdockerio/php74-fpm container_name: php74 working_dir: /application restart: always volumes: - ./application:/application - ./conf/php-fpm/php.ini:/etc/php/7.4/fpm/php.ini #php.ini配置文件映射 ports: - 9000:9000 nginx: image: nginx:alpine container_name: nginx restart: always working_dir: /application volumes: - ./application:/application #nginx站点配置文件 - ./conf/nginx/conf.d/phpinfo.conf:/etc/nginx/conf.d/phpinfo.conf # - ./conf/nginx/conf.d/site01.conf:/etc/nginx/conf.d/site01.conf # - ./conf/nginx/conf.d/site02.conf:/etc/nginx/conf.d/site02.conf # ssl # - ./conf/ssl/example.crt:/etc/nginx/ssl/example.crt # - ./conf/ssl/example.key:/etc/nginx/ssl/example.key ports: - 8080:80 - 8081:8081 mysql: image: mysql:8.0.19 container_name: mysql restart: always volumes: - ./data/mysql:/var/lib/mysql ports: - 33066:3306 environment: - MYSQL_ROOT_PASSWORD=123456 nginx站点配置文件 以phpinfophpinfo.conf为例： server { listen 8081; root /application/phpinfo; index index.html index.htm index.php; charset utf-8; client_max_body_size 2048M; location / { if (!-e $request_filename) { rewrite ^(.*)$ /index.php?s=/$1 last; break; } } location = /favicon.ico { access_log off; log_not_found off; } location = /robots.txt { access_log off; log_not_found off; } access_log off; error_log /var/log/nginx/phpinfo-error.log error; sendfile off; location ~ \.php$ { fastcgi_split_path_info ^(.&#43;\.php)(/.&#43;)$; fastcgi_pass php74:9000; #注意此处fastcgi_pass的配置,这个地方的php74是nginx容器连接php-fpm的容器 fastcgi_index index.php; include fastcgi_params; fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; fastcgi_intercept_errors off; fastcgi_buffer_size 16k; fastcgi_buffers 4 16k; fastcgi_connect_timeout 300; fastcgi_send_timeout 300; fastcgi_read_timeout 300; } location ~ /\.ht { deny all; } } 使用docker-compose一键启动 执行命令启动 #一键启动LNMP sudo docker-compose up -d #一键关闭LNMP sudo docker-compose down 启动后,访问站点成功 </content>
+    </entry>
+    
+     <entry>
+        <title>rpmrebuild重新打包</title>
+        <url>https://technod.cn/note/20220324/rpmrebuild.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>rpm</tag><tag>rpmrebuild</tag>
+        </tags>
+        <content type="html"> rpmrebuild的使用 安装rpmrebuild yum install rpmrebuild 制作rpm包过程较为麻烦，此处使用rpmrebuild去将本机已安装好的nginx包进行重新打包，用于下次安装部署 修改nginx的配置文件如/etc/nginx/nginx.conf 重新打包 rpmrebuild nginx 执行后文件会生成于/root/rpmbuild/RPMS/x86_64/nginx.**.rpm
+</content>
+    </entry>
+    
+     <entry>
+        <title>使用rpmbuild制作rpm包</title>
+        <url>https://technod.cn/note/20220322/make-rpm.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>rpm</tag><tag>rpmbuild</tag>
+        </tags>
+        <content type="html"> rpmbuild 安装rpmbuild yum install rpm-build 生成rpmbuild目录结构 使用非root账户
+rpmbuild -ba nginx.spec //会报错，没有文件或目录 此时会生成rpmbuild工作目录 编写SEPC工程文件 在rpmbuild/SEPCS目录新建SPEC工程文件
+vi webrtc-server.spec 文件内容示例：
+Name: webrtc-server Version: 1.0	Release: 1.0 Summary: webrtc-server Group: System	License: GPL BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root Requires: etcd redis supervisor %description webrtc-server %prep echo &amp;#34;do not&amp;#34; %install cp -ar %{_sourcedir}/opt %{buildroot}/ chmod 755 %{buildroot}/opt/dispatch/bin/dispatch chmod 755 %{buildroot}/opt/signal_a/bin/sdn-signal-server chmod 755 %{buildroot}/opt/record/bin/sdn-record-server chmod 755 %{buildroot}/opt/record/data mkdir -p %{buildroot}/var/log/signal_a install -m 755 %{_sourcedir}/server.log %{buildroot}/var/log/signal_a/server.log mkdir -p %{buildroot}/var/log/record install -m 755 %{_sourcedir}/server.log %{buildroot}/var/log/record/server.log mkdir -p %{buildroot}/etc/supervisord.d install -m 755 %{_sourcedir}/dispatch.conf %{buildroot}/etc/supervisord.d/dispatch.conf install -m 755 %{_sourcedir}/signal-a.conf %{buildroot}/etc/supervisord.d/signal-a.conf install -m 755 %{_sourcedir}/record.conf %{buildroot}/etc/supervisord.d/record.conf %files %defattr(-,root,root,-) /opt/dispatch /opt/signal_a /opt/record %doc /etc/supervisord.d/dispatch.conf /etc/supervisord.d/signal-a.conf /etc/supervisord.d/record.conf /var/log/record/server.log /var/log/signal_a/server.log %pre %post supervisorctl update %preun rm -rf /opt/dispatch rm -rf /opt/signal_a rm -rf /opt/record rm -rf /var/log/signal_a rm -rf /var/log/record %changelog * Wed Jan 19 2022 &amp;lt;157****0273@126.com&amp;gt; - 1.0.0.1 - your writing 将需要用到的二进制程序及相关配置文件上传至SOURCES目录 SOURCES目录下文件内容及结构： 执行工程文件生成rpm包 rpmbuild -bb webrtc.spec 成功执行后将会在rpmbuild/RPMS目录生成rpm文件
+</content>
+    </entry>
+    
+     <entry>
+        <title>Ubuntu搭建LNMP环境</title>
+        <url>https://technod.cn/leaf/20211110/lnmp.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>LNMP</tag><tag>PHP</tag>
+        </tags>
+        <content type="html"> 安装Nginx sudo apt install nginx 安装MySQL sudo apt install mysql-server-5.7 添加php源 sudo add-apt-repository ppa:ondrej/php sudo apt update 也可以使用ppa国内源 deb https://launchpad.proxy.ustclug.org/ondrej/php/ubuntu focal main 安装PHP sudo apt install php7.4 sudo apt install php7.4-fpm 安装PHP扩展 sudo apt install php7.4-xml php7.4-json php7.4-mysql php7.4-curl php7.4-gd php7.4-pdo php7.4-mbstring php7.4-mysqlnd php7.4-bcmath php7.4-zip php7.4-fileinfo php7.4-redis 设置MySQL用户名密码 #查看初始用户名和密码 cd /etc/mysql sudo cat debian.cnf #使用初始用户名密码登录mysql mysql -udebian-sys-maint -pGIOyPu42YoZEwRTe #设置密码 use mysql; update mysql.user set authentication_string=&amp;#39;yourpassword&amp;#39; where user=&amp;#39;root&amp;#39; and Host =&amp;#39;localhost&amp;#39;; update user set plugin=&amp;#34;mysql_native_password&amp;#34; where user=&amp;#39;root&amp;#39;; #设置允许远程登录 update user set host=&amp;#34;%&amp;#34; where user=&amp;#39;root&amp;#39;; flush privileges; quit; 配置Nginx多域名访问 进入/etc/nginx/conf.d目录 cd /etc/nginx/conf.d 新建站点配置 sudo vi mysite.com.conf server { listen 80; listen 443 ssl http2; server_name .tp5.test; root /www/mysite.com/public; index index.html index.htm index.php; charset utf-8; client_max_body_size 1000M; location / { if (!-e $request_filename) { rewrite ^(.*)$ /index.php?s=/$1 last; break; } } location = /favicon.ico { access_log off; log_not_found off; } location = /robots.txt { access_log off; log_not_found off; } access_log off; error_log /var/log/nginx/tp5.test-error.log error; sendfile off; location ~ \.php(.*)$ { fastcgi_split_path_info ^(.&#43;\.php)(/.&#43;)$; fastcgi_pass unix:/var/run/php/php7.4-fpm.sock; fastcgi_index index.php; include fastcgi_params; fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; fastcgi_intercept_errors off; fastcgi_buffer_size 16k; fastcgi_buffers 4 16k; fastcgi_connect_timeout 300; fastcgi_send_timeout 300; fastcgi_read_timeout 300; } location ~ /\.ht { deny all; } ssl_certificate /etc/ssl/certs/mysite.com.crt; ssl_certificate_key /etc/ssl/certs/mysite.com.key; } 检查配置文件并重启Nginx sudo nginx -t sudo nginx -s reload </content>
+    </entry>
+    
+     <entry>
+        <title>记一次Docker mysql容器在windows虚拟机无法启动问题</title>
+        <url>https://technod.cn/leaf/202109/docker_err.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>Docker</tag><tag>mysql</tag>
+        </tags>
+        <content type="html"> 环境 使用的环境是Windows10&#43;homestead(VirtualBox) 启动过程 运行sudo docker-compose up -d 容器可以正常启动 运行sudo docker exec -it db-mysql bash进入mysql容器操作数据库报错：ERROR 2002 (HY000): Can&#39;t connect to local MySQL server through socket &#39;/var/run/mysqld/mysqld.sock&#39; (2) 运行service mysql status查看mysql启动状态,发现服务未启动 运行sudo docker logs db-mysql查看容器启动日志: [ERROR] InnoDB: Operating system error number 95 in a file operation. [ERROR] InnoDB: Error number 95 means &amp;#39;Operation not supported&amp;#39; [Note] InnoDB: Some operating system error numbers are described at http://dev.mysql.com/doc/refman/5.7/en/operating-system-error-codes.html [ERROR] InnoDB: File ./ib_logfile0: &amp;#39;Linux aio&amp;#39; returned OS error 195. Cannot continue operation [ERROR] InnoDB: Cannot continue operation. 解决办法 start the container like this : docker run -it mysql --innodb_use_native_aio=0 add the command to your docker-compose file : command: --innodb_use_native_aio=0 add an option to your my.cnf file in your build innodb_use_native_aio=0 From stackoverflow By @AndrewD
+附：我的docker-compose.yml文件 version: &amp;#34;2&amp;#34; services: mysql: image: docker-mysql57 container_name: db-mysql restart: always environment: - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} - MYSQL_DATABASE=${MYSQL_DATABASE} - MYSQL_USER=${MYSQL_USER} - MYSQL_PASSWORD=${MYSQL_PASSWORD} volumes: - ./data/mysql:/var/lib/mysql ports: - 33066:3306 command: --innodb_use_native_aio=0 </content>
+    </entry>
+    
+     <entry>
+        <title>Homestead环境搭建</title>
+        <url>https://technod.cn/note/202105/installhd.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Laravel</tag><tag>Homestead</tag><tag>PHP</tag>
+        </tags>
+        <content type="html"> 准备工作 环境 OS: Windows 10 安装所需软件 Git Vagrant VitrualBox xshell Navicat 生成SSH Key 在用户家目录运行：
+cd ~ ssh-keygen -t rsa -C &amp;#34;youemail@homestead.com&amp;#34; 此时，会生成以下的文件
+安装Homestead (还可以直接前往Vagrant Cloud下载相应box文件) 打开命令终端以管理员权限运行，cd到用户根cd ~目录 运行命令： vagrant box add laravel/homestead 输入编号，选择vitrualbox选项 等待下载安装即可（现在国内的下载速度还是可以的，所以不用去找box文件啦） 完成后运行vagrant box list命令查看是否安装成功 配置Homestead 克隆homestead配置文件到用户家目录 cd ~ git clone https://github.com/laravel/homestead.git 执行命令bash init.sh初始化 cd homestead bash init.sh 配置Homestead.yaml文件 --- ip: &amp;#34;192.168.1.10&amp;#34; memory: 2048 cpus: 2 provider: virtualbox authorize: ~/.ssh/id_rsa.pub keys: - ~/.ssh/id_rsa folders: - map: D:\workspace /**自定义自己的工作目录(注释删除)**/ to: /home/vagrant/code sites: - map: homestead.test to: /home/vagrant/code/homestead/public - map: api.test to: /home/vagrant/code/shopApi/public - map: tp5.test to: /home/vagrant/code/tp5/public php: &amp;#34;7.2&amp;#34; /**指定php版本(注释内容删除)**/ type: thinkphp /**TP框架需指定thinkphp类型(为了支持pathinfo)(注释内容删除)**/ databases: - homestead - api features: - mysql: true - mariadb: false - postgresql: false - ohmyzsh: false - webdriver: false #services: # - enabled: # - &amp;#34;postgresql@12-main&amp;#34; # - disabled: # - &amp;#34;postgresql@11-main&amp;#34; # ports: # - send: 50000 # to: 5000 # - send: 7777 # to: 777 # protocol: udp 运行vagrant up命令，启动Homestead vagrant up xshell连接虚拟机的IP为yaml配置文件中的IP，用户名和密码均为vagrant Navicat连接MySQL数据库的IP为yaml配置文件中的IP，用户名为homestead，密码为secret 修改Homestead中PHP的版本 # 查看所有 php 版本和当前版本 sudo update-alternatives --display php # 执行后，会列出当前 php 所有版本和编号，输入编号，切换到执行的版本 sudo update-alternatives --config php # homestead 目录下有个 aliases 文件，这个文件中定义了一些可以直接在虚拟机中使用的命令，比如想切换到 7.0 版本直接执行 php70 即可 </content>
+    </entry>
+    
+     <entry>
+        <title>Ubuntu-安装PHP启动报错php: error while loading shared libraries: libcrypto.so.1.0.0: cannot open shared object file: No such file or directory解决办法</title>
+        <url>https://technod.cn/note/202105/phperror.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>PHP</tag>
+        </tags>
+        <content type="html"> Ubuntu-使用宝塔面板安装PHP后启动报错：php: error while loading shared libraries: libcrypto.so.1.0.0: cannot open shared object file: No such file or directory 解决办法 前往http://security.ubuntu.com/ubuntu/pool/main/o/openssl1.0/找到合适的软件包 我这里选择libssl1.0-dev_1.0.2n-1ubuntu5_amd64.deb
+cd /usr/local/src sudo wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0-dev_1.0.2n-1ubuntu5_amd64.deb sudo dpkg -i libssl1.0-dev_1.0.2n-1ubuntu5_amd64.deb 再次重启PHP成功 </content>
+    </entry>
+    
+     <entry>
+        <title>Ubuntu-Docker的安装与使用</title>
+        <url>https://technod.cn/note/202104/docker.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Docker</tag><tag>Ubuntu</tag>
+        </tags>
+        <content type="html"> 环境配置 删除旧版本 sudo apt-get remove docker docker-engine docker.io containerd runc 更新apt包索引 sudo apt-get update 安装包以允许apt通过HTTPS使用存储库 sudo apt-get install apt-transport-https sudo apt-get install ca-certificates sudo apt-get install curl sudo apt-get install gnupg-agent sudo apt-get install software-properties-common 添加Docker的官方GPG密钥 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88通过搜索指纹的最后8个字符，验证您现在拥有带指纹的密钥
+sudo apt-key fingerprint 0EBFCD88 添加软件源 sudo add-apt-repository \ &amp;#34;deb [arch=amd64] https://download.docker.com/linux/ubuntu \ $(lsb_release -cs) \ stable&amp;#34; 更新apt索引 sudo apt-get update 执行安装 sudo apt-get install docker-ce docker-ce-cli containerd.io 通过运行hello-world 映像验证是否正确安装了Docker CE sudo docker run hello-world 查看docker版本 sudo docker version 进程维护 停止、启动、重启docker sudo systemctl start | stop | restart docker.service 加入开机自启 sudo systemctl enable docker 开机启动检测 sudo systemctl list-unit-files | grep docker Docker的升级维护 升级 sudo apt-get update 卸载 sudo apt-get purge docker-ce docker-ce-cli containerd.io docker docker.io sudo rm -rf /var/lib/docker sudo apt autoremove 账号权限 由于每次运行docker都要在命令前加sudo,下面设置当前登录账号执行docker命令方法
+创建docker组 sudo groupadd docker 将当前用户添加到docker组 sudo usermod -aG docker $USER 注销账号并重新登录即可 镜像管理 搜索镜像 docker search nginx 安装镜像 docker pull nginx 查看镜像 docker images 删除镜像 docker rmi -f nginx 容器管理 查看运行的容器 docker ps 查看所有容器 docker ps -a 查看容器进程 docker top nginx 查看容器端口映射 docker port xx 查看容器元信息（如IP） docker inspect xx 查看容器日志 docker logs nginx 删除容器 docker rm -f xx </content>
+    </entry>
+    
+     <entry>
+        <title>Js数组操作</title>
+        <url>https://technod.cn/note/202104/javascript.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>JavaScript</tag><tag>JS</tag><tag>数组</tag>
+        </tags>
+        <content type="html"> 类型转换 字符串 大部分数据类型都可以使用toString()函数转换为字符串
+console.log(([1,2,3]).toString()); //1,2,3 也可以使用函数String转换为字符串
+console.log(String([1,2,3])); 或者使用join连接为字符串
+console.log([1,2,3].join(&amp;#34;-&amp;#34;)); //1-2-3 Array.from 使用Array.from可将类数组转换为数组，类数组指包含length属性或可迭代的对象。
+let str = &amp;#39;你好上海&amp;#39;; console.log(Array.from(str)); //[&amp;#34;你&amp;#34;,&amp;#34;好&amp;#34;,&amp;#34;上&amp;#34;,&amp;#34;海&amp;#34;] 为对象设置length属性后也可以转换为数组，但要下标为数值或数值字符串
+let user = { 0: &amp;#39;张三&amp;#39;, &amp;#39;1&amp;#39;: 18, length: 2 }; console.log(Array.from(user)); //[&amp;#34;张三&amp;#34;, 18] 展开语法 数组合并 使用...可将数组展开为多个值。
+let a = [1,2,3]; let b = [&amp;#39;a&amp;#39;,&amp;#39;technod.cn&amp;#39;,...a]; console.log(b); //[&amp;#39;a&amp;#39;,&amp;#39;technod.cn&amp;#39;,1,2,3] 函数参数 使用展示语法可以替接收任意数量的参数
+function live(...args){ console.log(args); } live(1,2,3,&amp;#39;technod.cn&amp;#39;); //[1,2,3,&amp;#39;technod.cn&amp;#39;] 解构赋值 基本使用 let [site,url] = [&amp;#39;nodjoy&amp;#39;,&amp;#39;technod.cn&amp;#39;]; console.log(site); //nodjoy 剩余解构 //使用一个变量来接收剩余参数 let [a,...b] = [&amp;#39;technod.cn&amp;#39;,&amp;#39;beijing&amp;#39;,&amp;#39;shanghai&amp;#39;]; console.log(a); //technod.cn console.log(b); //[&amp;#39;beijing&amp;#39;,shanghai] 字符串解构 const [...a] = &amp;#39;technod.cn&amp;#39; console.log(a); //Array(13) 管理元素 向数组追加元素 let arr = [1,&amp;#39;technod.cn&amp;#39;,&amp;#39;nodjoy&amp;#39;]; arr[arr.length] = &amp;#39;dada&amp;#39;; console.log(arr); //[1,&amp;#39;technod.cn&amp;#39;,&amp;#39;nodjoy&amp;#39;,&amp;#39;dada&amp;#39;] 使用展开语法批量添加元素 let arr = [1,2,3,&amp;#39;listen&amp;#39;]; let live = [&amp;#39;technod.cn&amp;#39;]; live.push(...arr); console.log(live); //[&amp;#39;technod.cn,1,2,3,&amp;#39;listen&amp;#39;] push 压入元素。返回值为数组元素的数量
+let arr = [&amp;#39;site&amp;#39;,&amp;#39;nodjoy&amp;#39;]; console.log(arr.push(&amp;#39;apple&amp;#39;,&amp;#39;strawberry&amp;#39;)); //4 console.log(arr); //[&amp;#39;site&amp;#39;,&amp;#39;nodjoy&amp;#39;,&amp;#39;apple&amp;#39;,&amp;#39;strawberry&amp;#39;] pop 从末尾弹出元素，返回值为弹出的元素。
+let arr = [&amp;#39;apple&amp;#39;,&amp;#39;strawberry&amp;#39;,&amp;#39;banana&amp;#39;]; console.log(arr.pop()); //banana console.log(arr); //[&amp;#39;apple&amp;#39;,&amp;#39;strawberry&amp;#39;] shift 从数组前面取出一个元素
+let arr = [&amp;#39;apple&amp;#39;,&amp;#39;banana&amp;#39;]; console.log(arr.shift()); //apple console.log(arr); //[&amp;#39;banana&amp;#39;] unshift 从数组前面添加元素
+let arr = [&amp;#39;apple&amp;#39;,&amp;#39;banana&amp;#39;]; console.log(arr.unshift(&amp;#39;strawberry&amp;#39;,&amp;#39;grape&amp;#39;)); //4 console.log(arr); //[&amp;#39;strawberry&amp;#39;,&amp;#39;grape&amp;#39;,&amp;#39;apple&amp;#39;,&amp;#39;banana&amp;#39;] fill 使用fill填充数组元素 let arr = Array(4).fill(&amp;#39;apple&amp;#39;); console.log(arr); //[&amp;#39;apple&amp;#39;,&amp;#39;apple&amp;#39;,&amp;#39;apple&amp;#39;,&amp;#39;apple&amp;#39;] 指定填充位置 let arr = [1,2,3,4]; arr.fill(&amp;#34;technod.cn&amp;#34;,1,2); console.log(arr); //[1,&amp;#39;technod.cn&amp;#39;,3,4] slice 数组截取,不会改变原数组
+let arr = [0,1,2,3,4,5]; console.log(arr.slice(1,3)); //[1,2] splice splice可以添加、删除、替换数组中的元素，会对原数组进行改变，返回值为删除的元素 删除数组元素第一个参数为从哪开始删除，第二个参数为删除的数量。
+let arr = [0, 1, 2, 3, 4, 5, 6]; console.log(arr.splice(1, 3)); //返回删除的元素 [1, 2, 3] console.log(arr); //删除数据后的原数组 [0, 4, 5, 6] 通过修改length删除最后一个元素 let arr = [&amp;#34;apple&amp;#34;, &amp;#34;banana&amp;#34;]; arr.length = arr.length - 1; console.log(arr); 通过指定第三个参数来设置在删除位置添加的元素 let arr = [0, 1, 2, 3, 4, 5, 6]; console.log(arr.splice(1, 3, &amp;#39;apple&amp;#39;, &amp;#39;strawberry&amp;#39;)); //[1, 2, 3] console.log(arr); //[0, &amp;#34;apple&amp;#34;, &amp;#34;strawberry&amp;#34;, 4, 5, 6] 向末尾添加元素 let arr = [0, 1, 2, 3, 4, 5, 6]; console.log(arr.splice(arr.length, 0, &amp;#39;apple&amp;#39;, &amp;#39;strawberry&amp;#39;)); //[] console.log(arr); // [0, 1, 2, 3, 4, 5, 6, &amp;#34;apple&amp;#34;, &amp;#34;strawberry&amp;#34;] 向数组前添加元素 let arr = [0, 1, 2, 3, 4, 5, 6]; console.log(arr.splice(0, 0, &amp;#39;apple&amp;#39;, &amp;#39;strawberry&amp;#39;)); //[] console.log(arr); // [&amp;#34;apple&amp;#34;, &amp;#34;strawberry&amp;#34;，0, 1, 2, 3, 4, 5, 6] 数组的合并与拆分 join 使用join连接成字符串
+let arr = [1,&amp;#39;cms&amp;#39;,&amp;#39;apple&amp;#39;]; console.log(arr.join(&amp;#39;-&amp;#39;)); //1-cms-apple split split 将字符串分割成数组
+let price = &amp;#34;22,28,aa&amp;#34;; console.log(price.split(&amp;#34;,&amp;#34;)); //[&amp;#34;22&amp;#34;,&amp;#34;28&amp;#34;,&amp;#34;aa&amp;#34;] concat concat用于连接两个或多个数组
+let arr = [&amp;#34;apple&amp;#34;, &amp;#34;strawberrry&amp;#34;]; let listen = [1, 2]; let live = [3, 4]; console.log(array.concat(listen, live)); //[&amp;#34;apple&amp;#34;, &amp;#34;strawberrry&amp;#34;, 1, 2, 3, 4] 也可使用展开语法实现连接
+console.log([...arr,...listen,...live]); copyWithin copyWithin从数组中复制一部分到数组中的其他位置
+array.copyWithin(target,start,end); /* *参数说明 *target--必需。复制到指定目标索引位置。 *start--可选。元素复制的起始位置。 *end--可选。停止复制的索引位置 (默认为 array.length)。如果为负值，表示倒数。 */ 查找元素 indexOf indexOf从前向后查找元素出现的位置，如果找不到返回-1
+let arr = [7,3,5,8,9]; console.log(arr.indexOf(3)); //1 console.log(arr.indexOf(2)); //-1 includes 使用includes查找字符串，返回值为布尔类型，方便判断。
+let arr = [7,3,2,6]; console.log(arr.includes(6)); //true find find方法找到后会把值返回出来(返回第一次找到的值)，如果找不到返回值为undefined
+findIndex findIndex与find的区别是返回索引值
+数组排序 reverse 反转数组顺序
+let arr = [1,4,2,9]; console.log(arr.reverse()); //[9,2,4,1] sort 默认从小到大排序 let arr = [1,4,2,9]; console.log(arr.sort()); //[1,2,4,9] 使用排序函数从大到小排序 let arr = [1, 4, 2, 9]; console.log(arr.sort(function (v1, v2) { return v2 - v1; })); //[9, 4, 2, 1] 循环遍历 for let lessons = [ {title: &amp;#39;媒体查询响应式布局&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;FLEX 弹性盒模型&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;MYSQL多表查询随意操作&amp;#39;,category: &amp;#39;mysql&amp;#39;} ]; for (let i = 0; i &amp;lt; lessons.length; i&#43;&#43;) { lessons[i] = `课程: ${lessons[i].title}`; } console.log(lessons); forEach let lessons = [ {title: &amp;#39;媒体查询响应式布局&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;FLEX 弹性盒模型&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;MYSQL多表查询随意操作&amp;#39;,category: &amp;#39;mysql&amp;#39;} ]; lessons.forEach((item, index, array) =&amp;gt; { item.title = item.title.substr(0, 5); }); console.log(lessons); for/in let lessons = [ {title: &amp;#39;媒体查询响应式布局&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;FLEX 弹性盒模型&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;MYSQL多表查询随意操作&amp;#39;,category: &amp;#39;mysql&amp;#39;} ]; for (const key in lessons) { console.log(`标题: ${lessons[key].title}`); } for/of let lessons = [ {title: &amp;#39;媒体查询响应式布局&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;FLEX 弹性盒模型&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;MYSQL多表查询随意操作&amp;#39;,category: &amp;#39;mysql&amp;#39;} ]; for (const item of lessons) { console.log(` 标题: ${item.title} 栏目: ${item.category == &amp;#34;css&amp;#34; ? &amp;#34;前端&amp;#34; : &amp;#34;数据库&amp;#34;} `); } 实现取数组最大值的方法 function arrayMax(array) { let max = array[0]; for (const elem of array) { max = max &amp;gt; elem ? max : elem; } return max; } console.log(arrayMax([1, 3, 2, 9])); 扩展方法 every every 用于递归的检测元素，要所有元素操作都要返回真结果才为真。
+实现标题的关键词检查
+let words = [&amp;#39;js&amp;#39;, &amp;#39;css&amp;#39;, &amp;#39;php&amp;#39;]; let title = &amp;#39;dfgdsgdsfdgjs&amp;#39;; let state = words.every(function (item, index, array) { return title.indexOf(item) &amp;gt;= 0; }); if (state == false) console.log(&amp;#39;标题必须包含所有关键词&amp;#39;); some 使用 some 函数可以递归的检测元素，如果有一个返回true，表达式结果就是真。第一个参数为元素，第二个参数为索引，第三个参数为原数组。
+使用 some 检测规则关键词的示例，如果匹配到一个词就提示违规。
+let words = [&amp;#39;ss&amp;#39;, &amp;#39;蛤蟆&amp;#39;, &amp;#39;wa&amp;#39;]; let title = &amp;#39;wawawawawwww&amp;#39; let state = words.some(function (item, index, array) { return title.indexOf(item) &amp;gt;= 0; }); if (state) console.log(&amp;#39;标题含有违规关键词&amp;#39;); filter 使用 filter 可以过滤数据中元素
+下面是获取所有在CSS栏目的课程。
+let lessons = [ {title: &amp;#39;媒体查询响应式布局&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;FLEX 弹性盒模型&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;MYSQL多表查询随意操作&amp;#39;,category: &amp;#39;mysql&amp;#39;} ]; let cssLessons = lessons.filter(function (item, index, array) { if (item.category.toLowerCase() == &amp;#39;css&amp;#39;) { return true; } }); console.log(cssLessons); map 使用 map 映射可以在数组的所有元素上应用函数，用于映射出新的值。 获取数组所有标题组合的新数组
+let lessons = [ {title: &amp;#39;媒体查询响应式布局&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;FLEX 弹性盒模型&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;MYSQL多表查询随意操作&amp;#39;,category: &amp;#39;mysql&amp;#39;} ]; console.log(lessons.map(item =&amp;gt; item.title)); 为所有标题添加上 APPLE
+let lessons = [ {title: &amp;#39;媒体查询响应式布局&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;FLEX 弹性盒模型&amp;#39;,category: &amp;#39;css&amp;#39;}, {title: &amp;#39;MYSQL多表查询随意操作&amp;#39;,category: &amp;#39;mysql&amp;#39;} ]; lessons = lessons.map(function (item, index, array) { item.title = `[APPLE] ${item[&amp;#39;title&amp;#39;]}`; return item; }); console.log(lessons); reduce 使用 reduce 与 reduceRight 函数可以迭代数组的所有元素，reduce 从前开始 reduceRight 从后面开始
+统计元素出现的次数 function countArrayELem(array, elem) { return array.reduce((total, cur) =&amp;gt; (total &#43;= cur == elem ? 1 : 0), 0); } let numbers = [1, 2, 3, 1, 5]; console.log(countArrayELem(numbers, 1)); //2 取数组中的最大值 function arrayMax(array) { return array.reduce( (max, elem) =&amp;gt; (max &amp;gt; elem ? max : elem), array[0] ); } console.log(arrayMax([1, 3, 2, 9])); 取价格最高的商品 let cart = [ { name: &amp;#34;iphone&amp;#34;, price: 12000 }, { name: &amp;#34;imac&amp;#34;, price: 25000 }, { name: &amp;#34;ipad&amp;#34;, price: 3600 } ]; function maxPrice(array) { return array.reduce( (goods, elem) =&amp;gt; (goods.price &amp;gt; elem.price ? goods : elem), array[0] ); } console.log(maxPrice(cart)); 计算购物车中的商品总价 let cart = [ { name: &amp;#34;iphone&amp;#34;, price: 12000 }, { name: &amp;#34;imac&amp;#34;, price: 25000 }, { name: &amp;#34;ipad&amp;#34;, price: 3600 } ]; const total = cart.reduce( (total, goods) =&amp;gt; total &#43;= goods.price, 0 ); console.log(total); //40600 获取价格超过1万的商品名称 let goods = [ { name: &amp;#34;iphone&amp;#34;, price: 12000 }, { name: &amp;#34;imac&amp;#34;, price: 25000 }, { name: &amp;#34;ipad&amp;#34;, price: 3600 } ]; function getNameByPrice(array, price) { return array.reduce((goods, elem) =&amp;gt; { if (elem.price &amp;gt; price) { goods.push(elem); } return goods; }, []).map(elem =&amp;gt; elem.name); } console.table(getNameByPrice(goods, 10000)); 实现数组去重 let arr = [1, 2, 6, 2, 1]; let filterArr = arr.reduce((pre, cur, index, array) =&amp;gt; { if (pre.includes(cur) === false) { pre = [...pre, cur]; } return pre; }, []); console.log(filterArr); // [1,2,6] </content>
+    </entry>
+    
+     <entry>
+        <title>Node-Koa2之axios请求云之讯短信发送接口和soap请求WebService</title>
+        <url>https://technod.cn/leaf/202103/axios-soap.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>api</tag><tag>axios</tag><tag>soap</tag><tag>node.js</tag><tag>koa2</tag>
+        </tags>
+        <content type="html"> axios请求云之讯短信接口实现短信发送 安装axios npm install axios --save 方法实现 static async sendMessage(ctx){ let param = Math.random().toString().substr(2, 4); //生成四位随机数 let phone = &amp;#39;157********&amp;#39;; const url = &amp;#39;https://open.ucpaas.com/ol/sms/sendsms&amp;#39;; const axios = require(&amp;#39;axios&amp;#39;); let sendRe = await axios({ method: &amp;#39;post&amp;#39;, url: url, data: { sid: &amp;#34;4rtw******&amp;#34;, token: &amp;#34;5fjg******&amp;#34;, appid: &amp;#34;8aj5******&amp;#34;, templateid: &amp;#39;2780*&amp;#39;, param: param, mobile: phone, //uid: config.uid }, headers: { &amp;#34;Content-Type&amp;#34;: &amp;#34;application/json;charset=utf-8&amp;#34;, &amp;#34;Accept&amp;#34;: &amp;#34;application/json&amp;#34; } }); if(sendRe.data.code == &amp;#39;000000&amp;#39;){ ctx.json({ code:11, message:&amp;#34;发送成功&amp;#34; }); }else{ ctx.json({ code:22, message:&amp;#34;短信验证码发送失败，&amp;#34;&#43;sendRe.data.code }) } } soap请求WebService服务器数据 安装soap npm install soap --save 发起soap请求 async function GetProjectInfo () { var url = &amp;#39;http://digitcode.yesno.com.cn/CCNOutService/OutDigitCodeService.asmx?wsdl&amp;#39;; var args = { userID :&amp;#39;b6cf5d3*******1b3e&amp;#39;, userPwd:&amp;#39;50e3*******066&amp;#39;, ip:&amp;#39;101.*****&amp;#39;, acCode:&amp;#34;20210310****&amp;#34;, language:&amp;#39;1&amp;#39;, channel:&amp;#39;X&amp;#39; }; return new Promise(function (results) { const soap = require(&amp;#39;soap&amp;#39;); soap.createClient(url, function(err, client) { client.Get_AcCodeInfoInterface(args, function(err, result) { if (err) { results(err) }else { results(result) } }); }); }); } module.exports = { GetProjectInfo }; 获取到WebService返回的Xml数据 let resultProductInfo = await GetProjectInfo(); let xmlReply = resultProductInfo.reply; 解析Xml数据 安装xmlreader npm install xmlreader --save xml数据转json对象实现 async function XmlToJson (xmlString) { return new Promise(function (result){ var xmlreader = require(&amp;#34;xmlreader&amp;#34;); xmlreader.read(xmlString, function(errors, response){ if(null !== errors ){ result(errors); } let datas={}; datas.reply = response.messageinfo.item.reply.text(); datas.p_code = response.messageinfo.item.zcode.text(); datas.cuanhuocode = response.messageinfo.item.cuanhuocode.text(); datas.productcode = response.messageinfo.item.productcode.text(); result(datas); }); }); } module.exports = { XmlToJson }; </content>
+    </entry>
+    
+     <entry>
+        <title>基于Koa框架的Lincms常用操作</title>
+        <url>https://technod.cn/note/202103/lincms.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>lincms</tag><tag>Sequelize</tag><tag>koa</tag><tag>node.js</tag>
+        </tags>
+        <content type="html"> Sequelize事务操作 let transaction; //事务开始 try { transaction = await sequelize.transaction(); const replace_record = { p_code: v.get(&amp;#39;path.p_code&amp;#39;), p_type: v.get(&amp;#39;path.p_type&amp;#39;) }; const { id: record_id } = await ReplaceRecordModel.create(replace_record, { transaction }); await WxReplacesheetsModel.create( { record_id, name: v.get(&amp;#39;path.name&amp;#39;), phone: v.get(&amp;#39;path.phone&amp;#39;), province: v.get(&amp;#39;path.province&amp;#39;), city: v.get(&amp;#39;path.city&amp;#39;), district: v.get(&amp;#39;path.district&amp;#39;), question: v.get(&amp;#39;path.question&amp;#39;), status: 1 }, { transaction } ); await transaction.commit(); //事务提交 ctx.json({ code:11, message:&amp;#34;创建成功&amp;#34; }); }catch (error) { console.log(error) await transaction.rollback(); //事务回滚 throw new Failed({ code:22, message:&amp;#34;创建失败&amp;#34;, }); } 更新update await ReplaceRecordModel.update({status:2},{ where:{ id:1 } }); koa读取Excel文件 const xlsx = require(&amp;#39;xlsx&amp;#39;); const fs = require(&amp;#39;fs&amp;#39;); const path = require(&amp;#39;path&amp;#39;); async function getExcelObjs (arr) { const file = &amp;#39;app/assets/&amp;#39;&#43;arr[0].path; // 获取上传的excel文件路径 const reader = fs.createReadStream(file); // 创建可读流 const upStream = fs.createWriteStream(file); // 创建可写流 const getRes = await getFile(reader, upStream); //等待数据存储完成 const datas = []; //可能存在多个sheet的情况 if (!getRes) { const workbook = xlsx.readFile(file); const sheetNames = workbook.SheetNames; // 返回 [&amp;#39;sheet1&amp;#39;, ...] for (const sheetName of sheetNames) { const worksheet = workbook.Sheets[sheetName]; const data = xlsx.utils.sheet_to_json(worksheet); datas.push(data); } //删除文件 fs.unlink(file,function(error){ if(error){ console.log(error); return false; } }); return { status: true, datas }; } else { return { status: false, msg: &amp;#39;error message...&amp;#39; }; } } function getFile (reader, upStream) { return new Promise(function (result) { let stream = reader.pipe(upStream); // 可读流通过管道写入可写流 stream.on(&amp;#39;finish&amp;#39;, function (err) { result(err); }); }); } module.exports = { getExcelObjs }; </content>
+    </entry>
+    
+     <entry>
+        <title>Linux开启bbr加速</title>
+        <url>https://technod.cn/leaf/202102/bbr.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>Linux</tag><tag>bbr</tag>
+        </tags>
+        <content type="html"> 安装bbr加速 进入/usr/local/src目录，下载bbr.sh文件 cd /usr/local/src sudo wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh 添加可执行权限 sudo chmod &#43;x bbr.sh 执行该脚本文件,安装完成后提示按y重启系统 sudo sh bbr.sh 判断BBR加速有没有开启成功。输入以下命令： sysctl net.ipv4.tcp_available_congestion_control 如果返回值为：net.ipv4.tcp_available_congestion_control = bbr cubic reno则说明已经开启成功了 </content>
+    </entry>
+    
+     <entry>
+        <title>PHP&amp;kuaidi.com实现快递查询</title>
+        <url>https://technod.cn/leaf/202101/kuaidiapi.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>快递API</tag><tag>PHP</tag><tag>快递接口</tag>
+        </tags>
+        <content type="html"> 申请快递查询API授权key kuaidi.com SDK文件KDApi.php /** * 物流信息查询接口SDK */ class KDAPI{ private $_APPKEY = &amp;#39;twde5d8ef***********&amp;#39;; //改为您自己的key private $_APIURL = &amp;#34;https://highapi.kuaidi.com/openapi-querycountordernumber.html?&amp;#34;; private $_show = 0; private $_muti = 0; private $_order = &amp;#39;desc&amp;#39;; /** * 获得的快递网接口查询KEY。 * @param string $key */ public function KuaidiAPi($key){ $this-&amp;gt;_APPKEY = $key; } /** * 设置数据返回类型。0: 返回 json 字符串; 1:返回 xml 对象 * @param number $show */ public function setShow($show = 0){ $this-&amp;gt;_show = $show; } /** * 设置返回物流信息条目数, 0:返回多行完整的信息; 1:只返回一行信息 * @param number $muti */ public function setMuti($muti = 0){ $this-&amp;gt;_muti = $muti; } /** * 设置返回物流信息排序。desc:按时间由新到旧排列; asc:按时间由旧到新排列 * @param string $order */ public function setOrder($order = &amp;#39;desc&amp;#39;){ $this-&amp;gt;_order = $order; } /** * 查询物流信息，传入单号， * @param 物流单号 $nu * @param 公司简码 $com 要查询的快递公司代码,不支持中文,具体请参考快递公司代码文档。 不填默认根据单号自动匹配公司。注:单号匹配成功率高于 95%。 * @throws Exception * @return array */ public function query($nu, $com=&amp;#39;&amp;#39;){ if (function_exists(&amp;#39;curl_init&amp;#39;) == 1) { $url = $this-&amp;gt;_APIURL; $dataArr = array( &amp;#39;id&amp;#39; =&amp;gt; $this-&amp;gt;_APPKEY, &amp;#39;com&amp;#39; =&amp;gt; $com, &amp;#39;nu&amp;#39; =&amp;gt; $nu, &amp;#39;show&amp;#39; =&amp;gt; $this-&amp;gt;_show, &amp;#39;muti&amp;#39; =&amp;gt; $this-&amp;gt;_muti, &amp;#39;order&amp;#39; =&amp;gt; $this-&amp;gt;_order ); foreach ($dataArr as $key =&amp;gt; $value) { $url .= $key . &amp;#39;=&amp;#39; . $value . &amp;#34;&amp;amp;&amp;#34;; } // echo $url; $curl = curl_init(); curl_setopt($curl, CURLOPT_URL, $url); curl_setopt($curl, CURLOPT_HEADER, 0); curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); curl_setopt($curl, CURLOPT_TIMEOUT, 10); $kuaidresult = curl_exec($curl); curl_close($curl); if($this-&amp;gt;_show == 0){ $result = json_decode($kuaidresult, true); }else{ $result = $kuaidresult; } return $result; }else{ throw new Exception(&amp;#34;Please install curl plugin&amp;#34;, 1); } } } 使用示例example.php include &amp;#39;KDApi.php&amp;#39;; $kuaidichaxun = new KDAPI(); //设置返回格式。 0: 返回 json 字符串; 1:返回 xml 对象 //$kuaidichaxun-&amp;gt;setShow(1); //可选，默认为 0 返回json格式 //返回物流信息条目数。 0:返回多行完整的信息; 1:只返回一行信息 //$kuaidichaxun-&amp;gt;setMuti(1); //可选，默认为0 //设置返回物流信息排序。desc:按时间由新到旧排列; asc:按时间由旧到新排列 //$kuaidichaxun-&amp;gt;setOrder(&amp;#39;asc&amp;#39;); //查询 $result = $kuaidichaxun-&amp;gt;query(&amp;#39;YT21212*****&amp;#39;, &amp;#39;yuantong&amp;#39;); var_dump($result); 运行结果 </content>
+    </entry>
+    
+     <entry>
+        <title>Linux-使用防火墙firewalld开放端口</title>
+        <url>https://technod.cn/leaf/20210122/linux-firewalld.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>firewalld</tag><tag>防火墙</tag>
+        </tags>
+        <content type="html"> 查看当前开了哪些端口其实一个服务对应一个端口，每个服务对应/usr/lib/firewalld/services下面一个xml文件 firewall-cmd --list-services 通过firewall-cmd --get-services命令查看可以打开的服务有哪些 新建并编辑vpn-port.xml文件 开放18001端口 &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;service&amp;gt; &amp;lt;short&amp;gt;VPN Port&amp;lt;/short&amp;gt; &amp;lt;description&amp;gt;VPN Port 18001&amp;lt;/description&amp;gt; &amp;lt;port protocol=&amp;#34;tcp&amp;#34; port=&amp;#34;18001&amp;#34;/&amp;gt; &amp;lt;/service&amp;gt; 可以通过下面的命令添加一个服务到firewalld firewall-cmd --add-service=vpn-port //vpn-port换成想要开放的service,仅当前有效 firewall-cmd --permanent --add-service=vpn-port //加上--permanent,表示系统重启后也有效 重启防火墙即可生效 systemctl restart firewalld.service </content>
+    </entry>
+    
+     <entry>
+        <title>使用Linux定时任务-Crontab 完成MySQL数据库的备份和表操作</title>
+        <url>https://technod.cn/leaf/202101/crontab_linux.html</url>
+        <categories>
+          <category>技术</category>
+        </categories>
+        <tags>
+          <tag>定时任务</tag><tag>crontab</tag>
+        </tags>
+        <content type="html"> crontab基本命令 crontab -l //查看定时任务 crontab -e //编辑定时任务 crontab -r //删除定时任务 crontab常用写法 每分钟执行 */1 * * * * command 每小时0分执行 0 * * * * command 每天0点执行 0 0 * * * command 每周日0点执行 0 0 * * 0 command 每月1号执行 0 0 1 * * command 每年1月1日执行 0 0 1 1 * command 使用crontab定时任务备份数据库 首先编写shell脚本 back_mysql.sh t = `date &amp;#39;&#43;%Y-%m-%d %H:%M:%S&amp;#39;` //使用时间做文件名 mysqldump -h127.0.0.1 -uusername -ppwd dbname &amp;gt; /var/back_mysql/dbname&amp;#34;$t&amp;#34;.sql 将shell脚本加入到定时任务 00 6 * * * /opt/back_mysql.sh //每天六点备份数据库 使用定时任务定期更新数据库表字段 //每年1月1日更新年龄字段，让 age &#43; 1 0 0 1 1 * mysql -uusername -ppwd -e &amp;#34;use dbname;UPDATE tablename SET age = age &#43; 1;quit;&amp;#34; </content>
+    </entry>
+    
+     <entry>
+        <title>SEO搜索引擎优化-常用的站长平台总结</title>
+        <url>https://technod.cn/share/202101/zhanzhangurl/</url>
+        <categories>
+          <category>分享</category>
+        </categories>
+        <tags>
+          <tag>SEO</tag>
+        </tags>
+        <content type="html"> 百度: https://ziyuan.baidu.com 谷歌: https://analytics.google.com 腾讯: https://mta.qq.com 搜狗: http://zhanzhang.sogou.com 360: http://zhanzhang.so.com 必应: https://www.bing.com/webmasters/homepage 头条: https://zhanzhang.toutiao.com 神马: https://zhanzhang.sm.cn </content>
+    </entry>
+    
+     <entry>
+        <title>PHP-微信公众号实现发送模板消息</title>
+        <url>https://technod.cn/leaf/2020/12/15/wechat01/</url>
+        <categories>
+          <category>杂记</category>
+        </categories>
+        <tags>
+          <tag>微信开发</tag><tag>模板消息</tag><tag>PHP</tag>
+        </tags>
+        <content type="html"> PHP微信公众号实现发送模板消息 $appid = &amp;#34;wxb7729*******&amp;#34;; $appsecret = &amp;#34;8b99**************&amp;#34;; $url = &amp;#34;https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&amp;amp;appid=$appid&amp;amp;secret=$appsecret&amp;#34;; $ch = curl_init(); curl_setopt($ch, CURLOPT_URL, $url); curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE); curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); $output = curl_exec($ch); curl_close($ch); $jsoninfo = json_decode($output, true);	$ACCESS_TOKEN = $jsoninfo[&amp;#34;access_token&amp;#34;]; $data=array( &amp;#39;touser&amp;#39;=&amp;gt;&amp;#34;oaIgKt*********&amp;#34;, //要发送给用户的openid &amp;#39;template_id&amp;#39;=&amp;gt;&amp;#34;gSxmffQ*********&amp;#34;,//改成自己的模板id，在微信后台模板消息里查看 &amp;#39;url&amp;#39;=&amp;gt;&amp;#34;https://technod.cn&amp;#34;, //用户点击要跳转的url &amp;#39;data&amp;#39;=&amp;gt;array( &amp;#39;first&amp;#39;=&amp;gt;array( &amp;#39;value&amp;#39;=&amp;gt;&amp;#34;亲爱的同学，您有直播提醒，请查阅。&amp;#34;, &amp;#39;color&amp;#39;=&amp;gt;&amp;#34;#000&amp;#34; ), &amp;#39;keyword1&amp;#39;=&amp;gt;array( &amp;#39;value&amp;#39;=&amp;gt;&amp;#34;教授直播&amp;#34;, &amp;#39;color&amp;#39;=&amp;gt;&amp;#34;#f00&amp;#34; ), &amp;#39;keyword2&amp;#39;=&amp;gt;array( &amp;#39;value&amp;#39;=&amp;gt;&amp;#34;教授&amp;#34;, &amp;#39;color&amp;#39;=&amp;gt;&amp;#34;#173177&amp;#34; ), &amp;#39;keyword3&amp;#39;=&amp;gt;array( &amp;#39;value&amp;#39;=&amp;gt;&amp;#34;2020-03-25 19:00&amp;#34;, &amp;#39;color&amp;#39;=&amp;gt;&amp;#34;#3d3d3d&amp;#34; ), &amp;#39;remark&amp;#39;=&amp;gt;array( &amp;#39;value&amp;#39;=&amp;gt;&amp;#34;戳进来可以查看详情&amp;gt;&amp;gt;&amp;gt;&amp;#34;, &amp;#39;color&amp;#39;=&amp;gt;&amp;#34;#3d3d3d&amp;#34; ), ) ); $json_data=json_encode($data);//转化成json数组让微信可以接收 $url=&amp;#34;https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=&amp;#34;.$ACCESS_TOKEN;//模板消息请求URL $res=https_request($url,urldecode($json_data));//请求开始 $res=json_decode($res,true); if($res[&amp;#39;errcode&amp;#39;]==0 &amp;amp;&amp;amp; $res[&amp;#39;errcode&amp;#39;]==&amp;#34;ok&amp;#34;){ echo &amp;#34;发送成功！&amp;#34;; } //curl请求函数 function https_request($url,$data = null){ $curl = curl_init(); curl_setopt($curl, CURLOPT_URL, $url); curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE); if (!empty($data)){ curl_setopt($curl, CURLOPT_POST, 1); curl_setopt($curl, CURLOPT_POSTFIELDS, $data); } curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); $output = curl_exec($curl); curl_close($curl); return $output; } 发送成功 </content>
+    </entry>
+    
+     <entry>
+        <title>Koa框架实现导出Excel文件</title>
+        <url>https://technod.cn/note/2020/12/11/koa_import/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Koa2</tag><tag>Node.js</tag>
+        </tags>
+        <content type="html"> 安装引入excel-export包 npm install excel-export --save const nodeExcel = require(&amp;#39;excel-export&amp;#39;); 实现导出方法 /** * 数据导出--导出方法 * @param resultData [{},{},] //从数据库中获取的数据格式 */ static async exportData(resultData,ctx){ let conf ={}; conf.name = &amp;#34;worksheet&amp;#34;;//表格名 let alldata = new Array(); for(let i = 0;i&amp;lt;resultData.length;i&#43;&#43;){ let arr = new Array(); arr.push(resultData[i].name); arr.push(resultData[i].phone); arr.push(resultData[i].age); alldata.push(arr); } //决定列名和类型 conf.cols = [{ caption:&amp;#39;姓名&amp;#39;, type:&amp;#39;string&amp;#39; },{ caption:&amp;#39;手机号&amp;#39;, type:&amp;#39;string&amp;#39; },{ caption:&amp;#39;年龄&amp;#39;, type:&amp;#39;string&amp;#39; }]; conf.rows = alldata;//填充数据 let result = nodeExcel.execute(conf); //最后3行express框架是这样写 // res.setHeader(&amp;#39;Content-Type&amp;#39;, &amp;#39;application/vnd.openxmlformats&amp;#39;); // res.setHeader(&amp;#34;Content-Disposition&amp;#34;, &amp;#34;attachment; filename=&amp;#34; &#43; &amp;#34;Report.xlsx&amp;#34;); // res.end(result, &amp;#39;binary&amp;#39;); ctx.set(&amp;#39;Content-Type&amp;#39;, &amp;#39;application/vnd.openxmlformats&amp;#39;); ctx.set(&amp;#34;Content-Disposition&amp;#34;, &amp;#34;attachment; filename=&amp;#34; &#43; &amp;#34;Report.xlsx&amp;#34;); ctx.body=data; } </content>
+    </entry>
+    
+     <entry>
+        <title>php安装Oracle扩展oci8</title>
+        <url>https://technod.cn/leaf/2020/10/26/php_oci8/</url>
+        <categories>
+          <category>杂记</category>
+        </categories>
+        <tags>
+          <tag>PHP</tag>
+        </tags>
+        <content type="html"> 安装oracle-instantclient 下载地址 分别下载 oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm
+oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm
+运行 rpm -ivh oracle-instantclient11.2-* 此时会生成/usr/lib/oracle/11/2/client64/lib 目录
+修改 /etc/ld.so.conf 配置文件 追加以下内容
+/usr/lib/oracle/11.2/client64/lib/
+保存并退出
+执行命令 ldconfig
+安装 oci8 下载oci8组件 下载oci-2.0.8.tgz 解压并安装 tar -xvzf oci-2.0.8.tag
+cd oci-2.0.8
+/www/server/php/56/bin/phpize （用phpize生成configure配置文件) ./configure --with-php-config=/www/server/php/56/bin/php-config --with-oci8=shared,instantclient,/usr/lib/oracle/11.2/client64/lib make &amp;amp;&amp;amp; make install
+修改 php.ini 添加extension=&amp;ldquo;oci8.so&amp;rdquo; 重启PHP，查看phpinfo </content>
+    </entry>
+    
+     <entry>
+        <title>Laravel Api开发之Dingo&amp;Jwt的使用</title>
+        <url>https://technod.cn/note/2020/09/22/laravel_dingo/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>PHP</tag><tag>Laravel</tag><tag>Api</tag>
+        </tags>
+        <content type="html"> Dingo 安装组件 composer require dingo/api:2.x 生成配置文件 php artisan vendor:publish 执行命令后会生成config/api.php配置文件
+config/api.php 配置说明 #接口围绕：[x]本地和私有环境 [prs]公司内部app使用 [vnd]公开接口 &amp;#39;standardsTree&amp;#39; =&amp;gt; env(&amp;#39;API_STANDARDS_TREE&amp;#39;, &amp;#39;x&amp;#39;) #项目名称 &amp;#39;subtype&amp;#39; =&amp;gt; env(&amp;#39;API_SUBTYPE&amp;#39;, &amp;#39;hdcms&amp;#39;) #Api前缀 通过 www.hdcms.com/api 来访问 API。 &amp;#39;prefix&amp;#39; =&amp;gt; env(&amp;#39;API_PREFIX&amp;#39;, &amp;#39;api&amp;#39;) #api域名 &amp;#39;domain&amp;#39; =&amp;gt; env(&amp;#39;API_DOMAIN&amp;#39;, &amp;#39;api.hdcms.com&amp;#39;), #版本号 &amp;#39;version&amp;#39; =&amp;gt; env(&amp;#39;API_VERSION&amp;#39;, &amp;#39;v1&amp;#39;) #开发时开启DEBUG便于发现错误 &amp;#39;debug&amp;#39; =&amp;gt; env(&amp;#39;API_DEBUG&amp;#39;, false) 接口版本&amp;ndash;在routes/api.php中定义 $api = app(\Dingo\Api\Routing\Router::class); #默认配置指定的是v1版本，可以直接通过 {host}/api/version 访问到 $api-&amp;gt;version(&amp;#39;v1&amp;#39;, function ($api) { $api-&amp;gt;get(&amp;#39;version&amp;#39;, function () { return &amp;#39;v1&amp;#39;; }); }); #如果v2不是默认版本，需要设置请求头 #Accept: application/[配置项 standardsTree].[配置项 subtype].v2&#43;json $api-&amp;gt;version(&amp;#39;v2&amp;#39;, function ($api) { $api-&amp;gt;get(&amp;#39;version&amp;#39;, function () { return &amp;#39;v2&amp;#39;; }); }); 基础控制器 php artisan make:controller Api/Controller namespace App\Http\Controllers\Api; use Dingo\Api\Routing\Helpers; use Illuminate\Http\Request; use App\Http\Controllers\Controller as SysController; class Controller extends SysController { use Helpers; } 响应结果&amp;ndash;设置响应状态码 return $this-&amp;gt;response-&amp;gt;array(User::get())-&amp;gt;setStatusCode(200); return response()-&amp;gt;json([&amp;#39;error&amp;#39; =&amp;gt; &amp;#39;Unauthorized&amp;#39;], 401); 错误响应 // 一个自定义消息和状态码的普通错误。 return $this-&amp;gt;response-&amp;gt;error(&amp;#39;This is an error.&amp;#39;, 404); // 一个没有找到资源的错误，第一个参数可以传递自定义消息。 return $this-&amp;gt;response-&amp;gt;errorNotFound(); // 一个 bad request 错误，第一个参数可以传递自定义消息。 return $this-&amp;gt;response-&amp;gt;errorBadRequest(); // 一个服务器拒绝错误，第一个参数可以传递自定义消息。 return $this-&amp;gt;response-&amp;gt;errorForbidden(); // 一个内部错误，第一个参数可以传递自定义消息。 return $this-&amp;gt;response-&amp;gt;errorInternal(); // 一个未认证错误，第一个参数可以传递自定义消息。 return $this-&amp;gt;response-&amp;gt;errorUnauthorized(&amp;#39;帐号或密码错误&amp;#39;); 限制请求次数 使用 api.throttle中间件结合 limit、expires 参数可实现接口次数限制
+$api-&amp;gt;version(&amp;#39;v1&amp;#39;, [&amp;#39;namespace&amp;#39; =&amp;gt; &amp;#39;\App\Api&amp;#39;], function ($api) { $api-&amp;gt;group([&amp;#39;middleware&amp;#39; =&amp;gt; &amp;#39;api.throttle&amp;#39;, &amp;#39;limit&amp;#39; =&amp;gt; 2, &amp;#39;expires&amp;#39; =&amp;gt; 1], function ($api) { $api-&amp;gt;get(&amp;#39;user&amp;#39;, &amp;#39;UserController@all&amp;#39;); }); }); 限制1分钟只能访问2次
+Jwt 安装组件 composer require tymon/jwt-auth:2.x 生成配置文件 php artisan vendor:publish 生成密钥 php artisan jwt:secret 这将用 JWT_SECRET=foobar 更新.env文件
+配置说明 JWT配置文件是 config/jwt.php
+#令牌过期时间(单位分钟)，设置null为永不过期 &amp;#39;ttl&amp;#39; =&amp;gt; env(&amp;#39;JWT_TTL&amp;#39;, 60) #刷新令牌时间(单位分钟)，设置为null可永久随时刷新 &amp;#39;refresh_ttl&amp;#39; =&amp;gt; env(&amp;#39;JWT_REFRESH_TTL&amp;#39;, 20160) 更新用户模型示例 首先，您需要在用户模型上实现 Tymon\JWTAuth\Contracts\JWTSubject 契约，它要求您实现两个方法 getJWTIdentifier() 和 getJWTCustomClaims()
+namespace App; use Tymon\JWTAuth\Contracts\JWTSubject; use Illuminate\Notifications\Notifiable; use Illuminate\Foundation\Auth\User as Authenticatable; class User extends Authenticatable implements JWTSubject { use Notifiable; /** * 获取将存储在JWT主题声明中的标识符. * 就是用户表主键 id * * @return mixed */ public function getJWTIdentifier() { return $this-&amp;gt;getKey(); } /** * 返回一个键值数组，其中包含要添加到JWT的任何自定义声明. * * @return array */ public function getJWTCustomClaims() { return []; } } 配置验证守卫 修改 config/auth.php 文件以使用jwt保护来为接口身份验证提供支持
+&amp;#39;guards&amp;#39; =&amp;gt; [ &amp;#39;web&amp;#39; =&amp;gt; [ &amp;#39;driver&amp;#39; =&amp;gt; &amp;#39;session&amp;#39;, &amp;#39;provider&amp;#39; =&amp;gt; &amp;#39;users&amp;#39;, ], &amp;#39;api&amp;#39; =&amp;gt; [ &amp;#39;driver&amp;#39; =&amp;gt; &amp;#39;jwt&amp;#39;, &amp;#39;provider&amp;#39; =&amp;gt; &amp;#39;users&amp;#39;, ], ] 修改dingo配置文件 config/api.php 文件中的身份验证提供者
+&amp;#39;auth&amp;#39; =&amp;gt; [ &amp;#39;jwt&amp;#39; =&amp;gt; \Dingo\Api\Auth\Provider\JWT::class, ], 验证操作 路由定义
+$api = app(\Dingo\Api\Routing\Router::class); $api-&amp;gt;version(&amp;#39;v1&amp;#39;, [&amp;#39;namespace&amp;#39; =&amp;gt; &amp;#39;App\Http\Controllers\Api&amp;#39;,], function ($api) { $api-&amp;gt;post(&amp;#39;login&amp;#39;, &amp;#39;AuthController@login&amp;#39;); $api-&amp;gt;get(&amp;#39;logout&amp;#39;, &amp;#39;AuthController@logout&amp;#39;); $api-&amp;gt;get(&amp;#39;me&amp;#39;, &amp;#39;AuthController@me&amp;#39;); }); 控制器定义
+class AuthController extends Controller { public function __construct() { // 除login外都需要验证 $this-&amp;gt;middleware(&amp;#39;auth:api&amp;#39;, [&amp;#39;except&amp;#39; =&amp;gt; [&amp;#39;login&amp;#39;]]); } //登录获取token public function login() { $credentials = request([&amp;#39;email&amp;#39;, &amp;#39;password&amp;#39;]); if (!$token = auth(&amp;#39;api&amp;#39;)-&amp;gt;attempt($credentials)) { return $this-&amp;gt;response-&amp;gt;errorUnauthorized(&amp;#39;帐号或密码错误&amp;#39;); } return $this-&amp;gt;respondWithToken($token); } //获取用户资料 public function me() { return response()-&amp;gt;json(auth(&amp;#39;api&amp;#39;)-&amp;gt;user()); } //销毁token public function logout() { auth(&amp;#39;api&amp;#39;)-&amp;gt;logout(); return response()-&amp;gt;json([&amp;#39;message&amp;#39; =&amp;gt; &amp;#39;Successfully logged out&amp;#39;]); } //刷新token public function refresh() { return $this-&amp;gt;respondWithToken(auth(&amp;#39;api&amp;#39;)-&amp;gt;refresh()); } //响应token protected function respondWithToken($token) { return response()-&amp;gt;json([ &amp;#39;access_token&amp;#39; =&amp;gt; $token, &amp;#39;token_type&amp;#39; =&amp;gt; &amp;#39;bearer&amp;#39;, &amp;#39;expires_in&amp;#39; =&amp;gt; auth(&amp;#39;api&amp;#39;)-&amp;gt;factory()-&amp;gt;getTTL() * 60, ]); } } 使用令牌 在postman 工具中可以使用以下方式操作
+</content>
+    </entry>
+    
+     <entry>
+        <title>Larvel-使用Seeder生成测试数据</title>
+        <url>https://technod.cn/note/2020/08/24/laravel05/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Laravel</tag><tag>PHP</tag>
+        </tags>
+        <content type="html"> 生成Seeder文件 php artisan make:seeder UserSeeder 运行后会在database/seeds目录下生成UserSeeder.php 文件
+编辑UserSeeder.php 文件 public function run() { //生成30条用户数据，并指定第一条账号的账号邮箱 $users = factory(\App\User::class,30)-&amp;gt;create(); $user = $users[0]; $user-&amp;gt;name = &amp;#39;NODJOY&amp;#39;; $user-&amp;gt;email = &amp;#39;nodjoy@163.com&amp;#39;; $user-&amp;gt;save(); } 编辑工厂文件database/factories/UserFactory.php $factory-&amp;gt;define(App\User::class, function (Faker $faker) { return [ &amp;#39;name&amp;#39; =&amp;gt; $faker-&amp;gt;name, &amp;#39;email&amp;#39; =&amp;gt; $faker-&amp;gt;unique()-&amp;gt;safeEmail, &amp;#39;password&amp;#39; =&amp;gt; bcrypt(&amp;#39;admin888&amp;#39;), &amp;#39;remember_token&amp;#39; =&amp;gt; str_random(10), ]; }); 编辑执行Seeder文件database/seeds/DatabaseSeeder.php public function run() { // $this-&amp;gt;call(UsersTableSeeder::class); $this-&amp;gt;call(UserSeeder::class); } 执行填充数据命令 php artisan db:seed </content>
+    </entry>
+    
+     <entry>
+        <title>Sequelize操作MySQL数据库</title>
+        <url>https://technod.cn/note/2020/08/20/sequelize01/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Node.js</tag><tag>Sequelize</tag>
+        </tags>
+        <content type="html"> 安装sequelize、sequelize-cli和mysql2 npm install sequelize-cli -g npm install sequelize --save npm install mysql2 --save 初始化项目 sequelize init 在config.js中配置连接数据库参数 //连接数据库 { &amp;#34;development&amp;#34;: { &amp;#34;username&amp;#34;: &amp;#34;root&amp;#34;, &amp;#34;password&amp;#34;: null, &amp;#34;database&amp;#34;: &amp;#34;bilikoa&amp;#34;, &amp;#34;host&amp;#34;: &amp;#34;127.0.0.1&amp;#34;, &amp;#34;dialect&amp;#34;: &amp;#34;mysql&amp;#34; }, &amp;#34;test&amp;#34;: { &amp;#34;username&amp;#34;: &amp;#34;root&amp;#34;, &amp;#34;password&amp;#34;: null, &amp;#34;database&amp;#34;: &amp;#34;database_test&amp;#34;, &amp;#34;host&amp;#34;: &amp;#34;127.0.0.1&amp;#34;, &amp;#34;dialect&amp;#34;: &amp;#34;mysql&amp;#34; }, &amp;#34;production&amp;#34;: { &amp;#34;username&amp;#34;: &amp;#34;root&amp;#34;, &amp;#34;password&amp;#34;: null, &amp;#34;database&amp;#34;: &amp;#34;database_production&amp;#34;, &amp;#34;host&amp;#34;: &amp;#34;127.0.0.1&amp;#34;, &amp;#34;dialect&amp;#34;: &amp;#34;mysql&amp;#34; } } 建立Article模型和迁移文件 sequelize model:generate --name Article --attributes title:string,content:text 运行迁移，生成数据表 sequelize db:migrate 新建种子文件 sequelize seed:generate --name atricle 配置种子文件seeders/article.js &amp;#39;use strict&amp;#39;; module.exports = { up: async (queryInterface, Sequelize) =&amp;gt; { await queryInterface.bulkInsert(&amp;#39;Articles&amp;#39;, [ { title: &amp;#39;John Doe&amp;#39;, content: &amp;#39;内容。。&amp;#39;, createdAt: new Date(), updatedAt: new Date() }, { title: &amp;#39;John Does&amp;#39;, content: &amp;#39;内容。。&amp;#39;, createdAt: new Date(), updatedAt: new Date() } ], {}); }, down: async (queryInterface, Sequelize) =&amp;gt; { await queryInterface.bulkDelete(&amp;#39;People&amp;#39;, null, {}); } }; 运行种子文件，即可在articles表中生成测试数据 sequelize db:seed:all </content>
+    </entry>
+    
+     <entry>
+        <title>Koa使用require-directory实现路由的自动加载</title>
+        <url>https://technod.cn/note/2020/08/13/koa07/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Koa</tag><tag>Node.js</tag>
+        </tags>
+        <content type="html"> require-directory的安装与使用 const Koa = require(&amp;#39;koa&amp;#39;); const app = new Koa(); const requireDirectory = require(&amp;#39;require-directory&amp;#39;); const Router = require(&amp;#39;koa-router&amp;#39;); const modules = requireDirectory(module,&amp;#39;./api&amp;#39;,{ visit:whenLoadModule }) function whenLoadModule(obj){ if(obj instanceof Router){ app.use(obj.routes()) } } app.listen(3000); 路由文件的写法api/v1/book.js const Router = require(&amp;#39;koa-router&amp;#39;); const router = new Router(); router.get(&amp;#39;/v1/book/latest&amp;#39;,(ctx,next)=&amp;gt;{ ctx.body={key:&amp;#39;books&amp;#39;} }) module.exports = router 目录结构 </content>
+    </entry>
+    
+     <entry>
+        <title>使用Koa应用生成器快速生成koa应用</title>
+        <url>https://technod.cn/note/2020/08/10/koa06/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Koa</tag><tag>Node.js</tag>
+        </tags>
+        <content type="html"> 全局安装koa脚手架生成工具 npm install koa-generator -g 创建项目 koa koa_demo 安装依赖 cd koa_demo npm install 启动项目 npm start </content>
+    </entry>
+    
+     <entry>
+        <title>Koa Cookie与Session</title>
+        <url>https://technod.cn/note/2020/08/10/koa05/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Koa</tag><tag>Node.js</tag>
+        </tags>
+        <content type="html"> Cookie Koa中设置Cookie值 ctx.cookies.set(name,value,[options]); Koa中获取Cookie值 ctx.cookies.get(&amp;#39;name&amp;#39;); Koa中使用Buffer设置中文Cookie //设置中文Cookie router.get(&amp;#39;/&amp;#39;,async (ctx)=&amp;gt;{ var userinfo=new Buffer(&amp;#39;张三&amp;#39;).toString(&amp;#39;base64&amp;#39;); ctx.cookies.set(&amp;#39;userinfo&amp;#39;,userinfo,{ maxAge:60*1000*60 }); }) //获取中文Cookie router.get(&amp;#39;/news&amp;#39;,async (ctx)=&amp;gt;{ var data=ctx.cookies.get(&amp;#39;userinfo&amp;#39;); var userinfo=new Buffer(data, &amp;#39;base64&amp;#39;).toString(); console.log(userinfo); }) Session 安装并引入koa-session npm install koa-session --save const session = require(&amp;#39;koa-session&amp;#39;); 配置koa-session中间件 app.keys = [&amp;#39;some secret hurr&amp;#39;]; const CONFIG = { key: &amp;#39;koa:sess&amp;#39;, //cookie key (default is koa:sess) maxAge: 86400000, // cookie 的过期时间 maxAge in ms (default is 1 days) overwrite: true, //是否可以 overwrite (默认 default true) httpOnly: true, //cookie 是否只有服务器端可以访问 httpOnly or not (default true) signed: true, //签名默认 true rolling: false, //在每次请求时强行设置 cookie，这将重置 cookie 过期时间（默认：false） renew: false, //(boolean) renew session when session is nearly expired, }; app.use(session(CONFIG, app)); 设置与获取Session值 //设置值 ctx.session.username = &amp;#34;张三&amp;#34;; //获取值 ctx.session.username </content>
+    </entry>
+    
+     <entry>
+        <title>Koa post提交数据与静态资源中间件</title>
+        <url>https://technod.cn/note/2020/08/10/koa04/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Koa</tag><tag>Node.js</tag>
+        </tags>
+        <content type="html"> 原生Node.js获取post提交的数据 表单 &amp;lt;form action=&amp;#34;/doAdd&amp;#34; method=&amp;#34;post&amp;#34;&amp;gt; 用户名: &amp;lt;input type=&amp;#34;text&amp;#34; name=&amp;#34;username&amp;#34;/&amp;gt; &amp;lt;br/&amp;gt; &amp;lt;br/&amp;gt; 密　码: &amp;lt;input type=&amp;#34;password&amp;#34; name=&amp;#34;password&amp;#34;/&amp;gt; &amp;lt;br/&amp;gt; &amp;lt;br/&amp;gt; &amp;lt;button type=&amp;#34;submit&amp;#34;&amp;gt;提交&amp;lt;/button&amp;gt; &amp;lt;/form&amp;gt; 在module/common.js封装获取数据的方法 exports.getPostData=function(ctx){ //获取数据 异步 return new Promise(function(resolve,reject){ try{ let str=&amp;#39;&amp;#39;; ctx.req.on(&amp;#39;data&amp;#39;,function(chunk){ str&#43;=chunk; }) ctx.req.on(&amp;#39;end&amp;#39;,function(chunk){ resolve(str) }) }catch(err){ reject(err) } }) } 获取post提交的数据 //引用获取数据方法 var common = require(&amp;#39;./module/common.js&amp;#39;); //接收post提交的数据 router.post(&amp;#39;/doAdd&amp;#39;,async (ctx)=&amp;gt;{ //原生nodejs 在koa中获取表单提交的数据 var data=await common.getPostData(ctx); console.log(data); ctx.body=data; }) 使用koa-bodyparser中间件获取post提交的数据 安装并引入koa-bodyparser npm install koa-bodyparser --save var bodyParser = require(&amp;#39;koa-bodyparser&amp;#39;); 配置kooa-bodyparser中间件 app.use(bodyParser()); 获取post提交的数据 router.post(&amp;#39;/doAdd&amp;#39;,async (ctx)=&amp;gt;{ ctx.body = ctx.request.body; //获取表单提交的数据 }) 静态资源中间件 安装koa-static并引入 npm install koa-static --save const static = require(&amp;#39;koa-static&amp;#39;); 配置koa-static中间件 app.use(static(&amp;#39;./static&amp;#39;)); 引入静态资源 &amp;lt;link rel=&amp;#34;stylesheet&amp;#34; href=&amp;#34;css/basic.css&amp;#34;/&amp;gt; //即可成功引入static/css/basic.css </content>
+    </entry>
+    
+     <entry>
+        <title>Koa路由和中间件</title>
+        <url>https://technod.cn/note/2020/08/09/koa02/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Koa</tag><tag>Node.js</tag>
+        </tags>
+        <content type="html"> Koa路由的安装和配置 安装Koa路由 npm install koa-router --save Koa路由的使用 var Koa = require(&amp;#39;koa&amp;#39;); //引入Koa var Router = require(&amp;#39;koa-router&amp;#39;); //引入路由 var app = new Koa(); var router = new Router(); //配置路由 router.get(&amp;#39;/&amp;#39;,async function(ctx){ //ctx context 包含request和responses等信息 ctx.body=&amp;#34;首页&amp;#34;; }).get(&amp;#39;/news&amp;#39;,async (ctx)=&amp;gt;{ ctx.body=&amp;#34;新闻页&amp;#34;; }) //启动路由 app .use(router.routes()) .use(router.allowedMethods()); app.listen(3000); Koa Get传值及获取get传值 router.get(&amp;#39;/newscontent&amp;#39;,async (ctx)=&amp;gt;{ /*在 koa2 中 GET 传值通过 request 接收，但是接收的方法有两种：query 和 querystring。 query：返回的是格式化好的参数对象。 querystring：返回的是请求字符串。*/ //从ctx中读取get传值 console.log(ctx.query); //{ aid: &amp;#39;123&amp;#39; } 获取的是对象 用的最多的方式 ******推荐 console.log(ctx.querystring); //aid=123&amp;amp;name=zhangsan 获取的是一个字符串 console.log(ctx.url); //获取url地址 //ctx里面的request里面获取get传值 console.log(ctx.request.url); console.log(ctx.request.query); //{ aid: &amp;#39;123&amp;#39;, name: &amp;#39;zhangsan&amp;#39; } 对象 console.log(ctx.request.querystring); //aid=123&amp;amp;name=zhangsan ctx.body=&amp;#34;新闻详情&amp;#34;; }) Koa动态路由 router.get(&amp;#39;/package/:aid/:cid&amp;#39;,async (ctx)=&amp;gt;{ //获取动态路由的传值 console.log(ctx.params); //{ aid: &amp;#39;123&amp;#39;, cid: &amp;#39;456&amp;#39; } ctx.body=&amp;#34;新闻详情&amp;#34;; }) Koa中间件 应用级中间件 var Koa = require(&amp;#39;koa&amp;#39;); //引入Koa var Router = require(&amp;#39;koa-router&amp;#39;); //引入路由 var app = new Koa(); var router = new Router(); //中间件 app.use(async (ctx,next)=&amp;gt;{ ctx.body=&amp;#39;这是一个中间件&amp;#39;; console.log(new Date()); await next(); /*当前路由匹配完成后继续向下匹配*/ }); //配置路由 router.get(&amp;#39;/&amp;#39;,async function(ctx){ //ctx context 包含request和responses等信息 ctx.body=&amp;#34;首页&amp;#34;; }); router.get(&amp;#39;/news&amp;#39;,async (ctx)=&amp;gt;{ ctx.body=&amp;#34;新闻页&amp;#34;; }); router.get(&amp;#39;/login&amp;#39;,async (ctx)=&amp;gt;{ ctx.body=&amp;#34;登录&amp;#34;; }); //启动路由 app .use(router.routes()) .use(router.allowedMethods()); app.listen(3000); 路由级中间件 //匹配到news路由之后继续向下匹配路由 router.get(&amp;#39;/news&amp;#39;,async (ctx，next)=&amp;gt;{ console.log(&amp;#39;这是新闻1&amp;#39;); await.next(); }); router.get(&amp;#39;/news&amp;#39;,async (ctx)=&amp;gt;{ ctx.body=&amp;#34;这是新闻2&amp;#34;; }); 错误处理中间件 app.use(async (ctx,next)=&amp;gt;{ next(); if(ctx.status == 404){ ctx.status = 404; ctx.body = &amp;#39;404页面&amp;#39;; } }); app.use(async (ctx,next)=&amp;gt;{ console.log(&amp;#39;这是一个中间件01&amp;#39;); next(); if(ctx.status==404){ /*如果页面找不到*/ ctx.status = 404; ctx.body=&amp;#34;这是一个 404 页面&amp;#34; }else{ console.log(ctx.url); } }) router.get(&amp;#39;/&amp;#39;,async (ctx)=&amp;gt;{ ctx.body=&amp;#34;首页&amp;#34;; }) router.get(&amp;#39;/news&amp;#39;,async (ctx)=&amp;gt;{ console.log(&amp;#39;这是新闻2&amp;#39;); ctx.body=&amp;#39;这是一个新闻&amp;#39;; }) router.get(&amp;#39;/login&amp;#39;,async (ctx)=&amp;gt;{ ctx.body=&amp;#34;新闻列表页面&amp;#34;; }) app.use(router.routes()); /*启动路由*/ app.use(router.allowedMethods()); app.listen(3000); Koa中间件的执行流程 app.use(async (ctx,next)=&amp;gt;{ console.log(&amp;#39;1、这是第一个中间件01&amp;#39;); await next(); console.log(&amp;#39;5、匹配路由完成以后又会返回来执行中间件&amp;#39;); }) app.use(async (ctx,next)=&amp;gt;{ console.log(&amp;#39;2、这是第二个中间件02&amp;#39;); await next(); console.log(&amp;#39;4、匹配路由完成以后又会返回来执行中间件&amp;#39;); }) router.get(&amp;#39;/&amp;#39;,async (ctx)=&amp;gt;{ ctx.body=&amp;#34;首页&amp;#34;; }) router.get(&amp;#39;/news&amp;#39;,async (ctx)=&amp;gt;{ console.log(&amp;#39;3、匹配到了news这个路由&amp;#39;); ctx.body=&amp;#39;这是一个新闻&amp;#39;; }) //运行顺序 1、2、3、4、5、 app.use(router.routes()); /*启动路由*/ app.use(router.allowedMethods()); app.listen(3000); </content>
+    </entry>
+    
+     <entry>
+        <title>Koa框架安装及ES6基础语法</title>
+        <url>https://technod.cn/note/2020/08/09/koa01/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Koa</tag><tag>Node.js</tag>
+        </tags>
+        <content type="html"> 安装Koa框架 初始化 npm init --yes 安装Koa npm install koa --save 第一个Koa程序app.js var Koa = require(&amp;#39;koa&amp;#39;); //引入Koa var app = new Koa(); //实例化 //中间件 app.use(async(ctx)=&amp;gt;{ ctx.body=&amp;#39;Hello Koa&amp;#39;; }); app.listen(3000); ES6基本语法 let与const let 块作用域,其他等同于var
+const 定义常量
+模板字符串 var name = &amp;#39;张三&amp;#39;; var age = 20; console.log(`${name}的年龄是${age}`); 属性的简写 var name = &amp;#39;zhangsan&amp;#39;; var app={ name //等同于name:name } console.log(app.name); 方法的简写 var name = &amp;#39;zhangsan&amp;#39;; var app={ name, run:function(){ console.log(`${this.name}在跑步`); } } app.run(); 箭头函数 setTimeout(function(){ console.log(&amp;#39;Hello&amp;#39;); },1000) //箭头函数写法 setTimeout(()=&amp;gt;{ console.log(&amp;#39;Hello&amp;#39;); },1000) 回调函数 获取异步方法里面的数据 function getData(callback){ //ajax 模拟异步 setTimeout(function(){ var name = &amp;#39;zhangsan&amp;#39;; callback(name); },1000); } //外部获取异步方法里面的数据 getData(function(data){ console.log(data); }) Promise处理异步 //resolve 成功的回调函数 //reject 失败的回调函数 var p =new Promise(function(resolve,reject){ //ajax 模拟异步 setTimeout(function(){ var name = &amp;#39;zhangsan&amp;#39;; resolve(name); },1000); }) p.then(function(data){ console.log(data); }) Koa异步处理Async Await和Promise的使用 Async与Await async 让方法变为异步方法
+await 等待异步方法执行完成
+async function getData(){ return &amp;#39;这是一个数据&amp;#39;; } //运行结果：Promise {&amp;#39;这是一个数据&amp;#39;} - 返回的是promise对象 获取async异步方法里面的数据 async function getData(){ return &amp;#39;这是一个数据&amp;#39;; } var p = getData(); p.then((data)=&amp;gt;{ console.log(data); }) await用在异步方法里面 async function getData(){ return &amp;#39;这是一个数据&amp;#39;; } async function test(){ var d = await getData(); console.log(d); } //调用 test(); await阻塞功能，把异步改为同步 async function getData(){ console.log(2); } async function test(){ console.log(1); var d = await getData(); console.log(3); } test(); //运行结果 1 2 3 Promise的使用及获取Promise的数据 function getData(){ return new Promise((resolve,reject)=&amp;gt;{ setTimeout(()=&amp;gt;{ var username = &amp;#39;zhangsan&amp;#39;; resolve(username); },1000) }) } async function test(){ var data = await getData(); console.log(data); } test(); </content>
+    </entry>
+    
+     <entry>
+        <title>Git 版 本 控 制</title>
+        <url>https://technod.cn/leaf/2020/08/07/gitcommand/</url>
+        <categories>
+          <category>杂记</category>
+        </categories>
+        <tags>
+          <tag>Git</tag><tag>Command</tag>
+        </tags>
+        <content type="html"> Git基本命令 git config -l 查看配置
+git config -global user.name &amp;ldquo;username&amp;rdquo; 全局设置用户名
+git config -global user.email &amp;ldquo;email&amp;rdquo; 全局设置用户邮箱
+git init 初始化版本库
+git add a.php 添加文件到版本库
+git add . 添加所有文件到版本库
+git status 查看状态
+git commit -m &amp;lsquo;message&amp;rsquo; 提交到版本库并添加提交信息
+git rm --cached readme.txt 移除版本库中的文件
+git log 查看日志
+git commit --amend 修改最近一次提交的信息
+git reset HEAD a.php 撤销添加
+git checkout -- a.php 撤销文件修改
+git clone -b 分支名 仓库地址 使用Git下载指定分支 git branch 查看分支
+git branch ask 创建分支
+git checkout ask 切换分支 git checkout -b bbs 创建并切换到bbs分支 git merge ask 合并分支
+git branch -d ask 删除分支
+git branch --no-merge 查看未合并的分支
+git branch -D test 删除未合并的分支
+git stash 暂存
+git stash list 暂存列表
+git stash apply 恢复暂存
+git archive master --prefix=&amp;lsquo;bbs/&amp;rsquo; --forma=zip &amp;gt; bbs.zip 生成zip发布压缩包
+git remote add origin https://github.com/user/example.com.git 本地与GitHub远程关联
+git push -u origin master 推送到远程master分支
+git pull origin ask:ask 将远程ask分支拉到本地
+.gitignore 忽略文件 a.php 忽略提交此文件
+vendor 忽略提交此文件夹
+vendor/*.txt 忽略提交此文件目录下的TXT文件
+!a.php 不忽略此文件
+</content>
+    </entry>
+    
+     <entry>
+        <title>使用Laravel邮件发送实现用户的验证&amp;注册业务</title>
+        <url>https://technod.cn/note/2020/08/04/laravel09/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>PHP</tag><tag>Laravel</tag>
+        </tags>
+        <content type="html"> 注册数据处理方法中添加token并触发邮件发送 //用户注册数据处理 public function store(Request $request) { $data = $this-&amp;gt;validate($request,[ &amp;#39;name&amp;#39; =&amp;gt; &amp;#39;required|min:4&amp;#39;, &amp;#39;email&amp;#39; =&amp;gt; &amp;#39;required|email|unique:users&amp;#39;, &amp;#39;password&amp;#39; =&amp;gt; &amp;#39;required|min:6|confirmed&amp;#39;, ]); $data[&amp;#39;password&amp;#39;] = bcrypt($data[&amp;#39;password&amp;#39;]); $data[&amp;#39;email_token&amp;#39;] = Str::random(10); $user = User::create($data); //发送注册邮件 \Mail::to($user)-&amp;gt;send(new RegMail($user)); session()-&amp;gt;flash(&amp;#39;success&amp;#39;,&amp;#39;请查看邮箱完成注册验证&amp;#39;); return redirect(&amp;#39;/&amp;#39;); } app/Mail/RegMail.php namespace App\Mail; use Illuminate\Bus\Queueable; use Illuminate\Mail\Mailable; use Illuminate\Queue\SerializesModels; use Illuminate\Contracts\Queue\ShouldQueue; class RegMail extends Mailable { use Queueable, SerializesModels; /** * Create a new message instance. * * @return void */ public $user; //定义公共属性会自动分配到视图模板 public function __construct($user) { // $this-&amp;gt;user = $user; } /** * Build the message. * * @return $this */ public function build() { return $this-&amp;gt;view(&amp;#39;mail.reg&amp;#39;); } } 用户邮件验证视图reg.blade.php &amp;lt;!doctype html&amp;gt; &amp;lt;html lang=&amp;#34;en&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;meta charset=&amp;#34;UTF-8&amp;#34;&amp;gt; &amp;lt;meta name=&amp;#34;viewport&amp;#34; content=&amp;#34;width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0&amp;#34;&amp;gt; &amp;lt;meta http-equiv=&amp;#34;X-UA-Compatible&amp;#34; content=&amp;#34;ie=edge&amp;#34;&amp;gt; &amp;lt;title&amp;gt;点击链接验证邮箱&amp;lt;/title&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;div&amp;gt; &amp;lt;a href=&amp;#34;http://blog01.com/confirmEmailToken/{{$user[&amp;#39;email_token&amp;#39;]}}&amp;#34;&amp;gt;点击链接完成验证&amp;lt;/a&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; 点击邮件中的链接验证 //用户验证邮件路由 Route::get(&amp;#39;confirmEmailToken/{token}&amp;#39;,&amp;#39;UserController@confirmEmailToken&amp;#39;)-&amp;gt;name(&amp;#39;confirmEmailToken&amp;#39;); 邮件验证方法 public function confirmEmailToken($token) { $user = User::where(&amp;#39;email_token&amp;#39;,$token)-&amp;gt;first(); if($user){ $user -&amp;gt;email_active = true; $user -&amp;gt;save(); session()-&amp;gt;flash(&amp;#39;success&amp;#39;,&amp;#39;验证成功&amp;#39;); \Auth::login($user); return redirect(&amp;#39;/&amp;#39;); } session()-&amp;gt;flash(&amp;#39;danger&amp;#39;,&amp;#39;邮箱验证失败&amp;#39;); return redirect(&amp;#39;/&amp;#39;); } </content>
+    </entry>
+    
+     <entry>
+        <title>Laravel Api开发之laravel/passport授权包的使用及基本配置</title>
+        <url>https://technod.cn/note/2020/07/31/laravel06/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>PHP</tag><tag>Laravel</tag><tag>Api</tag>
+        </tags>
+        <content type="html"> 安装laravel/passport composer require laravel/passport=~7.0 指定为7.0版本，laravel5.8不支持8.0及以上版本
+创建所需的表 php artisan migrate 生成secret php artisan passport:install 在app/Providers/AuthServiceProvider.php中引入并在boot方法中调用 use Laravel\Passport\Passport; public function boot() { $this-&amp;gt;registerPolicies(); Passport::routes(); } 配置config/auth.php,将api默认的token改为passport &amp;#39;api&amp;#39; =&amp;gt; [ &amp;#39;driver&amp;#39; =&amp;gt; &amp;#39;passport&amp;#39;, &amp;#39;provider&amp;#39; =&amp;gt; &amp;#39;users&amp;#39;, &amp;#39;hash&amp;#39; =&amp;gt; false, ], 将HasApiTokens Trait引入app/User.php中,这个 Trait 为模型提供一些辅助函数，用于检查已认证用户的令牌和使用范围 namespace App; use Laravel\Passport\HasApiTokens; use Illuminate\Notifications\Notifiable; use Illuminate\Foundation\Auth\User as Authenticatable; class User extends Authenticatable { use HasApiTokens, Notifiable; } </content>
+    </entry>
+    
+     <entry>
+        <title>MongoDB 安装配置</title>
+        <url>https://technod.cn/note/2020/07/30/mongodb01/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>MongoDB</tag><tag>nosql</tag><tag>数据库</tag>
+        </tags>
+        <content type="html"> 安装配置（with WAMP） 下载MongoDB，并将安装包移动到wamp环境目录下 在mongodb目录新建log.txt文件和dat文件目录 启动命令 mongod --port 8888 --dbpath d:/wamp64/bin/mongodb/data --logpath d:/wamp64/bin/mongodb/log.txt 查看是否启动成功
+netstat -an 连接MongoDB数据库 mongo localhost:8888 MongoDB基本指令 use dbname //使用数据库，如果没有则创建 show dbs //查看数据库 db.集合名.insert({}) //插入集合 show tables //查看集合 db.集合名.find() //查询集合里面的所有文档 db.集合名.findOne() //查询集合里面的第一个文档 db.集合名.drop() //删除集合 db.dropDatabase() //删除数据库（当前use的数据库） db.集合名.remove({age:5}) //删除文档 db.集合名.update({条件}),{新文档} //更新文档 db.集合名.find({条件}) //查询文档 </content>
+    </entry>
+    
+     <entry>
+        <title>Laravel基础04-视图</title>
+        <url>https://technod.cn/note/2020/07/23/laravel04/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Laravel</tag><tag>PHPstorm</tag><tag>PHP</tag>
+        </tags>
+        <content type="html"> Blade模板引擎的模板继承构建后台界面 后台视图文件目录 -/resources/views/admin/layout 为父级模板目录
+使用@yield占位定义活动的页面范围 &amp;lt;div&amp;gt; @yield(&amp;#39;content&amp;#39;) &amp;lt;/div&amp;gt; 子页面继承父级模板 @extends(&amp;#39;admin.layout.master&amp;#39;) @section(&amp;#39;content&amp;#39;) &amp;lt;div class=&amp;#34;panel panel-default&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;panel-heading&amp;#34;&amp;gt; &amp;lt;h3 class=&amp;#34;panel-title&amp;#34;&amp;gt;后台管理&amp;lt;/h3&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;panel-body&amp;#34;&amp;gt; 后台管理系统 &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; @endsection 使用request进行表单验证 创建request php artisan make:request AdminPost 执行后会在app/Http/Requests目录生成AdminPost.php文件
+首先引入登录验证的中间件，即在管理员登录状态才进行验证 use Auth; use Validator; use Hash; public function authorize() { return Auth::guard(&amp;#39;admin&amp;#39;)-&amp;gt;check(); } /* *添加验证规则--用于确认密码比对 */ public function addValidator() { Validator::extend(&amp;#39;check_password&amp;#39;,function($attribute,$value,$parameters,$validator){ return Hash::check($value,Auth::guard(&amp;#39;admin&amp;#39;)-&amp;gt;user()-&amp;gt;password); //验证密码 }); } 使用Validator验证器
+设置验证规则 public function rules() { $this-&amp;gt;addValidator(); return [ &amp;#39;password&amp;#39; =&amp;gt; &amp;#39;sometimes|required|confirmed&amp;#39;, &amp;#39;password_confirmation&amp;#39; =&amp;gt; &amp;#39;sometimes|required&amp;#39;, &amp;#39;original_password&amp;#39; =&amp;gt; &amp;#39;sometimes|required|check_password&amp;#39;, ]; /*sometimes表示有表单的时候才会验证*/ } 定义错误提示信息 public function message() { return [ &amp;#39;password.required&amp;#39; =&amp;gt; &amp;#39;密码不能为空&amp;#39;, &amp;#39;password_confirmation.required&amp;#39; =&amp;gt; &amp;#39;请输入确认密码&amp;#39;, &amp;#39;password_confirmed&amp;#39; =&amp;gt; &amp;#39;两次密码输入不一致&amp;#39;, &amp;#39;original_password.required&amp;#39; =&amp;gt; &amp;#39;请输入初始密码&amp;#39;, &amp;#39;original_password.check_password&amp;#39; =&amp;gt; &amp;#39;初始密码错误&amp;#39;, ]; } 在视图中显示错误提示信息 定义错误提示模板errors.blade.php
+@if (count($errors) &amp;gt; 0) &amp;lt;div class=&amp;#34;modal fade&amp;#34; id=&amp;#34;modal_message&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;modal-dialog&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;modal-content&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;modal-header&amp;#34;&amp;gt; &amp;lt;button type=&amp;#34;button&amp;#34; class=&amp;#34;close&amp;#34; data-dismiss=&amp;#34;modal&amp;#34; aria-hidden=&amp;#34;true&amp;#34;&amp;gt; &amp;amp;times; &amp;lt;/button&amp;gt; &amp;lt;h4 class=&amp;#34;modal-title&amp;#34;&amp;gt;后台 - 友情提示&amp;lt;/h4&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;modal-body&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;row&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;col-sm-2&amp;#34;&amp;gt; &amp;lt;i class=&amp;#34;fa fa-info-circle fa-4x&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;col-sm-9&amp;#34;&amp;gt; @foreach ($errors-&amp;gt;all() as $error) {{ $error }}&amp;lt;br&amp;gt; @endforeach &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;modal-footer&amp;#34;&amp;gt; &amp;lt;button type=&amp;#34;button&amp;#34; class=&amp;#34;btn btn-default&amp;#34; data-dismiss=&amp;#34;modal&amp;#34;&amp;gt;关闭&amp;lt;/button&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;script&amp;gt; require([&amp;#39;bootstrap&amp;#39;], function ($) { $(&amp;#39;#modal_message&amp;#39;).modal(&amp;#39;show&amp;#39;); setTimeout(function () { $(&amp;#39;#modal_message&amp;#39;).modal(&amp;#39;hide&amp;#39;); }, 3000); }) &amp;lt;/script&amp;gt; @endif 在控制器中引用并使用request验证 use App\Http\Requests\AdminPost; use Auth; public function changePassword(AdminPost $request) { $model = Auth::guard(&amp;#39;admin&amp;#39;)-&amp;gt;user(); $model-&amp;gt;password = bcrypt($request[&amp;#39;password&amp;#39;]); //获取密码加密 $model-&amp;gt;save(); //保存更新密码 } 使用laracasts-flash在视图中展示错误提示信息 安装laracasts-flash composer require laracasts/flash 将此工具在config/app.php服务提供者(providers)里面注册 Laracasts\Flash\FlashServiceProvider::class, 在父级模板中（master.blade.php）引用 @include(&amp;#39;flash::message&amp;#39;) &amp;lt;script&amp;gt; require([&amp;#39;bootstrap&amp;#39;], function ($) { //使用bootstrap模态块 $(&amp;#39;#flash-overlay-modal&amp;#39;).modal(); }); &amp;lt;/script&amp;gt; 安装flash扩展支持 php artisan vendor:publish --provider=&amp;#34;Laracasts\Flash\FlashServiceProvider&amp;#34; 执行后会在resources/views/vendor目录下生成flsh支持目录
+在控制器中使用 public function changePassword(AdminPost $request) { $model = Auth::guard(&amp;#39;admin&amp;#39;)-&amp;gt;user(); $model-&amp;gt;password = bcrypt($request[&amp;#39;password&amp;#39;]); //获取密码加密 $model-&amp;gt;save(); //保存更新密码 flash(&amp;#39;密码修改成功&amp;#39;)-&amp;gt;overlay(); return redirect()-&amp;gt;back(); } </content>
+    </entry>
+    
+     <entry>
+        <title>Laravel基础03-中间件的使用</title>
+        <url>https://technod.cn/note/2020/07/22/laravel03/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Laravel</tag><tag>PHP</tag><tag>PHPstorm</tag>
+        </tags>
+        <content type="html"> 使用中间件进行后台权限验证 创建中间件 php artisan make:middleware AdminMiddleware 执行后会在app/Http/Middleware目录下生成AdminMiddleware.php文件
+在AdminMiddleware类handle方法中使用Auth验证 use Auth; public function handle($request, Closure $next) { if(!Auth::guard(&amp;#39;admin&amp;#39;)-&amp;gt;check()){ return redirect(&amp;#39;/admin/login&amp;#39;); } return $next($request); } 路由中挂载此中间件 配置app/Http/Kernel.php
+protected $routeMiddleware = [ &amp;#39;admin.auth&amp;#39; =&amp;gt; AdminMiddleware::class, //在路由中挂载登录验证中间件 &amp;#39;auth&amp;#39; =&amp;gt; \App\Http\Middleware\Authenticate::class, &amp;#39;auth.basic&amp;#39; =&amp;gt; \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class, &amp;#39;bindings&amp;#39; =&amp;gt; \Illuminate\Routing\Middleware\SubstituteBindings::class, &amp;#39;cache.headers&amp;#39; =&amp;gt; \Illuminate\Http\Middleware\SetCacheHeaders::class, &amp;#39;can&amp;#39; =&amp;gt; \Illuminate\Auth\Middleware\Authorize::class, &amp;#39;guest&amp;#39; =&amp;gt; \App\Http\Middleware\RedirectIfAuthenticated::class, &amp;#39;signed&amp;#39; =&amp;gt; \Illuminate\Routing\Middleware\ValidateSignature::class, &amp;#39;throttle&amp;#39; =&amp;gt; \Illuminate\Routing\Middleware\ThrottleRequests::class, &amp;#39;verified&amp;#39; =&amp;gt; \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class, ]; 在控制器中使用登录验证中间件 public function __construct() { //登录验证中间件 $this-&amp;gt;middleware(&amp;#39;admin.auth&amp;#39;)-&amp;gt;except([&amp;#39;loginForm&amp;#39;,&amp;#39;login&amp;#39;]); } except() 排除loginForm、login方法
+Auth&amp;amp;guard完成退出功能 退出方法 public function logout() { Auth::guard(&amp;#39;admin&amp;#39;)-&amp;gt;logout(); return redirect(&amp;#39;/admin/login&amp;#39;); } </content>
+    </entry>
+    
+     <entry>
+        <title>Laravel基础02-后台登录验证</title>
+        <url>https://technod.cn/note/2020/07/21/laravel02/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Laravel</tag><tag>PHP</tag><tag>PHPstorm</tag>
+        </tags>
+        <content type="html"> 创建后台控制器 php artisan make:controller Admin/EntryController 配置路由 Route::get(&amp;#39;/login&amp;#39;,&amp;#39;Admin\EntryController@loginForm&amp;#39;); 或者采用配置命名空间的方式指定到Admin目录，简化一些重复代码
+Route::group([&amp;#39;prefix&amp;#39; =&amp;gt; &amp;#39;admin&amp;#39;,&amp;#39;namespace&amp;#39; =&amp;gt; &amp;#39;Admin&amp;#39;],function(){ Route::get(&amp;#39;/login&amp;#39;,&amp;#39;EntryController@loginForm&amp;#39;); }); 使用Auth登录验证 编辑config/auth.php文件，在guards里定义admin入口 &amp;#39;admin&amp;#39; =&amp;gt; [ &amp;#39;driver&amp;#39; =&amp;gt; &amp;#39;session&amp;#39;, &amp;#39;provider&amp;#39; =&amp;gt; &amp;#39;admins&amp;#39;, ], 在providers里添加admins,并指定model &amp;#39;admins&amp;#39; =&amp;gt; [ &amp;#39;driver&amp;#39; =&amp;gt; &amp;#39;eloquent&amp;#39;, &amp;#39;model&amp;#39; =&amp;gt; App\Model\Admin::class, ], 在控制器里面引入Auth use Auth; 添加登录验证方法login并验证 public function login() { $status = Auth::guard(&amp;#39;admin&amp;#39;)-&amp;gt;attempt([ &amp;#39;username&amp;#39; =&amp;gt; Request::input(&amp;#39;username&amp;#39;), &amp;#39;password&amp;#39; =&amp;gt; Request::input(&amp;#39;password&amp;#39;), ]); dd($status); } laravel在表单提交数据的时候要在form中使用csrf验证
+{{ csrf_field() }} 验证登录 public function login() { $status = Auth::guard(&amp;#39;admin&amp;#39;)-&amp;gt;attempt([ &amp;#39;username&amp;#39; =&amp;gt; Request::input(&amp;#39;username&amp;#39;), &amp;#39;password&amp;#39; =&amp;gt; Request::input(&amp;#39;password&amp;#39;), ]); if($status){ return redirect(&amp;#39;/admin/index&amp;#39;); } return redirect(&amp;#39;/admin/login&amp;#39;)-&amp;gt;with(&amp;#39;error&amp;#39;,&amp;#39;用户名或密码错误&amp;#39;); } 使用with闪存(只存储一次)向视图传递错误信息 @if(session(&amp;#39;error&amp;#39;)) &amp;lt;div class=&amp;#34;alert alert-danger&amp;#34;&amp;gt; {{session(&amp;#39;error&amp;#39;)}} &amp;lt;/div&amp;gt; @endif </content>
+    </entry>
+    
+     <entry>
+        <title>Laravel基础01-安装配置</title>
+        <url>https://technod.cn/note/2020/07/16/laravel01/</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Laravel</tag><tag>PHP</tag><tag>PHPstorm</tag>
+        </tags>
+        <content type="html"> 安装 composer安装 composer命令：
+composer create-project --prefer-dist laravel/laravel hd Laravel目录： 安装提示工具 前往PHP应用商店packagist.org下载安装代码提示工具 barryvdh/laravel-ide-helper 使用composer安装以上ide增强工具 composer require barryvdh/laravel-ide-helper 把增强工具引入laravel项目中 在/config/app.php providers扩展中添加代码：
+Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class, 执行artisan命令初始化组件 php artisan ide-helper:generate 重启PHPstorm，完成工具安装 数据库配置 laravel有两个地方可以配置数据库：
+/.env 文件 （默认配置项） /config/database.php 文件 使用migration建表 执行make:migration命令创建hd数据表PHP文件 php artisan make:migration create_hd_table --create=hd 执行成功后会在database/migrations目录中生成PHP文件 2) 执行migrate命令创建hd数据表
+php artisan migrate 解决MySQL 5.6版本执行migrate命令报错，无法创建表问题 错误信息：Illuminate\Database\QueryException
+解决方法1：将MySQL升级至5.7&#43;
+解决方法2：将/config/database.php mysql配置由utf8bm4改为utf8
+解决方法3：将/app/Providers/AppServiceProvider.php 文件中引入Schema
+use Schema; 在boot方法中添加：
+Schema::defaultStringLength(191); 再次执行migrate命令数据表 数据表创建成功
+前后端路由配置 在/routes目录下新建admin目录作为后台路由 在/routes/web.php中包含admin目录文件 include __DIR__.&amp;#39;/admin/web.php&amp;#39;; 在routes/admin/web.php中配置路由组 Route::group([&amp;#39;prefix&amp;#39; =&amp;gt; &amp;#39;admin&amp;#39;],function(){ Route::get(&amp;#39;/abc&amp;#39;,function(){ return &amp;#39;abc&amp;#39;; }); }); 输入&amp;rsquo;域名/admin/abc&amp;rsquo;即可访问到后台admin路由 使用模型（Model）创建表 php artisan make:model Model/Admin -m -m 表示同时创建migration
+编辑database/migrations/下的文件，设置表字段 public function up() { Schema::create(&amp;#39;admins&amp;#39;, function (Blueprint $table) { $table-&amp;gt;increments(&amp;#39;id&amp;#39;); $table-&amp;gt;timestamps(); $table-&amp;gt;string(&amp;#39;username&amp;#39;)-&amp;gt;unique(); //表示username字段不允许重复 $table-&amp;gt;string(&amp;#39;password&amp;#39;); }); } 执行migrate命令创建admins表 php artisan migrate 为admins表添加数据 编辑database/factories/Modelfactory.php文件，添加如下代码：
+$factory-&amp;gt;define(\App\Model\Admin::class, function (Faker $faker) { return [ &amp;#39;username&amp;#39; =&amp;gt; $faker-&amp;gt;name, &amp;#39;password&amp;#39; =&amp;gt; bcrypt(&amp;#39;admin888&amp;#39;), ]; }); 接下来使用tinker添加数据
+php artisan tinker #启动tinker &amp;gt;&amp;gt;&amp;gt;factory(App\Model\Admin::class,3)-&amp;gt;create(); 此时admins表会新增3条数据 </content>
+    </entry>
+    
+     <entry>
+        <title>Hugo基本命令</title>
+        <url>https://technod.cn/note/2020/07/10/hugocommand.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>Hugo</tag>
+        </tags>
+        <content type="html"> Hugo基本命令 hugo server --noHTTPCache	#启动 hugo server --disableFastRender	#FastRender启动 hugo new site &amp;#34;technod.cn&amp;#34;	#创建站点 hugo new post/note/xx.md	#创建文章 hugo #编译所有文件并输出到public目录 Hugo下载 </content>
+    </entry>
+    
+     <entry>
+        <title>欢迎大家</title>
+        <url>https://technod.cn/home/welcome/</url>
+        <categories>
+          
+        </categories>
+        <tags>
+          
+        </tags>
+        <content type="html"> Welcome
+</content>
+    </entry>
+    
+     <entry>
+        <title>About</title>
+        <url>https://technod.cn/about/</url>
+        <categories>
+          
+        </categories>
+        <tags>
+          
+        </tags>
+        <content type="html"> 教育工作联系我 👇
+</content>
+    </entry>
+    
+</search>

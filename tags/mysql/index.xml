@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>mysql on TechNod</title>
+    <link>https://technod.cn/tags/mysql/</link>
+    <description>Recent content in mysql on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sat, 11 Sep 2021 00:22:13 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>记一次Docker mysql容器在windows虚拟机无法启动问题</title>
+      <link>https://technod.cn/leaf/202109/docker_err.html</link>
+      <pubDate>Sat, 11 Sep 2021 00:22:13 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202109/docker_err.html</guid>
+      <description>环境 使用的环境是Windows10+homestead(VirtualBox) 启动过程 运行sudo docker-compose up -d 容器可以正常启动 运行sudo docker exec -it db-mysql</description>
+    </item>
+    
+  </channel>
+</rss>

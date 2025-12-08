@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Laravel on TechNod</title>
+    <link>https://technod.cn/tags/laravel/</link>
+    <description>Recent content in Laravel on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 18 May 2021 15:20:48 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/laravel/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Homestead环境搭建</title>
+      <link>https://technod.cn/note/202105/installhd.html</link>
+      <pubDate>Tue, 18 May 2021 15:20:48 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/202105/installhd.html</guid>
+      <description>准备工作 环境 OS: Windows 10 安装所需软件 Git Vagrant VitrualBox xshell Navicat 生成SSH Key 在用户家目录运行： cd ~ ssh-keygen -t rsa -C &amp;#34;youemail@homestead.com&amp;#34; 此时，会生成以下的文件 安装Homestead (还可以直接</description>
+    </item>
+    
+    <item>
+      <title>Laravel Api开发之Dingo&amp;Jwt的使用</title>
+      <link>https://technod.cn/note/2020/09/22/laravel_dingo/</link>
+      <pubDate>Tue, 22 Sep 2020 15:02:17 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/09/22/laravel_dingo/</guid>
+      <description>Dingo 安装组件 composer require dingo/api:2.x 生成配置文件 php artisan vendor:publish 执行命令后会生成config/api.php配置文件 config/api.php 配置说明 #接口围绕：[x]本地和私有环境 [prs]公</description>
+    </item>
+    
+    <item>
+      <title>Larvel-使用Seeder生成测试数据</title>
+      <link>https://technod.cn/note/2020/08/24/laravel05/</link>
+      <pubDate>Mon, 24 Aug 2020 15:38:00 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/08/24/laravel05/</guid>
+      <description>生成Seeder文件 php artisan make:seeder UserSeeder 运行后会在database/seeds目录下生成UserSeeder.php 文件 编辑UserSeeder.php</description>
+    </item>
+    
+    <item>
+      <title>使用Laravel邮件发送实现用户的验证&amp;注册业务</title>
+      <link>https://technod.cn/note/2020/08/04/laravel09/</link>
+      <pubDate>Tue, 04 Aug 2020 17:21:13 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/08/04/laravel09/</guid>
+      <description>注册数据处理方法中添加token并触发邮件发送 //用户注册数据处理 public function store(Request $request) { $data = $this-&amp;gt;validate($request,[ &amp;#39;name&amp;#39; =&amp;gt; &amp;#39;required|min:4&amp;#39;, &amp;#39;email&amp;#39; =&amp;gt; &amp;#39;required|email|unique:users&amp;#39;, &amp;#39;password&amp;#39; =&amp;gt; &amp;#39;required|min:6|confirmed&amp;#39;, ]); $data[&amp;#39;password&amp;#39;] = bcrypt($data[&amp;#39;password&amp;#39;]); $data[&amp;#39;email_token&amp;#39;] = Str::random(10); $user = User::create($data); //发送注册邮件 \Mail::to($user)-&amp;gt;send(new RegMail($user));</description>
+    </item>
+    
+    <item>
+      <title>Laravel Api开发之laravel/passport授权包的使用及基本配置</title>
+      <link>https://technod.cn/note/2020/07/31/laravel06/</link>
+      <pubDate>Fri, 31 Jul 2020 17:18:54 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/31/laravel06/</guid>
+      <description>安装laravel/passport composer require laravel/passport=~7.0 指定为7.0版本，laravel5.8不支持8.0及以上版本 创建所需的表 php artisan migrate 生成secret php artisan</description>
+    </item>
+    
+    <item>
+      <title>Laravel基础04-视图</title>
+      <link>https://technod.cn/note/2020/07/23/laravel04/</link>
+      <pubDate>Thu, 23 Jul 2020 10:35:48 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/23/laravel04/</guid>
+      <description>Blade模板引擎的模板继承构建后台界面 后台视图文件目录 -/resources/views/admin/layout 为父级模板目录 使用@yield占位定义活动的页面范围 &amp;lt;div&amp;gt; @yield(&amp;#39;content&amp;#39;) &amp;lt;/div&amp;gt; 子页面继承父级模板 @extends(&amp;#39;admin.layout.master&amp;#39;) @section(&amp;#39;content&amp;#39;) &amp;lt;div</description>
+    </item>
+    
+    <item>
+      <title>Laravel基础03-中间件的使用</title>
+      <link>https://technod.cn/note/2020/07/22/laravel03/</link>
+      <pubDate>Wed, 22 Jul 2020 17:06:05 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/22/laravel03/</guid>
+      <description>使用中间件进行后台权限验证 创建中间件 php artisan make:middleware AdminMiddleware 执行后会在app/Http/Middleware目录下生成AdminMiddleware.php</description>
+    </item>
+    
+    <item>
+      <title>Laravel基础02-后台登录验证</title>
+      <link>https://technod.cn/note/2020/07/21/laravel02/</link>
+      <pubDate>Tue, 21 Jul 2020 13:29:04 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/21/laravel02/</guid>
+      <description>创建后台控制器 php artisan make:controller Admin/EntryController 配置路由 Route::get(&amp;#39;/login&amp;#39;,&amp;#39;Admin\EntryController@loginForm&amp;#39;); 或者采用配置命名空间的方式指定到Admin目录，简化一些重复代码 Route::group([&amp;#39;prefix&amp;#39; =&amp;gt; &amp;#39;admin&amp;#39;,&amp;#39;namespace&amp;#39; =&amp;gt; &amp;#39;Admin&amp;#39;],function(){ Route::get(&amp;#39;/login&amp;#39;,&amp;#39;EntryController@loginForm&amp;#39;); }); 使用Auth登录验证 编辑con</description>
+    </item>
+    
+    <item>
+      <title>Laravel基础01-安装配置</title>
+      <link>https://technod.cn/note/2020/07/16/laravel01/</link>
+      <pubDate>Thu, 16 Jul 2020 10:30:47 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/16/laravel01/</guid>
+      <description>安装 composer安装 composer命令： composer create-project --prefer-dist laravel/laravel hd Laravel目录： 安装提示工具 前往PHP应用商店packagist.org下载安装</description>
+    </item>
+    
+  </channel>
+</rss>

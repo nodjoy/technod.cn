@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>wsl on TechNod</title>
+    <link>https://technod.cn/tags/wsl/</link>
+    <description>Recent content in wsl on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 24 Aug 2023 19:58:34 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/wsl/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Windows 10 WSL2 安装配置</title>
+      <link>https://technod.cn/leaf/202308/wsl.html</link>
+      <pubDate>Thu, 24 Aug 2023 19:58:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202308/wsl.html</guid>
+      <description>Windows 10 WSL2 安装配置 安装 WSL2 启用适用于 Linux 的 Windows 子系统 和 虚拟机平台 选项 microsoft store 搜索并安装 ubuntu22.04 设置默认版本为 WSL2 wsl --set-default-version 2 wsl2 内核更新 下载地址 Docker无法启动问题解</description>
+    </item>
+    
+  </channel>
+</rss>

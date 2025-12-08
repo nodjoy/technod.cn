@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on TechNod</title>
+    <link>https://technod.cn/post/</link>
+    <description>Recent content in Posts on TechNod</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 25 Jul 2025 13:08:26 +0800</lastBuildDate><atom:link href="https://technod.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OCR识别图片文字内容</title>
+      <link>https://technod.cn/note/20250725/ocr.html</link>
+      <pubDate>Fri, 25 Jul 2025 13:08:26 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20250725/ocr.html</guid>
+      <description>使用python-ddddocr库识别图片文字内容 环境： conda create -n py312 python=3.12 &amp;amp;&amp;amp; conda activate py312 依赖安装：pip install ddddocr flask Python代码: from flask import Flask, request import ddddocr import base64 import json from PIL</description>
+    </item>
+    
+    <item>
+      <title>Proxmox虚拟机配置NAT网络</title>
+      <link>https://technod.cn/note/20240517/vm-nat.html</link>
+      <pubDate>Fri, 17 May 2024 09:12:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20240517/vm-nat.html</guid>
+      <description>环境准备 OS: Proxmox 7.4(Debian 11) 软件: dnsmasq 配置 新建网络 新建一个网络,例如 vmbr2 编辑网络配置 编辑网络配置： vi /etc/network/interfaces 末尾添加以下内容： post-up echo 1 &amp;gt; /proc/sys/net/ipv4/ip_forward post-up iptables -t nat -A POSTROUTING -s &amp;#39;192.168.100.0/24&amp;#39; -o vmbr0 -j MASQUERADE post-down</description>
+    </item>
+    
+    <item>
+      <title>使用tcconfig为ipv6限速实践</title>
+      <link>https://technod.cn/tech/202403/tc_ipv6.html</link>
+      <pubDate>Wed, 06 Mar 2024 10:23:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/tech/202403/tc_ipv6.html</guid>
+      <description>环境准备 OS: Ubuntu 软件: iperf tcconfig 安装iperf和tcconfig 在服务端A 安装iperf和tcconfig 在客户端B 安装iperf iperf apt install iperf tcconfig 下载tcc</description>
+    </item>
+    
+    <item>
+      <title>Proxmox升级openssh版本</title>
+      <link>https://technod.cn/tech/20240207/proxmox.html</link>
+      <pubDate>Wed, 07 Feb 2024 13:48:06 +0800</pubDate>
+      
+      <guid>https://technod.cn/tech/20240207/proxmox.html</guid>
+      <description>openssh版本升级至9.6p1 环境 OS: Proxmox7.4 (Debian11) 设置apt源 sed -i &amp;#39;s@deb.debian.org@mirrors.huaweicloud.com@g&amp;#39; /etc/apt/sources.list sed -i &amp;#39;s@ftp.debian.org@mirrors.huaweicloud.com@g&amp;#39; /etc/apt/sources.list apt update 取消proxmox对软件卸载的限制(暂时移除pve-apt-ho</description>
+    </item>
+    
+    <item>
+      <title>Windows 10 WSL2 安装配置</title>
+      <link>https://technod.cn/leaf/202308/wsl.html</link>
+      <pubDate>Thu, 24 Aug 2023 19:58:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202308/wsl.html</guid>
+      <description>Windows 10 WSL2 安装配置 安装 WSL2 启用适用于 Linux 的 Windows 子系统 和 虚拟机平台 选项 microsoft store 搜索并安装 ubuntu22.04 设置默认版本为 WSL2 wsl --set-default-version 2 wsl2 内核更新 下载地址 Docker无法启动问题解</description>
+    </item>
+    
+    <item>
+      <title>Video player test(1080p)</title>
+      <link>https://technod.cn/part/20230430/video.html</link>
+      <pubDate>Sun, 30 Apr 2023 21:05:40 +0800</pubDate>
+      
+      <guid>https://technod.cn/part/20230430/video.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Video player test(4K)</title>
+      <link>https://technod.cn/part/20230430/video4k.html</link>
+      <pubDate>Sun, 30 Apr 2023 21:05:30 +0800</pubDate>
+      
+      <guid>https://technod.cn/part/20230430/video4k.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Docker可视化管理工具--Portainer的配置与使用</title>
+      <link>https://technod.cn/note/20221226/portainer.html</link>
+      <pubDate>Mon, 26 Dec 2022 09:25:15 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20221226/portainer.html</guid>
+      <description>安装部署portainer-ce # 创建目录 mkdir -p app/portainer/portainer_data # 修改权限 chmod -R 777 app/portainer/portainer_data # 进入目录 cd app/portainer # 启动容器 docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/portainer_data:/data portainer/portainer-ce:latest 访问portaine</description>
+    </item>
+    
+    <item>
+      <title>使用jspdf导出pdf 内容被截断的问题</title>
+      <link>https://technod.cn/note/20221224/jspdf.html</link>
+      <pubDate>Sat, 24 Dec 2022 17:53:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20221224/jspdf.html</guid>
+      <description>问题 分页时内容被截断 解决 环境 vue2 依赖包：jspdf html2canvas jspdf-autotable 第一种解决方案&amp;mdash;使用jspdf-autotable 适用于内容为表格的情况 js</description>
+    </item>
+    
+    <item>
+      <title>deb包的打包流程</title>
+      <link>https://technod.cn/note/202208/make-deb.html</link>
+      <pubDate>Thu, 11 Aug 2022 21:23:57 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/202208/make-deb.html</guid>
+      <description>deb包的打包流程 以打包二进制文件为例 创建目录 mkdir make-deb cd make-deb mkdir -p opt/mydeb/bin 将准备好的二进制文件放入opt/mydeb/bin目录 创建DEBIAN目录 mkdir DEBIAN 创</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu/Debian环境下使浏览器信任自签名证书</title>
+      <link>https://technod.cn/note/202208/ssl.html</link>
+      <pubDate>Thu, 11 Aug 2022 20:49:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/202208/ssl.html</guid>
+      <description>准备工作 环境 OS: Ubuntu/Debian 软件: openssl libnss3-tools certutil 浏览器: Chrome Edge 360安全浏览器 生成自签名证书 1.使用廖雪峰的脚本 2.参考这篇文章中的脚本 证书导入 1.安装certu</description>
+    </item>
+    
+    <item>
+      <title>Golang与PHP的AES加密解密互转</title>
+      <link>https://technod.cn/share/202208/aes-lib.html</link>
+      <pubDate>Thu, 11 Aug 2022 20:09:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/share/202208/aes-lib.html</guid>
+      <description>Golang与PHP的AES加密解密互转 使用Github上的mervick/aes-everywhere加密库 mervick/aes-eve</description>
+    </item>
+    
+    <item>
+      <title>PHP获取mp4和m3u8视频时长的方法</title>
+      <link>https://technod.cn/note/202207/duration.html</link>
+      <pubDate>Sun, 17 Jul 2022 19:38:37 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/202207/duration.html</guid>
+      <description>PHP获取mp4视频时长 使用getid3获取mp4视频时长(同样适用于mp3等其他媒体文件) $getid3 = new getID3; $file = &amp;#39;./test.mp4&amp;#39;; $info = $getid3-&amp;gt;analyze($file); $playtime_seconds = $info[&amp;#39;playtime_seconds&amp;#39;]; $duration = gmdate(&amp;#34;H:i:s&amp;#34;, $playtime_seconds); //将秒换算为</description>
+    </item>
+    
+    <item>
+      <title>Harbor的安装配置与使用</title>
+      <link>https://technod.cn/leaf/202207/harbor.html</link>
+      <pubDate>Thu, 07 Jul 2022 17:03:45 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202207/harbor.html</guid>
+      <description>准备工作 环境 OS: CentOS 7.6 安装所需软件 Docker Docker-Compose 其它 域名 https证书 安装Harbor 下载安装包 解压安装包并进入安装目录 tar -zxvf harbor-offline-installer-v2.5.2.tgz cd harbor 编辑harbor.yam</description>
+    </item>
+    
+    <item>
+      <title>使用docker-compose一键部署nodejs项目</title>
+      <link>https://technod.cn/leaf/202206/nodejs-docker.html</link>
+      <pubDate>Tue, 14 Jun 2022 16:51:33 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202206/nodejs-docker.html</guid>
+      <description>环境 OS: Ubuntu 软件: docker、docker-compose 目录结构 docker-compose.yml文件 version: &amp;#34;2&amp;#34; services: mysql: image: mysql:8.0.19 container_name: mysql restart: always volumes: - ./data/mysql:/var/lib/mysql # mysq</description>
+    </item>
+    
+    <item>
+      <title>使用docker-compose一键搭建LNMP环境</title>
+      <link>https://technod.cn/leaf/202205/lnmp-docker.html</link>
+      <pubDate>Sat, 21 May 2022 20:56:46 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202205/lnmp-docker.html</guid>
+      <description>环境 OS: Ubuntu 软件: docker、docker-compose 目录结构 我的目录结构 创建docker-compose.yml文件 version: &amp;#34;2&amp;#34; services: php-fpm: image: phpdockerio/php74-fpm container_name: php74 working_dir: /application</description>
+    </item>
+    
+    <item>
+      <title>rpmrebuild重新打包</title>
+      <link>https://technod.cn/note/20220324/rpmrebuild.html</link>
+      <pubDate>Thu, 24 Mar 2022 21:06:46 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20220324/rpmrebuild.html</guid>
+      <description>rpmrebuild的使用 安装rpmrebuild yum install rpmrebuild 制作rpm包过程较为麻烦，此处使用rpmrebuild去将本机已安装好的nginx包</description>
+    </item>
+    
+    <item>
+      <title>使用rpmbuild制作rpm包</title>
+      <link>https://technod.cn/note/20220322/make-rpm.html</link>
+      <pubDate>Thu, 24 Mar 2022 19:48:46 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20220322/make-rpm.html</guid>
+      <description>rpmbuild 安装rpmbuild yum install rpm-build 生成rpmbuild目录结构 使用非root账户 rpmbuild -ba nginx.spec //会报错，没有文件或目录 此时会生成rpmbuild工作目录</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu搭建LNMP环境</title>
+      <link>https://technod.cn/leaf/20211110/lnmp.html</link>
+      <pubDate>Wed, 10 Nov 2021 16:59:27 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/20211110/lnmp.html</guid>
+      <description>安装Nginx sudo apt install nginx 安装MySQL sudo apt install mysql-server-5.7 添加php源 sudo add-apt-repository ppa:ondrej/php sudo apt update 也可以使用ppa国内源 deb https://launchpad.proxy.ustclug.org/ondrej/php/ubuntu focal main 安装PHP sudo apt install php7.4 sudo apt install php7.4-fpm 安装PHP扩展 sudo</description>
+    </item>
+    
+    <item>
+      <title>记一次Docker mysql容器在windows虚拟机无法启动问题</title>
+      <link>https://technod.cn/leaf/202109/docker_err.html</link>
+      <pubDate>Sat, 11 Sep 2021 00:22:13 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202109/docker_err.html</guid>
+      <description>环境 使用的环境是Windows10+homestead(VirtualBox) 启动过程 运行sudo docker-compose up -d 容器可以正常启动 运行sudo docker exec -it db-mysql</description>
+    </item>
+    
+    <item>
+      <title>Homestead环境搭建</title>
+      <link>https://technod.cn/note/202105/installhd.html</link>
+      <pubDate>Tue, 18 May 2021 15:20:48 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/202105/installhd.html</guid>
+      <description>准备工作 环境 OS: Windows 10 安装所需软件 Git Vagrant VitrualBox xshell Navicat 生成SSH Key 在用户家目录运行： cd ~ ssh-keygen -t rsa -C &amp;#34;youemail@homestead.com&amp;#34; 此时，会生成以下的文件 安装Homestead (还可以直接</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu-安装PHP启动报错php: error while loading shared libraries: libcrypto.so.1.0.0: cannot open shared object file: No such file or directory解决办法</title>
+      <link>https://technod.cn/note/202105/phperror.html</link>
+      <pubDate>Sat, 08 May 2021 10:36:36 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/202105/phperror.html</guid>
+      <description>Ubuntu-使用宝塔面板安装PHP后启动报错：php: error while loading shared libraries: libcrypto.so.1.0.0: cannot open shared object file: No such file or directory 解决办法 前往http://security.ubun</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu-Docker的安装与使用</title>
+      <link>https://technod.cn/note/202104/docker.html</link>
+      <pubDate>Thu, 29 Apr 2021 12:34:31 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/202104/docker.html</guid>
+      <description>环境配置 删除旧版本 sudo apt-get remove docker docker-engine docker.io containerd runc 更新apt包索引 sudo apt-get update 安装包以允许apt通过HTTPS使用存储库 sudo apt-get install apt-transport-https sudo apt-get install ca-certificates sudo apt-get install curl sudo apt-get install gnupg-agent sudo apt-get install software-properties-common 添</description>
+    </item>
+    
+    <item>
+      <title>Js数组操作</title>
+      <link>https://technod.cn/note/202104/javascript.html</link>
+      <pubDate>Thu, 08 Apr 2021 14:28:34 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/202104/javascript.html</guid>
+      <description>类型转换 字符串 大部分数据类型都可以使用toString()函数转换为字符串 console.log(([1,2,3]).toString()); //1,2,3 也可以使用函数String转换为字符串 console.log(String([1,2,3])); 或者使用join连接为</description>
+    </item>
+    
+    <item>
+      <title>Node-Koa2之axios请求云之讯短信发送接口和soap请求WebService</title>
+      <link>https://technod.cn/leaf/202103/axios-soap.html</link>
+      <pubDate>Wed, 10 Mar 2021 11:24:18 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202103/axios-soap.html</guid>
+      <description>axios请求云之讯短信接口实现短信发送 安装axios npm install axios --save 方法实现 static async sendMessage(ctx){ let param = Math.random().toString().substr(2, 4); //生成四位随机数 let phone = &amp;#39;157********&amp;#39;; const url = &amp;#39;https://open.ucpaas.com/ol/sms/sendsms&amp;#39;; const axios = require(&amp;#39;axios&amp;#39;); let sendRe = await axios({ method:</description>
+    </item>
+    
+    <item>
+      <title>基于Koa框架的Lincms常用操作</title>
+      <link>https://technod.cn/note/202103/lincms.html</link>
+      <pubDate>Wed, 03 Mar 2021 14:00:49 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/202103/lincms.html</guid>
+      <description>Sequelize事务操作 let transaction; //事务开始 try { transaction = await sequelize.transaction(); const replace_record = { p_code: v.get(&amp;#39;path.p_code&amp;#39;), p_type: v.get(&amp;#39;path.p_type&amp;#39;) }; const { id: record_id } = await ReplaceRecordModel.create(replace_record, { transaction }); await WxReplacesheetsModel.create( { record_id, name: v.get(&amp;#39;path.name&amp;#39;), phone: v.get(&amp;#39;path.phone&amp;#39;), province: v.get(&amp;#39;path.province&amp;#39;), city: v.get(&amp;#39;path.city&amp;#39;), district: v.get(&amp;#39;path.district&amp;#39;), question: v.get(&amp;#39;path.question&amp;#39;), status: 1 }, { transaction } );</description>
+    </item>
+    
+    <item>
+      <title>Linux开启bbr加速</title>
+      <link>https://technod.cn/leaf/202102/bbr.html</link>
+      <pubDate>Tue, 09 Feb 2021 13:09:10 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202102/bbr.html</guid>
+      <description>安装bbr加速 进入/usr/local/src目录，下载bbr.sh文件 cd /usr/local/src sudo wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh 添加可执行权限 sudo chmod +x bbr.sh 执行该脚本文件,安装完成后提示按y</description>
+    </item>
+    
+    <item>
+      <title>PHP&amp;kuaidi.com实现快递查询</title>
+      <link>https://technod.cn/leaf/202101/kuaidiapi.html</link>
+      <pubDate>Tue, 26 Jan 2021 16:14:21 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202101/kuaidiapi.html</guid>
+      <description>申请快递查询API授权key kuaidi.com SDK文件KDApi.php /** * 物流信息查询接口SDK */ class KDAPI{ private $_APPKEY = &amp;#39;twde5d8ef***********&amp;#39;; //改为您自己的key private $_APIURL = &amp;#34;https://highapi.kuaidi.com/openapi-querycountordernumber.html?&amp;#34;; private $_show = 0; private $_muti</description>
+    </item>
+    
+    <item>
+      <title>Linux-使用防火墙firewalld开放端口</title>
+      <link>https://technod.cn/leaf/20210122/linux-firewalld.html</link>
+      <pubDate>Fri, 22 Jan 2021 14:58:14 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/20210122/linux-firewalld.html</guid>
+      <description>查看当前开了哪些端口其实一个服务对应一个端口，每个服务对应/usr/lib/firewalld/services下面一个xml文件 firewall-cmd --list-services 通过f</description>
+    </item>
+    
+    <item>
+      <title>使用Linux定时任务-Crontab 完成MySQL数据库的备份和表操作</title>
+      <link>https://technod.cn/leaf/202101/crontab_linux.html</link>
+      <pubDate>Tue, 19 Jan 2021 17:39:31 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/202101/crontab_linux.html</guid>
+      <description>crontab基本命令 crontab -l //查看定时任务 crontab -e //编辑定时任务 crontab -r //删除定时任务 crontab常用写法 每分钟执行 */1 * * * * command 每小时0分执行</description>
+    </item>
+    
+    <item>
+      <title>SEO搜索引擎优化-常用的站长平台总结</title>
+      <link>https://technod.cn/share/202101/zhanzhangurl/</link>
+      <pubDate>Fri, 15 Jan 2021 13:24:58 +0800</pubDate>
+      
+      <guid>https://technod.cn/share/202101/zhanzhangurl/</guid>
+      <description>百度: https://ziyuan.baidu.com 谷歌: https://analytics.google.com 腾讯: https://mta.qq.com 搜狗: http://zhanzhang.sogou.com 360: http://zhanzhang.so.com 必应: https://www.bing.com/webmasters/homepage 头条: https://zhanzhang.toutiao.com 神马: https://zhanzhang.sm.cn</description>
+    </item>
+    
+    <item>
+      <title>PHP-微信公众号实现发送模板消息</title>
+      <link>https://technod.cn/leaf/2020/12/15/wechat01/</link>
+      <pubDate>Tue, 15 Dec 2020 11:19:55 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/2020/12/15/wechat01/</guid>
+      <description>PHP微信公众号实现发送模板消息 $appid = &amp;#34;wxb7729*******&amp;#34;; $appsecret = &amp;#34;8b99**************&amp;#34;; $url = &amp;#34;https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&amp;amp;appid=$appid&amp;amp;secret=$appsecret&amp;#34;; $ch = curl_init(); curl_setopt($ch, CURLOPT_URL, $url); curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE); curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); $output = curl_exec($ch); curl_close($ch); $jsoninfo = json_decode($output, true); $ACCESS_TOKEN = $jsoninfo[&amp;#34;access_token&amp;#34;]; $data=array( &amp;#39;touser&amp;#39;=&amp;gt;&amp;#34;oaIgKt*********&amp;#34;, //要发送给用户的openid &amp;#</description>
+    </item>
+    
+    <item>
+      <title>Koa框架实现导出Excel文件</title>
+      <link>https://technod.cn/note/2020/12/11/koa_import/</link>
+      <pubDate>Fri, 11 Dec 2020 17:29:57 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/12/11/koa_import/</guid>
+      <description>安装引入excel-export包 npm install excel-export --save const nodeExcel = require(&amp;#39;excel-export&amp;#39;); 实现导出方法 /** * 数据导出--导出方法 * @param resultData [{},{},] //从数据库中获取的数据格式 */ static async exportData(resultData,ctx){ let conf ={}; conf.name =</description>
+    </item>
+    
+    <item>
+      <title>php安装Oracle扩展oci8</title>
+      <link>https://technod.cn/leaf/2020/10/26/php_oci8/</link>
+      <pubDate>Mon, 26 Oct 2020 10:30:00 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/2020/10/26/php_oci8/</guid>
+      <description>安装oracle-instantclient 下载地址 分别下载 oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm 运行 rpm -ivh oracle-instantclient11.2-* 此时会生成/usr/lib/oracle/11/2/client6</description>
+    </item>
+    
+    <item>
+      <title>Laravel Api开发之Dingo&amp;Jwt的使用</title>
+      <link>https://technod.cn/note/2020/09/22/laravel_dingo/</link>
+      <pubDate>Tue, 22 Sep 2020 15:02:17 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/09/22/laravel_dingo/</guid>
+      <description>Dingo 安装组件 composer require dingo/api:2.x 生成配置文件 php artisan vendor:publish 执行命令后会生成config/api.php配置文件 config/api.php 配置说明 #接口围绕：[x]本地和私有环境 [prs]公</description>
+    </item>
+    
+    <item>
+      <title>Larvel-使用Seeder生成测试数据</title>
+      <link>https://technod.cn/note/2020/08/24/laravel05/</link>
+      <pubDate>Mon, 24 Aug 2020 15:38:00 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/08/24/laravel05/</guid>
+      <description>生成Seeder文件 php artisan make:seeder UserSeeder 运行后会在database/seeds目录下生成UserSeeder.php 文件 编辑UserSeeder.php</description>
+    </item>
+    
+    <item>
+      <title>Sequelize操作MySQL数据库</title>
+      <link>https://technod.cn/note/2020/08/20/sequelize01/</link>
+      <pubDate>Thu, 20 Aug 2020 14:00:54 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/08/20/sequelize01/</guid>
+      <description>安装sequelize、sequelize-cli和mysql2 npm install sequelize-cli -g npm install sequelize --save npm install mysql2 --save 初始化项目 sequelize init 在config.js中配置连接数据库参</description>
+    </item>
+    
+    <item>
+      <title>Koa使用require-directory实现路由的自动加载</title>
+      <link>https://technod.cn/note/2020/08/13/koa07/</link>
+      <pubDate>Thu, 13 Aug 2020 14:10:35 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/08/13/koa07/</guid>
+      <description>require-directory的安装与使用 const Koa = require(&amp;#39;koa&amp;#39;); const app = new Koa(); const requireDirectory = require(&amp;#39;require-directory&amp;#39;); const Router = require(&amp;#39;koa-router&amp;#39;); const modules = requireDirectory(module,&amp;#39;./api&amp;#39;,{ visit:whenLoadModule }) function whenLoadModule(obj){ if(obj instanceof Router){ app.use(obj.routes()) } } app.listen(3000); 路由文件的写法api/v1/b</description>
+    </item>
+    
+    <item>
+      <title>使用Koa应用生成器快速生成koa应用</title>
+      <link>https://technod.cn/note/2020/08/10/koa06/</link>
+      <pubDate>Mon, 10 Aug 2020 16:48:12 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/08/10/koa06/</guid>
+      <description>全局安装koa脚手架生成工具 npm install koa-generator -g 创建项目 koa koa_demo 安装依赖 cd koa_demo npm install 启动项目 npm start</description>
+    </item>
+    
+    <item>
+      <title>Koa Cookie与Session</title>
+      <link>https://technod.cn/note/2020/08/10/koa05/</link>
+      <pubDate>Mon, 10 Aug 2020 14:52:11 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/08/10/koa05/</guid>
+      <description>Cookie Koa中设置Cookie值 ctx.cookies.set(name,value,[options]); Koa中获取Cookie值 ctx.cookies.get(&amp;#39;name&amp;#39;); Koa中使用Buffer设置中文Cookie //设置中文Cookie router.get(&amp;#39;/&amp;#39;,async (ctx)=&amp;gt;{ var userinfo=new Buf</description>
+    </item>
+    
+    <item>
+      <title>Koa post提交数据与静态资源中间件</title>
+      <link>https://technod.cn/note/2020/08/10/koa04/</link>
+      <pubDate>Mon, 10 Aug 2020 12:03:41 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/08/10/koa04/</guid>
+      <description>原生Node.js获取post提交的数据 表单 &amp;lt;form action=&amp;#34;/doAdd&amp;#34; method=&amp;#34;post&amp;#34;&amp;gt; 用户名: &amp;lt;input type=&amp;#34;text&amp;#34; name=&amp;#34;username&amp;#34;/&amp;gt; &amp;lt;br/&amp;gt; &amp;lt;br/&amp;gt; 密 码: &amp;lt;input type=&amp;#34;password&amp;#34; name=&amp;#34;password&amp;#34;/&amp;gt; &amp;lt;br/&amp;gt; &amp;lt;br/&amp;gt; &amp;lt;button type=&amp;#34;submit&amp;#34;&amp;gt;提交</description>
+    </item>
+    
+    <item>
+      <title>Koa路由和中间件</title>
+      <link>https://technod.cn/note/2020/08/09/koa02/</link>
+      <pubDate>Sun, 09 Aug 2020 11:01:49 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/08/09/koa02/</guid>
+      <description>Koa路由的安装和配置 安装Koa路由 npm install koa-router --save Koa路由的使用 var Koa = require(&amp;#39;koa&amp;#39;); //引入Koa var Router = require(&amp;#39;koa-router&amp;#39;); //引入路由 var app = new Koa(); var router = new Router(); //配置路由 router.get(&amp;#39;/&amp;#39;,async function(ctx){ //ctx</description>
+    </item>
+    
+    <item>
+      <title>Koa框架安装及ES6基础语法</title>
+      <link>https://technod.cn/note/2020/08/09/koa01/</link>
+      <pubDate>Sun, 09 Aug 2020 08:59:12 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/08/09/koa01/</guid>
+      <description>安装Koa框架 初始化 npm init --yes 安装Koa npm install koa --save 第一个Koa程序app.js var Koa = require(&amp;#39;koa&amp;#39;); //引入Koa var app = new Koa(); //实例化 //中间件 app.use(async(ctx)=&amp;gt;{ ctx.body=&amp;#39;Hello Koa&amp;#39;; }); app.listen(3000); ES6</description>
+    </item>
+    
+    <item>
+      <title>Git 版 本 控 制</title>
+      <link>https://technod.cn/leaf/2020/08/07/gitcommand/</link>
+      <pubDate>Fri, 07 Aug 2020 11:44:45 +0800</pubDate>
+      
+      <guid>https://technod.cn/leaf/2020/08/07/gitcommand/</guid>
+      <description>Git基本命令 git config -l 查看配置 git config -global user.name &amp;ldquo;username&amp;rdquo; 全局设置用户名 git config -global user.email &amp;ldquo;email&amp;rdquo; 全局设置用户邮箱 git init 初始化版本库 git add a.php 添加文件到版本库 git add . 添加所有文件到版本</description>
+    </item>
+    
+    <item>
+      <title>使用Laravel邮件发送实现用户的验证&amp;注册业务</title>
+      <link>https://technod.cn/note/2020/08/04/laravel09/</link>
+      <pubDate>Tue, 04 Aug 2020 17:21:13 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/08/04/laravel09/</guid>
+      <description>注册数据处理方法中添加token并触发邮件发送 //用户注册数据处理 public function store(Request $request) { $data = $this-&amp;gt;validate($request,[ &amp;#39;name&amp;#39; =&amp;gt; &amp;#39;required|min:4&amp;#39;, &amp;#39;email&amp;#39; =&amp;gt; &amp;#39;required|email|unique:users&amp;#39;, &amp;#39;password&amp;#39; =&amp;gt; &amp;#39;required|min:6|confirmed&amp;#39;, ]); $data[&amp;#39;password&amp;#39;] = bcrypt($data[&amp;#39;password&amp;#39;]); $data[&amp;#39;email_token&amp;#39;] = Str::random(10); $user = User::create($data); //发送注册邮件 \Mail::to($user)-&amp;gt;send(new RegMail($user));</description>
+    </item>
+    
+    <item>
+      <title>Laravel Api开发之laravel/passport授权包的使用及基本配置</title>
+      <link>https://technod.cn/note/2020/07/31/laravel06/</link>
+      <pubDate>Fri, 31 Jul 2020 17:18:54 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/31/laravel06/</guid>
+      <description>安装laravel/passport composer require laravel/passport=~7.0 指定为7.0版本，laravel5.8不支持8.0及以上版本 创建所需的表 php artisan migrate 生成secret php artisan</description>
+    </item>
+    
+    <item>
+      <title>MongoDB 安装配置</title>
+      <link>https://technod.cn/note/2020/07/30/mongodb01/</link>
+      <pubDate>Thu, 30 Jul 2020 16:57:57 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/30/mongodb01/</guid>
+      <description>安装配置（with WAMP） 下载MongoDB，并将安装包移动到wamp环境目录下 在mongodb目录新建log.txt文件和dat文件目录</description>
+    </item>
+    
+    <item>
+      <title>Laravel基础04-视图</title>
+      <link>https://technod.cn/note/2020/07/23/laravel04/</link>
+      <pubDate>Thu, 23 Jul 2020 10:35:48 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/23/laravel04/</guid>
+      <description>Blade模板引擎的模板继承构建后台界面 后台视图文件目录 -/resources/views/admin/layout 为父级模板目录 使用@yield占位定义活动的页面范围 &amp;lt;div&amp;gt; @yield(&amp;#39;content&amp;#39;) &amp;lt;/div&amp;gt; 子页面继承父级模板 @extends(&amp;#39;admin.layout.master&amp;#39;) @section(&amp;#39;content&amp;#39;) &amp;lt;div</description>
+    </item>
+    
+    <item>
+      <title>Laravel基础03-中间件的使用</title>
+      <link>https://technod.cn/note/2020/07/22/laravel03/</link>
+      <pubDate>Wed, 22 Jul 2020 17:06:05 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/22/laravel03/</guid>
+      <description>使用中间件进行后台权限验证 创建中间件 php artisan make:middleware AdminMiddleware 执行后会在app/Http/Middleware目录下生成AdminMiddleware.php</description>
+    </item>
+    
+    <item>
+      <title>Laravel基础02-后台登录验证</title>
+      <link>https://technod.cn/note/2020/07/21/laravel02/</link>
+      <pubDate>Tue, 21 Jul 2020 13:29:04 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/21/laravel02/</guid>
+      <description>创建后台控制器 php artisan make:controller Admin/EntryController 配置路由 Route::get(&amp;#39;/login&amp;#39;,&amp;#39;Admin\EntryController@loginForm&amp;#39;); 或者采用配置命名空间的方式指定到Admin目录，简化一些重复代码 Route::group([&amp;#39;prefix&amp;#39; =&amp;gt; &amp;#39;admin&amp;#39;,&amp;#39;namespace&amp;#39; =&amp;gt; &amp;#39;Admin&amp;#39;],function(){ Route::get(&amp;#39;/login&amp;#39;,&amp;#39;EntryController@loginForm&amp;#39;); }); 使用Auth登录验证 编辑con</description>
+    </item>
+    
+    <item>
+      <title>Laravel基础01-安装配置</title>
+      <link>https://technod.cn/note/2020/07/16/laravel01/</link>
+      <pubDate>Thu, 16 Jul 2020 10:30:47 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/16/laravel01/</guid>
+      <description>安装 composer安装 composer命令： composer create-project --prefer-dist laravel/laravel hd Laravel目录： 安装提示工具 前往PHP应用商店packagist.org下载安装</description>
+    </item>
+    
+    <item>
+      <title>Hugo基本命令</title>
+      <link>https://technod.cn/note/2020/07/10/hugocommand.html</link>
+      <pubDate>Fri, 10 Jul 2020 14:52:58 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/2020/07/10/hugocommand.html</guid>
+      <description>Hugo基本命令 hugo server --noHTTPCache #启动 hugo server --disableFastRender #FastRender启动 hugo new site &amp;#34;technod.cn&amp;#34; #创建站点 hugo new post/note/xx.md #创建文章 hugo #编译所有文件并输出到public目录 Hug</description>
+    </item>
+    
+    <item>
+      <title>欢迎大家</title>
+      <link>https://technod.cn/home/welcome/</link>
+      <pubDate>Sun, 22 Mar 2020 18:24:39 +0800</pubDate>
+      
+      <guid>https://technod.cn/home/welcome/</guid>
+      <description>Welcome</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://technod.cn/about/</link>
+      <pubDate>Mon, 06 Jan 2020 19:33:20 +0800</pubDate>
+      
+      <guid>https://technod.cn/about/</guid>
+      <description>教育 工作 联系我 👇</description>
+    </item>
+    
+  </channel>
+</rss>
