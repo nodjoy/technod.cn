@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>DockerHub on Nodjoy</title>
-    <link>https://nodjoy.com/tags/dockerhub/</link>
-    <description>Recent content in DockerHub on Nodjoy</description>
+    <title>DockerHub on TechNod</title>
+    <link>https://technod.cn/tags/dockerhub/</link>
+    <description>Recent content in DockerHub on TechNod</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 12 Nov 2024 10:01:39 +0800</lastBuildDate><atom:link href="https://nodjoy.com/tags/dockerhub/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 12 Nov 2024 10:01:39 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/dockerhub/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>DockerHub Mirror 镜像源使用说明</title>
-      <link>https://nodjoy.com/share/tools/docker-mirror.html</link>
+      <link>https://technod.cn/share/tools/docker-mirror.html</link>
       <pubDate>Tue, 12 Nov 2024 10:01:39 +0800</pubDate>
       
-      <guid>https://nodjoy.com/share/tools/docker-mirror.html</guid>
+      <guid>https://technod.cn/share/tools/docker-mirror.html</guid>
       <description>镜像搜索 docker.nodjoy.cn/search?q=镜像名称 例如：docker.nodjoy.cn/search?q=nginx 使用</description>
     </item>
     

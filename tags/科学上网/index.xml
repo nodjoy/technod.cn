@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>科学上网 on Nodjoy</title>
-    <link>https://nodjoy.com/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
-    <description>Recent content in 科学上网 on Nodjoy</description>
+    <title>科学上网 on TechNod</title>
+    <link>https://technod.cn/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
+    <description>Recent content in 科学上网 on TechNod</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 22 Jan 2021 14:06:41 +0800</lastBuildDate><atom:link href="https://nodjoy.com/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 22 Jan 2021 14:06:41 +0800</lastBuildDate><atom:link href="https://technod.cn/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Shadowsocks的安装与配置</title>
-      <link>https://nodjoy.com/leaf/20210122/ssr.html</link>
+      <link>https://technod.cn/leaf/20210122/ssr.html</link>
       <pubDate>Fri, 22 Jan 2021 14:06:41 +0800</pubDate>
       
-      <guid>https://nodjoy.com/leaf/20210122/ssr.html</guid>
+      <guid>https://technod.cn/leaf/20210122/ssr.html</guid>
       <description>环境准备 OS: CentOS 7.6 安装Shadowsocks 连接服务器,安装Shadowsocks # 安装pip yum install python-setuptools easy_install pip # 安装shadowsocks pip install shadowsocks 配置服</description>
     </item>
     
