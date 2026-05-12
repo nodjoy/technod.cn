@@ -6,7 +6,16 @@
     <description>Recent content in Posts on TechNod</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 25 Jul 2025 13:08:26 +0800</lastBuildDate><atom:link href="https://technod.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 12 May 2026 11:56:02 +0800</lastBuildDate><atom:link href="https://technod.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Jetson设备配置yolo环境</title>
+      <link>https://technod.cn/note/202605/jetson.html</link>
+      <pubDate>Tue, 12 May 2026 11:56:02 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/202605/jetson.html</guid>
+      <description>环境 Jetpack 6.2.2 Ubuntu 22.04 Install some dependences and pip sudo apt install python3-pip libopenblas-base libopenmpi-dev libomp-dev libjpeg-dev zlib1g-dev libpython3-dev libopenblas-dev libavcodec-dev libavformat-dev libswscale-dev pip config --user set global.index-url https://mirrors.huaweicloud.com/repository/pypi/simple pip install --upgrade pip Install pytorch torchvision # https://developer.download.nvidia.com/compute/redist/jp/v61/pytorch/ wget https://developer.download.nvidia.com/compute/redist/jp/v61/pytorch/torch-2.5.0a0+872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl pip install torch-2.5.0a0+872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl git clone --branch release/0.20 https://github.com/pytorch/vision torchvision cd torchvision export BUILD_VERSION=0.20 python3 setup.py install --user # 会报错，需要安装cu</description>
+    </item>
+    
     <item>
       <title>OCR识别图片文字内容</title>
       <link>https://technod.cn/note/20250725/ocr.html</link>

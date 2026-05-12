@@ -193,7 +193,7 @@
         </li>
       
       <li class="menu-item ">
-        <a href="https://wiki.technod.com.cn" rel="section">
+        <a href="https://wiki.myflyh.xyz" rel="section">
             <i class="menu-item-icon fa fa-fw fa-wikipedia-w"></i> <br />wiki
           </a>
         </li>
@@ -223,7 +223,7 @@
         </li>
       
       <li class="menu-item ">
-        <a href="https://yacd.technod.com.cn" rel="section">
+        <a href="https://yacd.myflyh.xyz" rel="section">
             <i class="menu-item-icon fa fa-fw fa-cat"></i> <br />Clash Dashboard
           </a>
         </li>
@@ -276,6 +276,65 @@
             
     
  <section id="posts" class="posts-expand">
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://technod.cn/note/202605/jetson.html" itemprop="url">
+        Jetson设备配置yolo环境
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2026-05-12">
+    2026-05-12
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://technod.cn/categories/%E7%AC%94%E8%AE%B0" itemprop="url" rel="index">
+        <span itemprop="name">笔记</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-readme"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">285 字 ~ 1分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    环境 Jetpack 6.2.2 Ubuntu 22.04 Install some dependences and pip sudo apt install python3-pip libopenblas-base libopenmpi-dev libomp-dev libjpeg-dev zlib1g-dev libpython3-dev libopenblas-dev libavcodec-dev libavformat-dev libswscale-dev pip config --user set global.index-url https://mirrors.huaweicloud.com/repository/pypi/simple pip install --upgrade pip Install pytorch torchvision # https://developer.download.nvidia.com/compute/redist/jp/v61/pytorch/ wget https://developer.download.nvidia.com/compute/redist/jp/v61/pytorch/torch-2.5.0a0+872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl pip install torch-2.5.0a0+872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl git clone --branch release/0.20 https://github.com/pytorch/vision torchvision cd torchvision export BUILD_VERSION=0.20 python3 setup.py install --user # 会报错，需要安装cu
+    </div>
+    
+    <div class="post-more-link text-center">
+    <a class="btn" href="https://technod.cn/note/202605/jetson.html" rel="contents">
+      阅读全文 &raquo;
+    </a>
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
+  </article>
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
@@ -678,65 +737,6 @@
     <footer class="post-footer"><div class="post-eof"></div></footer>
   </article>
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://technod.cn/note/20221226/portainer.html" itemprop="url">
-        Docker可视化管理工具--Portainer的配置与使用
-        </a>
-      </h1>
-      <div class="post-meta">
-      <span class="post-time">
-<span class="post-meta-item-icon">
-    <i class="fa fa-calendar-o"></i>
-</span>
-<span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2022-12-26">
-    2022-12-26
-</time>
-</span> 
-      
-
-  <span class="post-category" >
-  &nbsp; | &nbsp;
-  <span class="post-meta-item-icon">
-    <i class="fa fa-folder-o"></i>
-  </span>
-  <span class="post-meta-item-text">分类：</span>
-  
-    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-      <a href="https://technod.cn/categories/%E7%AC%94%E8%AE%B0" itemprop="url" rel="index">
-        <span itemprop="name">笔记</span>
-      </a>
-      &nbsp; 
-    </span>
-  
-</span>
-
-
-       <span>
-&nbsp; | &nbsp;
-<span class="post-meta-item-icon">
-    <i class="fa fa-readme"></i>
-</span>
-<span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">503 字 ~ 2分钟</span>
-</span>
-      </div>
-    </header>
-    <div class="post-body" itemprop="articleBody">
-    安装部署portainer-ce # 创建目录 mkdir -p app/portainer/portainer_data # 修改权限 chmod -R 777 app/portainer/portainer_data # 进入目录 cd app/portainer # 启动容器 docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/portainer_data:/data portainer/portainer-ce:latest 访问portaine
-    </div>
-    
-    <div class="post-more-link text-center">
-    <a class="btn" href="https://technod.cn/note/20221226/portainer.html" rel="contents">
-      阅读全文 &raquo;
-    </a>
-    </div>
-    
-    <footer class="post-footer"><div class="post-eof"></div></footer>
-  </article>
-
 </section>
 
 
@@ -889,7 +889,7 @@
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://technod.cn/post/">
-        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-count">55</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
@@ -906,7 +906,7 @@
     <div class="site-state-item site-state-tags">
         <a href="https://technod.cn/tags/">
          
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">70</span>
         
         <span class="site-state-item-name">标签</span>
         </a>
@@ -935,7 +935,7 @@
             </li>
             
             <li class="links-of-blogroll-item">
-                <a href="https://wiki.technod.com.cn" title="wiki" target="_blank">
+                <a href="https://wiki.myflyh.xyz" title="wiki" target="_blank">
                     <i class="fa fa-fw fa-wikipedia-w"></i>
                     wiki
                 </a>
@@ -970,7 +970,7 @@
             </li>
             
             <li class="links-of-blogroll-item">
-                <a href="https://yacd.technod.com.cn" title="Clash Dashboard" target="_blank">
+                <a href="https://yacd.myflyh.xyz" title="Clash Dashboard" target="_blank">
                     <i class="fa fa-fw fa-cat"></i>
                     Clash Dashboard
                 </a>

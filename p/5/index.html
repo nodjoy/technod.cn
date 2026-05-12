@@ -193,7 +193,7 @@
         </li>
       
       <li class="menu-item ">
-        <a href="https://wiki.technod.com.cn" rel="section">
+        <a href="https://wiki.myflyh.xyz" rel="section">
             <i class="menu-item-icon fa fa-fw fa-wikipedia-w"></i> <br />wiki
           </a>
         </li>
@@ -223,7 +223,7 @@
         </li>
       
       <li class="menu-item ">
-        <a href="https://yacd.technod.com.cn" rel="section">
+        <a href="https://yacd.myflyh.xyz" rel="section">
             <i class="menu-item-icon fa fa-fw fa-cat"></i> <br />Clash Dashboard
           </a>
         </li>
@@ -276,6 +276,65 @@
             
     
  <section id="posts" class="posts-expand">
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://technod.cn/leaf/2020/12/15/wechat01/" itemprop="url">
+        PHP-微信公众号实现发送模板消息
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-12-15">
+    2020-12-15
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://technod.cn/categories/%E6%9D%82%E8%AE%B0" itemprop="url" rel="index">
+        <span itemprop="name">杂记</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-readme"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">629 字 ~ 2分钟</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    PHP微信公众号实现发送模板消息 $appid = &#34;wxb7729*******&#34;; $appsecret = &#34;8b99**************&#34;; $url = &#34;https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&amp;appid=$appid&amp;secret=$appsecret&#34;; $ch = curl_init(); curl_setopt($ch, CURLOPT_URL, $url); curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE); curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); $output = curl_exec($ch); curl_close($ch); $jsoninfo = json_decode($output, true); $ACCESS_TOKEN = $jsoninfo[&#34;access_token&#34;]; $data=array( &#39;touser&#39;=&gt;&#34;oaIgKt*********&#34;, //要发送给用户的openid &#
+    </div>
+    
+    <div class="post-more-link text-center">
+    <a class="btn" href="https://technod.cn/leaf/2020/12/15/wechat01/" rel="contents">
+      阅读全文 &raquo;
+    </a>
+    </div>
+    
+    <footer class="post-footer"><div class="post-eof"></div></footer>
+  </article>
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
@@ -684,65 +743,6 @@
     <footer class="post-footer"><div class="post-eof"></div></footer>
   </article>
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <h1 class="post-title" itemprop="name headline">
-        <a class="post-title-link" href="https://technod.cn/note/2020/08/10/koa05/" itemprop="url">
-        Koa Cookie与Session
-        </a>
-      </h1>
-      <div class="post-meta">
-      <span class="post-time">
-<span class="post-meta-item-icon">
-    <i class="fa fa-calendar-o"></i>
-</span>
-<span class="post-meta-item-text">时间：</span>
-<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2020-08-10">
-    2020-08-10
-</time>
-</span> 
-      
-
-  <span class="post-category" >
-  &nbsp; | &nbsp;
-  <span class="post-meta-item-icon">
-    <i class="fa fa-folder-o"></i>
-  </span>
-  <span class="post-meta-item-text">分类：</span>
-  
-    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-      <a href="https://technod.cn/categories/%E7%AC%94%E8%AE%B0" itemprop="url" rel="index">
-        <span itemprop="name">笔记</span>
-      </a>
-      &nbsp; 
-    </span>
-  
-</span>
-
-
-       <span>
-&nbsp; | &nbsp;
-<span class="post-meta-item-icon">
-    <i class="fa fa-readme"></i>
-</span>
-<span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">349 字 ~ 1分钟</span>
-</span>
-      </div>
-    </header>
-    <div class="post-body" itemprop="articleBody">
-    Cookie Koa中设置Cookie值 ctx.cookies.set(name,value,[options]); Koa中获取Cookie值 ctx.cookies.get(&#39;name&#39;); Koa中使用Buffer设置中文Cookie //设置中文Cookie router.get(&#39;/&#39;,async (ctx)=&gt;{ var userinfo=new Buf
-    </div>
-    
-    <div class="post-more-link text-center">
-    <a class="btn" href="https://technod.cn/note/2020/08/10/koa05/" rel="contents">
-      阅读全文 &raquo;
-    </a>
-    </div>
-    
-    <footer class="post-footer"><div class="post-eof"></div></footer>
-  </article>
-
 </section>
 
 
@@ -892,7 +892,7 @@
       <nav class="site-state motion-element">
     <div class="site-state-item site-state-posts">
       <a href="https://technod.cn/post/">
-        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-count">55</span>
         <span class="site-state-item-name">日志</span>
       </a>
     </div>
@@ -909,7 +909,7 @@
     <div class="site-state-item site-state-tags">
         <a href="https://technod.cn/tags/">
          
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">70</span>
         
         <span class="site-state-item-name">标签</span>
         </a>
@@ -938,7 +938,7 @@
             </li>
             
             <li class="links-of-blogroll-item">
-                <a href="https://wiki.technod.com.cn" title="wiki" target="_blank">
+                <a href="https://wiki.myflyh.xyz" title="wiki" target="_blank">
                     <i class="fa fa-fw fa-wikipedia-w"></i>
                     wiki
                 </a>
@@ -973,7 +973,7 @@
             </li>
             
             <li class="links-of-blogroll-item">
-                <a href="https://yacd.technod.com.cn" title="Clash Dashboard" target="_blank">
+                <a href="https://yacd.myflyh.xyz" title="Clash Dashboard" target="_blank">
                     <i class="fa fa-fw fa-cat"></i>
                     Clash Dashboard
                 </a>

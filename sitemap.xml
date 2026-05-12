@@ -1,6 +1,18 @@
 <search>
     
      <entry>
+        <title>Jetson设备配置yolo环境</title>
+        <url>https://technod.cn/note/202605/jetson.html</url>
+        <categories>
+          <category>笔记</category>
+        </categories>
+        <tags>
+          <tag>jetson</tag><tag>python</tag><tag>pytorch</tag><tag>yolo</tag><tag>ubuntu</tag>
+        </tags>
+        <content type="html"> 环境 Jetpack 6.2.2 Ubuntu 22.04 Install some dependences and pip sudo apt install python3-pip libopenblas-base libopenmpi-dev libomp-dev libjpeg-dev zlib1g-dev libpython3-dev libopenblas-dev libavcodec-dev libavformat-dev libswscale-dev pip config --user set global.index-url https://mirrors.huaweicloud.com/repository/pypi/simple pip install --upgrade pip Install pytorch torchvision # https://developer.download.nvidia.com/compute/redist/jp/v61/pytorch/ wget https://developer.download.nvidia.com/compute/redist/jp/v61/pytorch/torch-2.5.0a0&#43;872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl pip install torch-2.5.0a0&#43;872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl git clone --branch release/0.20 https://github.com/pytorch/vision torchvision cd torchvision export BUILD_VERSION=0.20 python3 setup.py install --user # 会报错，需要安装cusparselt：https://developer.nvidia.com/cusparselt-downloads # install cusparselt wget https://developer.download.nvidia.com/compute/cusparselt/0.9.1/local_installers/cusparselt-local-repo-ubuntu2204-0.9.1_0.9.1-1_arm64.deb sudo dpkg -i cusparselt-local-repo-ubuntu2204-0.9.1_0.9.1-1_arm64.deb sudo cp /var/cusparselt-local-repo-ubuntu2204-0.9.1/cusparselt-*-keyring.gpg /usr/share/keyrings/ sudo apt-get update sudo apt-get -y install cusparselt # 再次尝试安装 python3 setup.py install --user Check CUDA and cuDNN import torch print(&amp;#39;CUDA available: &amp;#39; &#43; str(torch.cuda.is_available())) print(&amp;#39;cuDNN version: &amp;#39; &#43; str(torch.backends.cudnn.version())) a = torch.tensor([0., 0.], dtype=torch.float32, device=&amp;#39;cuda&amp;#39;) print(&amp;#39;Tensor a =&amp;#39;, a) b = torch.randn(2, device=&amp;#39;cuda&amp;#39;) print(&amp;#39;Tensor b =&amp;#39;, b) c = a &#43; b print(&amp;#39;Tensor c =&amp;#39;, c) import torchvision print(torchvision.__version__) Install numpy 1.26.4 pip uninstall numpy pip install numpy==1.26.4 Install ultralytics pip install ultralytics Export engine model file yolo export model=best.pt format=engine device=0 half=True imgsz=640 simplify=False workspace=4 Install jtop sudo pip install jetson-stats sudo systemctl enable jtop.service sudo systemctl start jtop.service Install gstreamer and opencv sudo apt install -y \ python3-gi \ python3-gst-1.0 \ gstreamer1.0-tools \ gstreamer1.0-plugins-base \ gstreamer1.0-plugins-good \ gstreamer1.0-plugins-bad \ gstreamer1.0-plugins-ugly \ libgstreamer1.0-dev \ libgstreamer-plugins-base1.0-dev \ gstreamer1.0-plugins-base-apps pip uninstall opencv-python opencv-contrib-python opencv-python-headless sudo apt install -y python3-opencv </content>
+    </entry>
+    
+     <entry>
         <title>OCR识别图片文字内容</title>
         <url>https://technod.cn/note/20250725/ocr.html</url>
         <categories>
