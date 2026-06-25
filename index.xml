@@ -6,7 +6,16 @@
     <description>Recent content on TechNod</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 12 May 2026 11:56:02 +0800</lastBuildDate><atom:link href="https://technod.cn/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 24 Jun 2026 14:35:20 +0800</lastBuildDate><atom:link href="https://technod.cn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>瑞芯微RK3588配置yolo环境</title>
+      <link>https://technod.cn/note/20260624/rknn.html</link>
+      <pubDate>Wed, 24 Jun 2026 14:35:20 +0800</pubDate>
+      
+      <guid>https://technod.cn/note/20260624/rknn.html</guid>
+      <description>环境 Ubuntu 22.04-local(x86-64) Ubuntu 22.04-rk3588(aarch64) RK3588 python3.8 本机-x86-64 配置rknn-toolkit2环境 conda create -n rknn python=3.8 conda activate rknn pip config set global.index-url https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple # reference: https://github.com/rockchip-linux/rknn-toolkit2 wget https://ghfast.top/github.com/airockchip/rknn-toolkit2/blob/master/rknn-toolkit2/packages/x86_64/requirements_cp38-2.3.2.txt pip install -r requirements_cp38-2.3.2.txt wget https://ghfast.top/github.com/airockchip/rknn-toolkit2/blob/master/rknn-toolkit2/packages/x86_64/rknn_toolkit2-2.3.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl pip install rknn_toolkit2-2.3.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl git clone https://github.com/airockchip/ultralytics_yolov8.git cd ultralytics_yolov8 pip install -e .</description>
+    </item>
+    
     <item>
       <title>Jetson设备配置yolo环境</title>
       <link>https://technod.cn/note/202605/jetson.html</link>

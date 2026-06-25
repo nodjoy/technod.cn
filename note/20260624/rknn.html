@@ -1,0 +1,1293 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
+    <title>瑞芯微RK3588配置yolo环境 | TechNod</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="author" content="Gowshwah">
+    <meta name="copyright" content="Gowshwah">
+    <meta name="keywords" content="独立,博客,程序员,个人,gowshwah,开发,思考,读书,笔记,技术,分享,PHP,Nodejs,Elixir,Docker,Linux,互联网,前端,后端">
+    <meta property="og:title" content="瑞芯微RK3588配置yolo环境">
+    <meta property="og:url" content="https://technod.cn">
+    <meta property="og:site_name" content="TechNod">
+    <meta property="og:image" content="/img/author.jpg"> 
+    <meta name="title" content="瑞芯微RK3588配置yolo环境 - TechNod" />
+    <meta name="description" content="博客 | 软件 | 开发 | PHP | Nodejs | Elixir | Docker  | Linux | 读书 | 笔记 | 个人 | gowshwah | 独立 | 思考 | 分享 | 互联网 | 前端 | 后端"> 
+    <link rel="shortcut icon" href="https://technod.cn/img/favicon.ico" />
+    <link rel="apple-touch-icon" href="https://technod.cn/img/apple-touch-icon.png" />
+    <link rel="apple-touch-icon-precomposed" href="https://technod.cn/img/apple-touch-icon.png" />
+    <link href="https://technod.cn/js/vendor/font-awesome/css/all.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://technod.cn/js/vendor/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+    <link href="https://technod.cn/js/vendor/fancybox/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+    <link href="https://technod.cn/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="https://technod.cn/css/custom.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://technod.cn/css/govicons.min.css"/>
+    <link href="https://technod.cn/css/syntax.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://technod.cn/js/jquery.min.js"></script>
+    <script type="text/javascript" id="hexo.configuration">
+      var NexT = window.NexT || {};
+      var CONFIG = {
+      scheme: 'Pisces',
+      sidebar: {"position":"left","display":"post"},
+       fancybox: true, 
+      motion: true
+      };
+	</script>
+</head>
+
+
+<script async src="//www.googletagmanager.com/gtag/js?id=G-X87TYJK3E9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X87TYJK3E9');
+</script>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<div class="container one-collumn sidebar-position-left page-home  ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-meta  custom-logo ">
+
+  <div class="custom-logo-site-title">
+    <a href="https://technod.cn"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">TechNod</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">只做了一点微小的工作</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+      
+      
+        <li class="menu-item ">
+          <a href="https://technod.cn/"  rel="section">
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://technod.cn/categories/%E6%8A%80%E6%9C%AF/"  rel="section">
+              <i class="menu-item-icon fa fa-fw fa-code"></i> <br />技术
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://technod.cn/categories/%E7%AC%94%E8%AE%B0/"  rel="section">
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />笔记
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://technod.cn/categories/%E6%9D%82%E8%AE%B0/"  rel="section">
+              <i class="menu-item-icon fa fa-fw fa-leaf"></i> <br />杂记
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://technod.cn/categories/%E5%88%86%E4%BA%AB/"  rel="section">
+              <i class="menu-item-icon fa fa-fw fa-share"></i> <br />分享
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://technod.cn/post/"  rel="section">
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://technod.cn/about"  rel="section">
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="https://technod.cn/status"  rel="section">
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br />站点监控
+          </a>
+        </li>
+      
+        <li class="menu-item ">
+          <a href="//dash.nodjoy.com"  target="_blank"  rel="section">
+              <i class="menu-item-icon fa fa-fw fa-server"></i> <br />服务监控
+          </a>
+        </li>
+      
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger"> <i class="menu-item-icon fa fa-search fa-fw"></i> <br /> 搜索</a>
+      </li>
+    </ul>
+    
+    <ul id="menu-socials" class="menu menu-site menu-active">
+      
+      <li class="menu-item ">
+        <a href="https://github.com/nodjoy" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-github"></i> <br />GitHub
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="mailto:nodjoy@163.com" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-envelope"></i> <br />Email
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://b23.tv/jFlb6ip" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-bilibili"></i> <br />Bilibili
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://yuque.com/technod" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-crow"></i> <br />语雀
+          </a>
+        </li>
+      
+      
+      
+      <li class="menu-item img-hover dy-hover" style="opacity: 1; transform: translateY(0px);">
+        <a rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tiktok"></i> <br />抖音
+        </a>
+        <img class="common-img-hover img-dy-hover" src="https://technod.cn/img/dy-qr.jpg" />
+      </li>
+      
+      <li class="menu-item img-hover wx-hover" style="opacity: 1; transform: translateY(0px);">
+        <a rel="section">
+            <i class="menu-item-icon fa fa-fw fa-hand-holding-dollar"></i> <br />打赏
+        </a>
+        <img class="common-img-hover img-wx-hover" src="https://technod.cn/img/zs-qr.jpg" />
+      </li>
+      
+      
+    </ul>
+    
+    <ul id="menu-link" class="menu menu-site menu-active">
+      
+      <li class="menu-item ">
+        <a href="https://note.nodjoy.com" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-book"></i> <br />在线笔记
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://wiki.myflyh.xyz" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-wikipedia-w"></i> <br />wiki
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://doc.nodjoy.com" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-file-text"></i> <br />在线文档
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://ssl.nodjoy.com" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-key"></i> <br />域名证书管理
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://download.nodjoy.com" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-download"></i> <br />Download Hub
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://docker.nodjoy.cn" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-globe"></i> <br />DockerHub Mirror
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://yacd.myflyh.xyz" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-cat"></i> <br />Clash Dashboard
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://shop.nodjoy.com" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-cart-shopping"></i> <br />我的小店
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://ref.nodjoy.com" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-magnifying-glass"></i> <br />Quick Reference
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://cmd.nodjoy.com" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-terminal"></i> <br />Linux 命令查询
+          </a>
+        </li>
+      
+      <li class="menu-item ">
+        <a href="https://mock.nodjoy.com" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-m"></i> <br />Mock 模拟数据
+          </a>
+        </li>
+      
+    </ul>
+
+
+    <div class="site-search">
+      <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+    </div>
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+<section id="posts" class="posts-expand">
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <h1 class="post-title" itemprop="name headline">
+        <a class="post-title-link" href="https://technod.cn/note/20260624/rknn.html" itemprop="url">
+        瑞芯微RK3588配置yolo环境
+        </a>
+      </h1>
+      <div class="post-meta">
+      <span class="post-time">
+<span class="post-meta-item-icon">
+    <i class="fa fa-calendar-o"></i>
+</span>
+<span class="post-meta-item-text">时间：</span>
+<time itemprop="dateCreated" datetime="2016-03-22T13:04:35+08:00" content="2026-06-24">
+    2026-06-24
+</time>
+</span> 
+      
+
+  <span class="post-category" >
+  &nbsp; | &nbsp;
+  <span class="post-meta-item-icon">
+    <i class="fa fa-folder-o"></i>
+  </span>
+  <span class="post-meta-item-text">分类：</span>
+  
+    <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+      <a href="https://technod.cn/categories/%E7%AC%94%E8%AE%B0" itemprop="url" rel="index">
+        <span itemprop="name">笔记</span>
+      </a>
+      &nbsp; 
+    </span>
+  
+</span>
+
+
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-readme"></i>
+</span>
+<span class="post-meta-item-text">阅读：</span>
+<span class="leancloud-visitors-count">1402 字 ~ 3分钟</span>
+</span>
+       <span>
+&nbsp; | &nbsp;
+<span class="post-meta-item-icon">
+    <i class="fa fa-eye"></i>
+</span>
+<span id="/note/20260624/rknn.html" class="leancloud_visitors" data-flag-title="瑞芯微RK3588配置yolo环境">
+    <span class="post-meta-item-text">阅读量: </span>
+    <span class="leancloud-visitors-count"></span>
+</span>
+</span>
+      </div>
+    </header>
+    <div class="post-body" itemprop="articleBody">
+    <h1 id="环境">环境</h1>
+<ul>
+<li>Ubuntu 22.04-local(x86-64)</li>
+<li>Ubuntu 22.04-rk3588(aarch64)</li>
+<li>RK3588</li>
+<li>python3.8</li>
+</ul>
+<h1 id="本机-x86-64">本机-x86-64</h1>
+<h2 id="配置rknn-toolkit2环境">配置rknn-toolkit2环境</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>conda create -n rknn python<span style="color:#f92672">=</span>3.8
+</span></span><span style="display:flex;"><span>conda activate rknn
+</span></span><span style="display:flex;"><span>pip config set global.index-url https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># reference: https://github.com/rockchip-linux/rknn-toolkit2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>wget https://ghfast.top/github.com/airockchip/rknn-toolkit2/blob/master/rknn-toolkit2/packages/x86_64/requirements_cp38-2.3.2.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pip install -r requirements_cp38-2.3.2.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>wget https://ghfast.top/github.com/airockchip/rknn-toolkit2/blob/master/rknn-toolkit2/packages/x86_64/rknn_toolkit2-2.3.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pip install rknn_toolkit2-2.3.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>git clone https://github.com/airockchip/ultralytics_yolov8.git
+</span></span><span style="display:flex;"><span>cd ultralytics_yolov8
+</span></span><span style="display:flex;"><span>pip install -e .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>yolo check
+</span></span></code></pre></div><h2 id="模型转换">模型转换</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 先转为onnx:</span>
+</span></span><span style="display:flex;"><span>cd ultralytics_yolov8
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编辑./ultralytics/cfg/default.yaml 中 model 文件路径</span>
+</span></span><span style="display:flex;"><span>export PYTHONPATH<span style="color:#f92672">=</span>./
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 转换</span>
+</span></span><span style="display:flex;"><span>python ./ultralytics/engine/exporter.py
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># onnx转为rknn</span>
+</span></span><span style="display:flex;"><span>git clone https://github.com/airockchip/rknn_model_zoo.git
+</span></span><span style="display:flex;"><span>cd rknn_model_zoo/examples/yolov8/python
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># convert</span>
+</span></span><span style="display:flex;"><span>python convert.py /your_path/yolov8n.onnx rk3588 fp yolov8n.rknn
+</span></span></code></pre></div><h2 id="copy-yolov8nrknn-to-your-3588-device">copy yolov8n.rknn to your 3588 device</h2>
+<h1 id="rk3588-aarch64">rk3588-aarch64</h1>
+<h2 id="安装miniconda">安装miniconda</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 1. download: https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-aarch64.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. install miniconda3</span>
+</span></span><span style="display:flex;"><span>chmod +x Miniconda3-latest-Linux-aarch64.sh
+</span></span><span style="display:flex;"><span>sudo bash Miniconda3-latest-Linux-aarch64.sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># input installation path: /home/hello/miniconda3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>miniconda3/bin/conda init bash
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>source ~/.bashrc
+</span></span></code></pre></div><h2 id="配置rknn-toolkit-lite2环境">配置rknn-toolkit-lite2环境</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 1. create conda env</span>
+</span></span><span style="display:flex;"><span>conda create -n rknn python<span style="color:#f92672">=</span>3.8
+</span></span><span style="display:flex;"><span>conda activate rknn
+</span></span><span style="display:flex;"><span>pip config set global.index-url https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. install opencv pytorch numpy...</span>
+</span></span><span style="display:flex;"><span>wget https://ghfast.top/github.com/airockchip/rknn-toolkit2/blob/master/rknn-toolkit2/packages/arm64/arm64_requirements_cp38.txt
+</span></span><span style="display:flex;"><span>pip install -r arm64_requirements_cp38.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. install rknn-toolkit-lite2</span>
+</span></span><span style="display:flex;"><span>wget https://ghfast.top/github.com/airockchip/rknn-toolkit2/blob/master/rknn-toolkit-lite2/packages/rknn_toolkit_lite2-2.3.2-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+</span></span><span style="display:flex;"><span>pip install rknn_toolkit_lite2-2.3.2-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl 
+</span></span></code></pre></div><h2 id="推理视频测试">推理视频测试</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> rknnlite.api <span style="color:#f92672">import</span> RKNNLite
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> cv2
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MODEL_PATH <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;weights/yolov8n.rknn&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># VIDEO_PATH = &#39;rtsp://192.168.10.178/live/camera0&#39;</span>
+</span></span><span style="display:flex;"><span>VIDEO_PATH <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;test.mp4&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OBJ_THRESH <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.25</span>
+</span></span><span style="display:flex;"><span>NMS_THRESH <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.45</span>
+</span></span><span style="display:flex;"><span>IMG_SIZE <span style="color:#f92672">=</span> (<span style="color:#ae81ff">640</span>, <span style="color:#ae81ff">640</span>)  <span style="color:#75715e"># (width, height)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>CLASSES <span style="color:#f92672">=</span> (<span style="color:#e6db74">&#34;person&#34;</span>, <span style="color:#e6db74">&#34;bicycle&#34;</span>, <span style="color:#e6db74">&#34;car&#34;</span>, <span style="color:#e6db74">&#34;motorbike&#34;</span>, <span style="color:#e6db74">&#34;aeroplane&#34;</span>, <span style="color:#e6db74">&#34;bus&#34;</span>, <span style="color:#e6db74">&#34;train&#34;</span>, <span style="color:#e6db74">&#34;truck&#34;</span>, <span style="color:#e6db74">&#34;boat&#34;</span>, <span style="color:#e6db74">&#34;traffic light&#34;</span>,
+</span></span><span style="display:flex;"><span>           <span style="color:#e6db74">&#34;fire hydrant&#34;</span>, <span style="color:#e6db74">&#34;stop sign&#34;</span>, <span style="color:#e6db74">&#34;parking meter&#34;</span>, <span style="color:#e6db74">&#34;bench&#34;</span>, <span style="color:#e6db74">&#34;bird&#34;</span>, <span style="color:#e6db74">&#34;cat&#34;</span>, <span style="color:#e6db74">&#34;dog&#34;</span>, <span style="color:#e6db74">&#34;horse&#34;</span>, <span style="color:#e6db74">&#34;sheep&#34;</span>, <span style="color:#e6db74">&#34;cow&#34;</span>, <span style="color:#e6db74">&#34;elephant&#34;</span>,
+</span></span><span style="display:flex;"><span>           <span style="color:#e6db74">&#34;bear&#34;</span>, <span style="color:#e6db74">&#34;zebra&#34;</span>, <span style="color:#e6db74">&#34;giraffe&#34;</span>, <span style="color:#e6db74">&#34;backpack&#34;</span>, <span style="color:#e6db74">&#34;umbrella&#34;</span>, <span style="color:#e6db74">&#34;handbag&#34;</span>, <span style="color:#e6db74">&#34;tie&#34;</span>, <span style="color:#e6db74">&#34;suitcase&#34;</span>, <span style="color:#e6db74">&#34;frisbee&#34;</span>, <span style="color:#e6db74">&#34;skis&#34;</span>, <span style="color:#e6db74">&#34;snowboard&#34;</span>, <span style="color:#e6db74">&#34;sports ball&#34;</span>, <span style="color:#e6db74">&#34;kite&#34;</span>,
+</span></span><span style="display:flex;"><span>           <span style="color:#e6db74">&#34;baseball bat&#34;</span>, <span style="color:#e6db74">&#34;baseball glove&#34;</span>, <span style="color:#e6db74">&#34;skateboard&#34;</span>, <span style="color:#e6db74">&#34;surfboard&#34;</span>, <span style="color:#e6db74">&#34;tennis racket&#34;</span>, <span style="color:#e6db74">&#34;bottle&#34;</span>, <span style="color:#e6db74">&#34;wine glass&#34;</span>, <span style="color:#e6db74">&#34;cup&#34;</span>, <span style="color:#e6db74">&#34;fork&#34;</span>, <span style="color:#e6db74">&#34;knife&#34;</span>,
+</span></span><span style="display:flex;"><span>           <span style="color:#e6db74">&#34;spoon&#34;</span>, <span style="color:#e6db74">&#34;bowl&#34;</span>, <span style="color:#e6db74">&#34;banana&#34;</span>, <span style="color:#e6db74">&#34;apple&#34;</span>, <span style="color:#e6db74">&#34;sandwich&#34;</span>, <span style="color:#e6db74">&#34;orange&#34;</span>, <span style="color:#e6db74">&#34;broccoli&#34;</span>, <span style="color:#e6db74">&#34;carrot&#34;</span>, <span style="color:#e6db74">&#34;hot dog&#34;</span>, <span style="color:#e6db74">&#34;pizza&#34;</span>, <span style="color:#e6db74">&#34;donut&#34;</span>, <span style="color:#e6db74">&#34;cake&#34;</span>, <span style="color:#e6db74">&#34;chair&#34;</span>, <span style="color:#e6db74">&#34;sofa&#34;</span>,
+</span></span><span style="display:flex;"><span>           <span style="color:#e6db74">&#34;pottedplant&#34;</span>, <span style="color:#e6db74">&#34;bed&#34;</span>, <span style="color:#e6db74">&#34;diningtable&#34;</span>, <span style="color:#e6db74">&#34;toilet&#34;</span>, <span style="color:#e6db74">&#34;tvmonitor&#34;</span>, <span style="color:#e6db74">&#34;laptop&#34;</span>, <span style="color:#e6db74">&#34;mouse&#34;</span>, <span style="color:#e6db74">&#34;remote&#34;</span>, <span style="color:#e6db74">&#34;keyboard&#34;</span>, <span style="color:#e6db74">&#34;cell phone&#34;</span>, <span style="color:#e6db74">&#34;microwave&#34;</span>,
+</span></span><span style="display:flex;"><span>           <span style="color:#e6db74">&#34;oven&#34;</span>, <span style="color:#e6db74">&#34;toaster&#34;</span>, <span style="color:#e6db74">&#34;sink&#34;</span>, <span style="color:#e6db74">&#34;refrigerator&#34;</span>, <span style="color:#e6db74">&#34;book&#34;</span>, <span style="color:#e6db74">&#34;clock&#34;</span>, <span style="color:#e6db74">&#34;vase&#34;</span>, <span style="color:#e6db74">&#34;scissors&#34;</span>, <span style="color:#e6db74">&#34;teddy bear&#34;</span>, <span style="color:#e6db74">&#34;hair drier&#34;</span>, <span style="color:#e6db74">&#34;toothbrush&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">filter_boxes</span>(boxes, box_confidences, box_class_probs):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Filter boxes with object threshold.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    box_confidences <span style="color:#f92672">=</span> box_confidences<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    candidate, class_num <span style="color:#f92672">=</span> box_class_probs<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    class_max_score <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>max(box_class_probs, axis<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    classes <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>argmax(box_class_probs, axis<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    _class_pos <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>where(class_max_score <span style="color:#f92672">*</span> box_confidences <span style="color:#f92672">&gt;=</span> OBJ_THRESH)
+</span></span><span style="display:flex;"><span>    scores <span style="color:#f92672">=</span> (class_max_score <span style="color:#f92672">*</span> box_confidences)[_class_pos]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    boxes <span style="color:#f92672">=</span> boxes[_class_pos]
+</span></span><span style="display:flex;"><span>    classes <span style="color:#f92672">=</span> classes[_class_pos]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> boxes, classes, scores
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">nms_boxes</span>(boxes, scores):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Suppress non-maximal boxes.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> boxes[:, <span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    y <span style="color:#f92672">=</span> boxes[:, <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    w <span style="color:#f92672">=</span> boxes[:, <span style="color:#ae81ff">2</span>] <span style="color:#f92672">-</span> boxes[:, <span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    h <span style="color:#f92672">=</span> boxes[:, <span style="color:#ae81ff">3</span>] <span style="color:#f92672">-</span> boxes[:, <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    areas <span style="color:#f92672">=</span> w <span style="color:#f92672">*</span> h
+</span></span><span style="display:flex;"><span>    order <span style="color:#f92672">=</span> scores<span style="color:#f92672">.</span>argsort()[::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    keep <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> order<span style="color:#f92672">.</span>size <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>        i <span style="color:#f92672">=</span> order[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        keep<span style="color:#f92672">.</span>append(i)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        xx1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>maximum(x[i], x[order[<span style="color:#ae81ff">1</span>:]])
+</span></span><span style="display:flex;"><span>        yy1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>maximum(y[i], y[order[<span style="color:#ae81ff">1</span>:]])
+</span></span><span style="display:flex;"><span>        xx2 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>minimum(x[i] <span style="color:#f92672">+</span> w[i], x[order[<span style="color:#ae81ff">1</span>:]] <span style="color:#f92672">+</span> w[order[<span style="color:#ae81ff">1</span>:]])
+</span></span><span style="display:flex;"><span>        yy2 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>minimum(y[i] <span style="color:#f92672">+</span> h[i], y[order[<span style="color:#ae81ff">1</span>:]] <span style="color:#f92672">+</span> h[order[<span style="color:#ae81ff">1</span>:]])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        w1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>maximum(<span style="color:#ae81ff">0.0</span>, xx2 <span style="color:#f92672">-</span> xx1 <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.00001</span>)
+</span></span><span style="display:flex;"><span>        h1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>maximum(<span style="color:#ae81ff">0.0</span>, yy2 <span style="color:#f92672">-</span> yy1 <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.00001</span>)
+</span></span><span style="display:flex;"><span>        inter <span style="color:#f92672">=</span> w1 <span style="color:#f92672">*</span> h1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        ovr <span style="color:#f92672">=</span> inter <span style="color:#f92672">/</span> (areas[i] <span style="color:#f92672">+</span> areas[order[<span style="color:#ae81ff">1</span>:]] <span style="color:#f92672">-</span> inter)
+</span></span><span style="display:flex;"><span>        inds <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>where(ovr <span style="color:#f92672">&lt;=</span> NMS_THRESH)[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        order <span style="color:#f92672">=</span> order[inds <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    keep <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(keep)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> keep
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">dfl</span>(position):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Distribution Focal Loss (DFL) - numpy implementation.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    n, c, h, w <span style="color:#f92672">=</span> position<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>    p_num <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>    mc <span style="color:#f92672">=</span> c <span style="color:#f92672">//</span> p_num
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Reshape to (n, p_num, mc, h, w)</span>
+</span></span><span style="display:flex;"><span>    position <span style="color:#f92672">=</span> position<span style="color:#f92672">.</span>reshape(n, p_num, mc, h, w)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Softmax along mc dimension</span>
+</span></span><span style="display:flex;"><span>    exp_position <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>exp(position <span style="color:#f92672">-</span> np<span style="color:#f92672">.</span>max(position, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, keepdims<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>))
+</span></span><span style="display:flex;"><span>    softmax_position <span style="color:#f92672">=</span> exp_position <span style="color:#f92672">/</span> np<span style="color:#f92672">.</span>sum(exp_position, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, keepdims<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Create accumulation matrix</span>
+</span></span><span style="display:flex;"><span>    acc_metrix <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(mc)<span style="color:#f92672">.</span>reshape(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, mc, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>astype(np<span style="color:#f92672">.</span>float32)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Weighted sum</span>
+</span></span><span style="display:flex;"><span>    result <span style="color:#f92672">=</span> (softmax_position <span style="color:#f92672">*</span> acc_metrix)<span style="color:#f92672">.</span>sum(axis<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> result
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">box_process</span>(position):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Process box coordinates.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    grid_h, grid_w <span style="color:#f92672">=</span> position<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">4</span>]
+</span></span><span style="display:flex;"><span>    col, row <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>meshgrid(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0</span>, grid_w), np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0</span>, grid_h))
+</span></span><span style="display:flex;"><span>    col <span style="color:#f92672">=</span> col<span style="color:#f92672">.</span>reshape(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, grid_h, grid_w)
+</span></span><span style="display:flex;"><span>    row <span style="color:#f92672">=</span> row<span style="color:#f92672">.</span>reshape(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, grid_h, grid_w)
+</span></span><span style="display:flex;"><span>    grid <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>concatenate((col, row), axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    stride <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([IMG_SIZE[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">//</span> grid_h, IMG_SIZE[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">//</span> grid_w])<span style="color:#f92672">.</span>reshape(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    position <span style="color:#f92672">=</span> dfl(position)
+</span></span><span style="display:flex;"><span>    box_xy <span style="color:#f92672">=</span> grid <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.5</span> <span style="color:#f92672">-</span> position[:, <span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">2</span>, :, :]
+</span></span><span style="display:flex;"><span>    box_xy2 <span style="color:#f92672">=</span> grid <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.5</span> <span style="color:#f92672">+</span> position[:, <span style="color:#ae81ff">2</span>:<span style="color:#ae81ff">4</span>, :, :]
+</span></span><span style="display:flex;"><span>    xyxy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>concatenate((box_xy <span style="color:#f92672">*</span> stride, box_xy2 <span style="color:#f92672">*</span> stride), axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> xyxy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post_process</span>(input_data):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Post-process model outputs.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    boxes, scores, classes_conf <span style="color:#f92672">=</span> [], [], []
+</span></span><span style="display:flex;"><span>    defualt_branch <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    pair_per_branch <span style="color:#f92672">=</span> len(input_data) <span style="color:#f92672">//</span> defualt_branch
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(defualt_branch):
+</span></span><span style="display:flex;"><span>        boxes<span style="color:#f92672">.</span>append(box_process(input_data[pair_per_branch <span style="color:#f92672">*</span> i]))
+</span></span><span style="display:flex;"><span>        classes_conf<span style="color:#f92672">.</span>append(input_data[pair_per_branch <span style="color:#f92672">*</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>        scores<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>ones_like(input_data[pair_per_branch <span style="color:#f92672">*</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>][:, :<span style="color:#ae81ff">1</span>, :, :], dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float32))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sp_flatten</span>(_in):
+</span></span><span style="display:flex;"><span>        ch <span style="color:#f92672">=</span> _in<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>        _in <span style="color:#f92672">=</span> _in<span style="color:#f92672">.</span>transpose(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> _in<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, ch)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    boxes <span style="color:#f92672">=</span> [sp_flatten(_v) <span style="color:#66d9ef">for</span> _v <span style="color:#f92672">in</span> boxes]
+</span></span><span style="display:flex;"><span>    classes_conf <span style="color:#f92672">=</span> [sp_flatten(_v) <span style="color:#66d9ef">for</span> _v <span style="color:#f92672">in</span> classes_conf]
+</span></span><span style="display:flex;"><span>    scores <span style="color:#f92672">=</span> [sp_flatten(_v) <span style="color:#66d9ef">for</span> _v <span style="color:#f92672">in</span> scores]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    boxes <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>concatenate(boxes)
+</span></span><span style="display:flex;"><span>    classes_conf <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>concatenate(classes_conf)
+</span></span><span style="display:flex;"><span>    scores <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>concatenate(scores)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    boxes, classes, scores <span style="color:#f92672">=</span> filter_boxes(boxes, scores, classes_conf)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    nboxes, nclasses, nscores <span style="color:#f92672">=</span> [], [], []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> set(classes):
+</span></span><span style="display:flex;"><span>        inds <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>where(classes <span style="color:#f92672">==</span> c)
+</span></span><span style="display:flex;"><span>        b <span style="color:#f92672">=</span> boxes[inds]
+</span></span><span style="display:flex;"><span>        c <span style="color:#f92672">=</span> classes[inds]
+</span></span><span style="display:flex;"><span>        s <span style="color:#f92672">=</span> scores[inds]
+</span></span><span style="display:flex;"><span>        keep <span style="color:#f92672">=</span> nms_boxes(b, s)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> len(keep) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>            nboxes<span style="color:#f92672">.</span>append(b[keep])
+</span></span><span style="display:flex;"><span>            nclasses<span style="color:#f92672">.</span>append(c[keep])
+</span></span><span style="display:flex;"><span>            nscores<span style="color:#f92672">.</span>append(s[keep])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> nclasses <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> nscores:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">None</span>, <span style="color:#66d9ef">None</span>, <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    boxes <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>concatenate(nboxes)
+</span></span><span style="display:flex;"><span>    classes <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>concatenate(nclasses)
+</span></span><span style="display:flex;"><span>    scores <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>concatenate(nscores)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> boxes, classes, scores
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">letter_box</span>(im, new_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">640</span>, <span style="color:#ae81ff">640</span>), pad_color<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Resize and pad image to new_shape.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    shape <span style="color:#f92672">=</span> im<span style="color:#f92672">.</span>shape[:<span style="color:#ae81ff">2</span>]  <span style="color:#75715e"># current shape [height, width]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isinstance(new_shape, int):
+</span></span><span style="display:flex;"><span>        new_shape <span style="color:#f92672">=</span> (new_shape, new_shape)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    r <span style="color:#f92672">=</span> min(new_shape[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">/</span> shape[<span style="color:#ae81ff">0</span>], new_shape[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">/</span> shape[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ratio <span style="color:#f92672">=</span> r, r
+</span></span><span style="display:flex;"><span>    new_unpad <span style="color:#f92672">=</span> int(round(shape[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">*</span> r)), int(round(shape[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> r))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    dw, dh <span style="color:#f92672">=</span> new_shape[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">-</span> new_unpad[<span style="color:#ae81ff">0</span>], new_shape[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">-</span> new_unpad[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    dw, dh <span style="color:#f92672">=</span> dw <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>, dh <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> shape[::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">!=</span> new_unpad:
+</span></span><span style="display:flex;"><span>        im <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>resize(im, new_unpad, interpolation<span style="color:#f92672">=</span>cv2<span style="color:#f92672">.</span>INTER_LINEAR)
+</span></span><span style="display:flex;"><span>    top, bottom <span style="color:#f92672">=</span> int(round(dh <span style="color:#f92672">-</span> <span style="color:#ae81ff">0.1</span>)), int(round(dh <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.1</span>))
+</span></span><span style="display:flex;"><span>    left, right <span style="color:#f92672">=</span> int(round(dw <span style="color:#f92672">-</span> <span style="color:#ae81ff">0.1</span>)), int(round(dw <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.1</span>))
+</span></span><span style="display:flex;"><span>    im <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>copyMakeBorder(im, top, bottom, left, right, cv2<span style="color:#f92672">.</span>BORDER_CONSTANT, value<span style="color:#f92672">=</span>pad_color)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> im, ratio, (dw, dh)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">draw</span>(image, boxes, scores, classes):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Draw detection results on image.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> box, score, cl <span style="color:#f92672">in</span> zip(boxes, scores, classes):
+</span></span><span style="display:flex;"><span>        top, left, right, bottom <span style="color:#f92672">=</span> [int(_b) <span style="color:#66d9ef">for</span> _b <span style="color:#f92672">in</span> box]
+</span></span><span style="display:flex;"><span>        cv2<span style="color:#f92672">.</span>rectangle(image, (top, left), (right, bottom), (<span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>), <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        cv2<span style="color:#f92672">.</span>putText(image, <span style="color:#e6db74">&#39;</span><span style="color:#e6db74">{0}</span><span style="color:#e6db74"> </span><span style="color:#e6db74">{1:.2f}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(CLASSES[cl], score),
+</span></span><span style="display:flex;"><span>                    (top, left <span style="color:#f92672">-</span> <span style="color:#ae81ff">6</span>), cv2<span style="color:#f92672">.</span>FONT_HERSHEY_SIMPLEX, <span style="color:#ae81ff">0.6</span>, (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">255</span>), <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Initialize RKNNLite</span>
+</span></span><span style="display:flex;"><span>    rknn_lite <span style="color:#f92672">=</span> RKNNLite()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Load RKNN model</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;--&gt; Load RKNN model&#39;</span>)
+</span></span><span style="display:flex;"><span>    ret <span style="color:#f92672">=</span> rknn_lite<span style="color:#f92672">.</span>load_rknn(MODEL_PATH)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ret <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#39;Load RKNN model failed!&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Init runtime environment</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;--&gt; Init runtime environment&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 尝试不指定 target，让系统自动检测</span>
+</span></span><span style="display:flex;"><span>        ret <span style="color:#f92672">=</span> rknn_lite<span style="color:#f92672">.</span>init_runtime()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ret <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">&#39;Init runtime environment failed!&#39;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Init runtime environment failed with error: </span><span style="color:#e6db74">{</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Trying alternative initialization methods...&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 尝试指定不同的 target</span>
+</span></span><span style="display:flex;"><span>        targets_to_try <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;rk3588&#39;</span>, <span style="color:#e6db74">&#39;rk3568&#39;</span>, <span style="color:#e6db74">&#39;rk3566&#39;</span>, <span style="color:#e6db74">&#39;rk3562&#39;</span>, <span style="color:#e6db74">&#39;rk3576&#39;</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> target <span style="color:#f92672">in</span> targets_to_try:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>                print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;  Trying target=</span><span style="color:#e6db74">{</span>target<span style="color:#e6db74">}</span><span style="color:#e6db74">...&#39;</span>)
+</span></span><span style="display:flex;"><span>                ret <span style="color:#f92672">=</span> rknn_lite<span style="color:#f92672">.</span>init_runtime(target<span style="color:#f92672">=</span>target)
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> ret <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>                    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;  Successfully initialized with target=</span><span style="color:#e6db74">{</span>target<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e2:
+</span></span><span style="display:flex;"><span>                print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;  Failed with target=</span><span style="color:#e6db74">{</span>target<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>e2<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">All initialization attempts failed.&#39;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Open video file</span>
+</span></span><span style="display:flex;"><span>    cap <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>VideoCapture(VIDEO_PATH)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> cap<span style="color:#f92672">.</span>isOpened():
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Cannot open video: </span><span style="color:#e6db74">{</span>VIDEO_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Get video info</span>
+</span></span><span style="display:flex;"><span>    fps <span style="color:#f92672">=</span> cap<span style="color:#f92672">.</span>get(cv2<span style="color:#f92672">.</span>CAP_PROP_FPS)
+</span></span><span style="display:flex;"><span>    width <span style="color:#f92672">=</span> int(cap<span style="color:#f92672">.</span>get(cv2<span style="color:#f92672">.</span>CAP_PROP_FRAME_WIDTH))
+</span></span><span style="display:flex;"><span>    height <span style="color:#f92672">=</span> int(cap<span style="color:#f92672">.</span>get(cv2<span style="color:#f92672">.</span>CAP_PROP_FRAME_HEIGHT))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Video info: </span><span style="color:#e6db74">{</span>width<span style="color:#e6db74">}</span><span style="color:#e6db74">x</span><span style="color:#e6db74">{</span>height<span style="color:#e6db74">}</span><span style="color:#e6db74"> @ </span><span style="color:#e6db74">{</span>fps<span style="color:#e6db74">}</span><span style="color:#e6db74"> FPS&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    frame_count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>        ret, frame <span style="color:#f92672">=</span> cap<span style="color:#f92672">.</span>read()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> ret:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        frame_count <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Processing frame </span><span style="color:#e6db74">{</span>frame_count<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>, end<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\r</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Preprocess</span>
+</span></span><span style="display:flex;"><span>        img, ratio, (dw, dh) <span style="color:#f92672">=</span> letter_box(frame<span style="color:#f92672">.</span>copy(), new_shape<span style="color:#f92672">=</span>IMG_SIZE, pad_color<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>        img <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>cvtColor(img, cv2<span style="color:#f92672">.</span>COLOR_BGR2RGB)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># RKNN 需要 4 维输入 (batch, height, width, channels)</span>
+</span></span><span style="display:flex;"><span>        img <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>expand_dims(img, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Inference</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>            outputs <span style="color:#f92672">=</span> rknn_lite<span style="color:#f92672">.</span>inference(inputs<span style="color:#f92672">=</span>[img])
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Inference failed: </span><span style="color:#e6db74">{</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> outputs <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span> <span style="color:#f92672">or</span> len(outputs) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">No outputs from inference&#39;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Post-process</span>
+</span></span><span style="display:flex;"><span>        boxes, classes, scores <span style="color:#f92672">=</span> post_process(outputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Scale boxes back to original image size</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> boxes <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            boxes[:, <span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> (boxes[:, <span style="color:#ae81ff">0</span>] <span style="color:#f92672">-</span> dw) <span style="color:#f92672">/</span> ratio[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>            boxes[:, <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> (boxes[:, <span style="color:#ae81ff">1</span>] <span style="color:#f92672">-</span> dh) <span style="color:#f92672">/</span> ratio[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>            boxes[:, <span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> (boxes[:, <span style="color:#ae81ff">2</span>] <span style="color:#f92672">-</span> dw) <span style="color:#f92672">/</span> ratio[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>            boxes[:, <span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> (boxes[:, <span style="color:#ae81ff">3</span>] <span style="color:#f92672">-</span> dh) <span style="color:#f92672">/</span> ratio[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># Clip boxes to image boundaries</span>
+</span></span><span style="display:flex;"><span>            boxes[:, <span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>clip(boxes[:, <span style="color:#ae81ff">0</span>], <span style="color:#ae81ff">0</span>, width)
+</span></span><span style="display:flex;"><span>            boxes[:, <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>clip(boxes[:, <span style="color:#ae81ff">1</span>], <span style="color:#ae81ff">0</span>, height)
+</span></span><span style="display:flex;"><span>            boxes[:, <span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>clip(boxes[:, <span style="color:#ae81ff">2</span>], <span style="color:#ae81ff">0</span>, width)
+</span></span><span style="display:flex;"><span>            boxes[:, <span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>clip(boxes[:, <span style="color:#ae81ff">3</span>], <span style="color:#ae81ff">0</span>, height)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># Draw results</span>
+</span></span><span style="display:flex;"><span>            draw(frame, boxes, scores, classes)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Show result</span>
+</span></span><span style="display:flex;"><span>        cv2<span style="color:#f92672">.</span>imshow(<span style="color:#e6db74">&#39;YOLOv8 Detection&#39;</span>, frame)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Press &#39;q&#39; to quit</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> cv2<span style="color:#f92672">.</span>waitKey(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span> <span style="color:#f92672">==</span> ord(<span style="color:#e6db74">&#39;q&#39;</span>):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Release resources</span>
+</span></span><span style="display:flex;"><span>    cap<span style="color:#f92672">.</span>release()
+</span></span><span style="display:flex;"><span>    cv2<span style="color:#f92672">.</span>destroyAllWindows()
+</span></span><span style="display:flex;"><span>    rknn_lite<span style="color:#f92672">.</span>release()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Processed </span><span style="color:#e6db74">{</span>frame_count<span style="color:#e6db74">}</span><span style="color:#e6db74"> frames&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    main()
+</span></span></code></pre></div>
+    </div>
+    <div class="post-nav">
+<div style="border: 1px dashed #e0e0e0; padding: 10px 10px 10px 10px; background-color: #fffeee; background-repeat: no-repeat; background-attachment: scroll; background-position: 1% 50%; -moz-background-size: auto auto; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">
+    <div style="float:left;margin-top:0px;">
+    <img src="https://technod.cn/img/author.jpg" style="width: 110px;"/>
+    <div style="text-align:center;"></div>
+    </div>
+    <div>
+        <p style="margin-top:0px;">
+            &nbsp;&nbsp;标题：瑞芯微RK3588配置yolo环境
+        <br />&nbsp;&nbsp;作者：<a target="_blank" href="https://technod.cn/">TechNod</a>
+        
+        <br />&nbsp;&nbsp;声明：自由转载-非商用-非衍生-保持署名
+        </p>
+    </div>
+</div>
+<div class="clear"></div>
+</div>
+    <hr />
+    <div id="boxyCover" class="cover_bg" _hover-ignore="1"></div>
+<div class="pop pop_main_box hangge_boxy_alert" style="display: none;">
+	<i class="pop-close fa fa-thin fa-xmark" onclick="closePayPage()"></i>
+	<div class="pop-title" _hover-ignore="1">
+		<div class="pop_name">给 technod.cn 打赏......</div>
+	</div>
+	
+	<div class="pop-content">
+		<div class="pop-interval-30" _hover-ignore="1">
+			<div class="pop-slogan">
+				<p>如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作。</p>
+			</div>
+			<div class="gratuity-process">
+				<div style="float:left;width:48%;text-align:center">
+					<img class="pop-slogan-img" width="80%" src="https://technod.cn/images/pay/eb05acdaec967.png">
+				</div>
+				<div style="float:right;width:48%;text-align:center">
+					<img class="pop-slogan-img" width="80%" src="https://technod.cn/images/pay/0831de845.png">
+				</div>
+                <div style="float:left;width: 100%;height: 26px;"></div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="support-author">
+    <div class="btn btn-pay">打赏支持</div>
+</div><br/>
+<script>
+    $(".pop_main_box").hide();
+    $("#boxyCover").hide();
+    $(document).ready(function(){
+        $(".btn-pay").click(function(){
+            $(".pop").css({display:"block"});
+            $(".pop_main_box").show();
+            $("#boxyCover").show();
+        });
+
+		$(".cover_bg").click(function(){
+            $(".pop").css({display:"none"});
+            $(".pop_main_box").hide();
+            $("#boxyCover").hide();
+        });
+    });
+    function closePayPage(){
+        $(".pop_main_box").hide();
+        $("#boxyCover").hide();
+    }
+</script>
+    
+    <div class="post-comment">
+      
+      
+ <script src='https://technod.cn/js/Valine.min.js'></script>
+<div id="vcomments"></div>
+<script>
+  new Valine({
+    el: "#vcomments",
+    appId: "9iOmqWQl7wQBsarOb3o2m0eO-gzGzoHsz",
+    appKey: "U2cCMaQisH6I3GsyClKuvrwK",
+    path: "\/note\/20260624\/rknn.html",
+    avatar: "wavatar",
+    avatar_cdn: "https:\/\/cravatar.cn\/avatar\/",
+    placeholder: "说点什么吧...",
+    visitor: true,
+  });
+</script> 
+<script type="text/javascript">
+  
+  let vsubmit = document.getElementsByClassName("vsubmit");
+  for (var i in vsubmit) {
+    vsubmit[i].onclick = function () {
+      
+      var httpRequest = new XMLHttpRequest();
+      let barkKey = "95C7PKkV6Kxu692W6LP9YN";
+      let title = "网站有新的留言了! ";
+      let blogTitle = "文章:" + "瑞芯微RK3588配置yolo环境 " + " \n";
+      let content =
+        "留言内容： " + document.getElementById("veditor").value + " \n";
+      let site = "链接： " + window.location.href + "  ";
+      var date = new Date();
+      let subDate = "时间： " + date.toLocaleString() + " ";
+      
+      let url =
+        "//api.day.app/" + barkKey + "/" + title + "/" + blogTitle + content;
+      httpRequest.open("GET", url, true);
+      httpRequest.send();
+    };
+  }
+</script>
+
+
+    </div>
+    <footer class="post-footer">
+     
+ 
+<div class="post-tags">     
+     
+    <a href="https://technod.cn/tags/python" rel="tag" title="python">#python#</a>
+    
+    <a href="https://technod.cn/tags/pytorch" rel="tag" title="pytorch">#pytorch#</a>
+    
+    <a href="https://technod.cn/tags/yolo" rel="tag" title="yolo">#yolo#</a>
+    
+    <a href="https://technod.cn/tags/rknn" rel="tag" title="rknn">#rknn#</a>
+    
+    <a href="https://technod.cn/tags/npu" rel="tag" title="npu">#npu#</a>
+    
+</div>
+
+
+
+     <div class="post-nav">
+    <div class="post-nav-next post-nav-item">
+    
+    </div>
+
+    <div class="post-nav-prev post-nav-item">
+    
+        <a href="https://technod.cn/note/202605/jetson.html" rel="prev" title="Jetson设备配置yolo环境">
+        Jetson设备配置yolo环境 <i class="fa fa-chevron-right"></i>
+        </a>
+    
+    </div>
+</div>
+      
+     
+     
+     
+
+
+
+
+    </footer>
+  </article>
+</section>
+
+          </div>
+        </div>
+        <div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+  <ul class="sidebar-nav motion-element">
+    <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+      文章目录
+    </li>
+    <li class="sidebar-nav-overview" data-target="site-overview">
+      站点概览
+    </li>
+  </ul>
+
+    <section class="site-overview sidebar-panel ">
+      <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+        src="https://technod.cn/img/author.jpg"
+        alt="TechNod" />
+    <p class="site-author-name" itemprop="name">TechNod</p>
+    <p class="site-description motion-element" itemprop="description"> 
+        Developer &amp; Acceleration Engineer⏩</p>
+</div>
+      <div class="links-of-author motion-element">
+  
+  
+  <span class="links-of-author-item">
+    <a href="https://github.com/nodjoy" target="_blank" title="GitHub">
+      <i class="fa fa-fw fa-github"></i>
+      GitHub
+    </a>
+  </span>
+  
+  <span class="links-of-author-item">
+    <a href="mailto:nodjoy@163.com" target="_blank" title="Email">
+      <i class="fa fa-fw fa-envelope"></i>
+      Email
+    </a>
+  </span>
+  
+  <span class="links-of-author-item">
+    <a href="https://b23.tv/jFlb6ip" target="_blank" title="Bilibili">
+      <i class="fa fa-fw fa-bilibili"></i>
+      Bilibili
+    </a>
+  </span>
+  
+  <span class="links-of-author-item">
+    <a href="https://yuque.com/technod" target="_blank" title="语雀">
+      <i class="fa fa-fw fa-crow"></i>
+      语雀
+    </a>
+  </span>
+  
+  
+  
+  
+  <span class="links-of-author-item">
+    <a title="抖音" class="img-hover dy-hover">
+      <i class="fa fa-fw fa-tiktok"></i>
+      抖音
+      <img class="common-img-hover img-dy-hover" src="https://technod.cn/img/dy-qr.jpg" /> 
+    </a>
+  </span>
+  
+  <span class="links-of-author-item">
+    <a title="打赏" class="img-hover wx-hover">
+      <i class="fa fa-fw fa-hand-holding-dollar"></i>
+      打赏
+      <img class="common-img-hover img-wx-hover" src="https://technod.cn/img/zs-qr.jpg" /> 
+    </a>
+  </span>
+  
+  
+</div>
+
+
+      <nav class="site-state motion-element">
+    <div class="site-state-item site-state-posts">
+      <a href="https://technod.cn/post/">
+        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-name">日志</span>
+      </a>
+    </div>
+    <div class="site-state-item site-state-categories">    
+        <a href="https://technod.cn/categories/">      
+         
+        <span class="site-state-item-count">4</span>
+        
+        <span class="site-state-item-name">分类</span>
+        
+        </a>
+    </div>
+
+    <div class="site-state-item site-state-tags">
+        <a href="https://technod.cn/tags/">
+         
+        <span class="site-state-item-count">72</span>
+        
+        <span class="site-state-item-name">标签</span>
+        </a>
+    </div>
+</nav>
+      
+      
+<div class="links-of-site motion-element">
+    <div class="links-of-blogroll-title">
+        <i class="fa fa-fw fa-tools"></i>
+        工具站
+        <ul class="links-of-blogroll-list">
+            
+            <li class="links-of-blogroll-item">
+                <a href="https://note.nodjoy.com" title="在线笔记" target="_blank">
+                    <i class="fa fa-fw fa-book"></i>
+                    在线笔记
+                </a>
+            </li>
+            
+            <li class="links-of-blogroll-item">
+                <a href="https://wiki.myflyh.xyz" title="wiki" target="_blank">
+                    <i class="fa fa-fw fa-wikipedia-w"></i>
+                    wiki
+                </a>
+            </li>
+            
+            <li class="links-of-blogroll-item">
+                <a href="https://doc.nodjoy.com" title="在线文档" target="_blank">
+                    <i class="fa fa-fw fa-file-text"></i>
+                    在线文档
+                </a>
+            </li>
+            
+            <li class="links-of-blogroll-item">
+                <a href="https://ssl.nodjoy.com" title="域名证书管理" target="_blank">
+                    <i class="fa fa-fw fa-key"></i>
+                    域名证书管理
+                </a>
+            </li>
+            
+            <li class="links-of-blogroll-item">
+                <a href="https://download.nodjoy.com" title="Download Hub" target="_blank">
+                    <i class="fa fa-fw fa-download"></i>
+                    Download Hub
+                </a>
+            </li>
+            
+            <li class="links-of-blogroll-item">
+                <a href="https://docker.nodjoy.cn" title="DockerHub Mirror" target="_blank">
+                    <i class="fa fa-fw fa-globe"></i>
+                    DockerHub Mirror
+                </a>
+            </li>
+            
+            <li class="links-of-blogroll-item">
+                <a href="https://yacd.myflyh.xyz" title="Clash Dashboard" target="_blank">
+                    <i class="fa fa-fw fa-cat"></i>
+                    Clash Dashboard
+                </a>
+            </li>
+            
+            <li class="links-of-blogroll-item">
+                <a href="https://shop.nodjoy.com" title="我的小店" target="_blank">
+                    <i class="fa fa-fw fa-cart-shopping"></i>
+                    我的小店
+                </a>
+            </li>
+            
+            <li class="links-of-blogroll-item">
+                <a href="https://ref.nodjoy.com" title="Quick Reference" target="_blank">
+                    <i class="fa fa-fw fa-magnifying-glass"></i>
+                    Quick Reference
+                </a>
+            </li>
+            
+            <li class="links-of-blogroll-item">
+                <a href="https://cmd.nodjoy.com" title="Linux 命令查询" target="_blank">
+                    <i class="fa fa-fw fa-terminal"></i>
+                    Linux 命令查询
+                </a>
+            </li>
+            
+            <li class="links-of-blogroll-item">
+                <a href="https://mock.nodjoy.com" title="Mock 模拟数据" target="_blank">
+                    <i class="fa fa-fw fa-m"></i>
+                    Mock 模拟数据
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+      
+
+      
+
+      <div class="links-of-blogroll motion-element inline">
+<script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=1VnPZadftGnvev4YDLORuwZ2lCFCy6ZxrUzwOoFk2ac"></script>
+</div>
+
+    </section>
+    
+<section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+    <div class="post-toc">
+        <div class="post-toc-content"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#配置rknn-toolkit2环境">配置rknn-toolkit2环境</a></li>
+    <li><a href="#模型转换">模型转换</a></li>
+    <li><a href="#copy-yolov8nrknn-to-your-3588-device">copy yolov8n.rknn to your 3588 device</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#安装miniconda">安装miniconda</a></li>
+    <li><a href="#配置rknn-toolkit-lite2环境">配置rknn-toolkit-lite2环境</a></li>
+    <li><a href="#推理视频测试">推理视频测试</a></li>
+  </ul>
+</nav></div>
+    </div>
+</section>
+
+  </div>
+</aside>
+
+      </div>
+    </main>
+   
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  <span itemprop="copyrightYear"> &copy; 2020 - <span class="currentYear"></span></span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span id="container"></span>
+  <span class="author" itemprop="copyrightHolder">TECHNOD.</span>
+</div>
+<div class="powered-by">
+  Powered by -
+  <a class="theme-link" href="https://gohugo.io" target="_blank" title="hugo"
+    >HUGO</a
+  >
+</div>
+<div class="powered-by">
+  Theme by -
+  <a
+    class="theme-link"
+    href="https://github.com/xtfly/hugo-theme-next"
+    target="_blank"
+  >
+    NexT
+  </a>
+</div>
+<div class="theme-info">
+  访客量 - <span id="busuanzi_value_site_uv" style="color: #555"></span>
+</div>
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+      <span id="scrollpercent"><span>0</span>%</span>
+    </div>
+  </div>
+
+   
+
+<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script>LA.init({id:"3P6oPWmkRzlxSstc",ck:"3P6oPWmkRzlxSstc"})</script>
+ 
+
+<script>
+  (function () {
+    var el = document.createElement("script");
+    el.src = "//lf1-cdn-tos.bytegoofy.com/goofy/ttzz/push.js?c7e054ba7f2f6b29892df6804c08092c7991cc1ed11bf34132b851984d3f927c3871f0d6a9220c04b06cd03d5ba8e733fe66d20303562cd119c1d6f449af6378";
+    el.id = "ttzz";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(el, s);
+  })(window);
+</script>
+
+
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "vpvsvx19d9");
+</script>
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== "[object Function]") {
+    window.Promise = null;
+  }
+</script>
+<script
+  type="text/javascript"
+  src="https://technod.cn/js/vendor/jquery/index.js?v=2.1.3"
+></script>
+<script
+  type="text/javascript"
+  src="https://technod.cn/js/vendor/fastclick/lib/fastclick.min.js?v=1.0.6"
+></script>
+<script
+  type="text/javascript"
+  src="https://technod.cn/js/vendor/jquery_lazyload/jquery.lazyload.js?v=1.9.7"
+></script>
+<script
+  type="text/javascript"
+  src="https://technod.cn/js/vendor/velocity/velocity.min.js?v=1.2.1"
+></script>
+<script
+  type="text/javascript"
+  src="https://technod.cn/js/vendor/velocity/velocity.ui.min.js?v=1.2.1"
+></script>
+<script src="https://technod.cn/js/vendor/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+
+<script src="https://technod.cn/js/vendor/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+<script type="text/javascript" src="https://technod.cn/js/utils.js"></script>
+<script type="text/javascript" src="https://technod.cn/js/motion.js"></script>
+<script type="text/javascript" src="https://technod.cn/js/affix.js"></script>
+<script type="text/javascript" src="https://technod.cn/js/schemes/pisces.js"></script>
+
+<script type="text/javascript" src="https://technod.cn/js/scrollspy.js"></script>
+<script type="text/javascript" src="https://technod.cn/js/post-details.js"></script>
+<script type="text/javascript" src="https://technod.cn/js/toc.js"></script>
+
+<script type="text/javascript" src="https://technod.cn/js/bootstrap.js"></script>
+
+<script type="text/javascript" src="https://technod.cn/js/search.js"></script>
+<script type="text/javascript" src="https://technod.cn/js/moment.js"></script>
+<script type="text/javascript" src="https://technod.cn/js/calendar.js"></script>
+
+ <script defer src="https://events.vercount.one/js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true
+    },
+    "HTML-CSS": { fonts: ["TeX"] }
+  });
+</script>
+
+<script type="text/javascript">
+  var currentDate = new Date();
+  var currentMonth = currentDate.getMonth() + 1;
+  var currentDay = currentDate.getDate();
+  
+  var currentYear = new Date().getFullYear();
+  var spanElement = document.querySelector(".currentYear");
+  spanElement.textContent = currentYear;
+  if (currentMonth === 6 && currentDay >= 4 && currentDay <= 6) {
+    document.getElementsByClassName("with-love")[0].style.display = "none";
+    const container = document.getElementById("container");
+    const i = document.createElement("i");
+    
+    i.setAttribute("class", "candle-holder");
+    container.setAttribute("class", "with-container");
+    container.appendChild(i);
+  }
+  
+  if (currentMonth == 1 && currentDay == 1) {
+    document.getElementsByClassName("with-love")[0].style.display = "none";
+    const container = document.getElementById("container");
+    const i = document.createElement("i");
+    i.setAttribute("class", "fa fa-champagne-glasses");
+    i.setAttribute("title", "Happy New Year!");
+    container.setAttribute("class", "with-container");
+    container.appendChild(i);
+  }
+  
+  
+  const solar2lunar = calendar.solar2lunar();
+  const lunarDate = solar2lunar.lunarDate;
+  const lunarMonth = moment(lunarDate, moment.defaultFormat).format("MM");
+  const lunarDay = moment(lunarDate, moment.defaultFormat).format("DD");
+  if (
+    (lunarMonth == 12 && lunarDay >= 23) ||
+    (lunarMonth == 1 && lunarDay <= 7)
+  ) {
+    document.getElementsByClassName("with-love")[0].style.display = "none";
+    const container = document.getElementById("container");
+    const i = document.createElement("i");
+    i.setAttribute("class", "lunar");
+    i.setAttribute("title", "Happy Chinese Lunar New Year!");
+    container.setAttribute("class", "with-container");
+    container.appendChild(i);
+  }
+
+  const dyHover = document.querySelector('.dy-hover');
+  const dyImg = dyHover.querySelector('img');
+  const wxHover = document.querySelector('.wx-hover');
+  const wxImg = wxHover.querySelector('img');
+  
+  let isImageVisible = false;
+
+  
+  dyHover.addEventListener('click', function(event) {
+    wxImg.style.display = 'none';
+    event.stopPropagation(); 
+    isImageVisible = !isImageVisible;
+    dyImg.style.display = isImageVisible ? 'block' : 'none';
+  });
+
+  
+  document.addEventListener('click', function() {
+    if (isImageVisible) {
+      dyImg.style.display = 'none';
+      isImageVisible = false;
+    }
+  });
+
+  wxHover.addEventListener('click', function(event) {
+    dyImg.style.display = 'none';
+    event.stopPropagation();
+    isImageVisible = !isImageVisible;
+    wxImg.style.display = isImageVisible ? 'block' : 'none';
+  });
+
+  document.addEventListener('click', function() {
+    if (isImageVisible) {
+      wxImg.style.display = 'none';
+      isImageVisible = false;
+    }
+  });
+</script>
+
+</body>
+</html>
