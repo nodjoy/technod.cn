@@ -508,7 +508,7 @@
       <pubDate>Mon, 06 Jan 2020 19:33:20 +0800</pubDate>
       
       <guid>https://technod.cn/about/</guid>
-      <description>教育 工作 联系我 👇</description>
+      <description>教育 工作 最近 {{ activity.content }} 联系我 👇</description>
     </item>
     
   </channel>

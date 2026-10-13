@@ -298,7 +298,7 @@
     <i class="fa fa-readme"></i>
 </span>
 <span class="post-meta-item-text">阅读：</span>
-<span class="leancloud-visitors-count">8 字 ~ 1分钟</span>
+<span class="leancloud-visitors-count">13 字 ~ 1分钟</span>
 </span>
        <span>
 &nbsp; | &nbsp;
@@ -319,16 +319,16 @@
     google.charts.load("current", { packages: ["timeline"] });
     google.charts.setOnLoadCallback(eduChart);
     google.charts.setOnLoadCallback(workChart);
-    google.charts.setOnLoadCallback(eventsChart2014);
-    google.charts.setOnLoadCallback(eventsChart2015);
-    google.charts.setOnLoadCallback(eventsChart2016);
-    google.charts.setOnLoadCallback(eventsChart2017);
-    google.charts.setOnLoadCallback(eventsChart2018);
-    google.charts.setOnLoadCallback(eventsChart2019);
-    google.charts.setOnLoadCallback(eventsChart2020);
-    google.charts.setOnLoadCallback(eventsChart2021);
-    google.charts.setOnLoadCallback(eventsChart2022);
-    google.charts.setOnLoadCallback(eventsChart2023);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     google.charts.setOnLoadCallback(eventsChart2024);
 
     
@@ -344,9 +344,9 @@
         dataTableWork.addColumn({ type: 'date', id: 'End' });
         dataTableWork.addRows([
             ['教育', '河北阜城中学', new Date(2010, 8), new Date(2013, 5)],
-            ['教育', '河北承德石油高等专科学校', new Date(2013, 8), new Date(2016, 5)],
-            ['教育', '开始学习程序了', new Date(2016, 10), new Date(2017, 5)],
-            ['教育', '北京邮电大学', new Date(2018, 8), new Date(2022, 11)],
+            ['教育', '承德石油高等专科学校', new Date(2013, 8), new Date(2016, 5)],
+            ['教育', '开始学习程序了', new Date(2016, 11), new Date(2017, 5)],
+            ['教育', '北京邮电大学', new Date(2018, 8), new Date(2022, 8)],
         ]);
         let optionsEdu = {
             timeline: {
@@ -387,223 +387,6 @@
         chartWork.draw(dataTableWork, optionsWork);
     }
 
-    function eventsChart2014() {
-        let containerEvents2014 = document.getElementById('events-content2014');
-        let chartEvents2014 = new google.visualization.Timeline(containerEvents2014);
-        let dataTable2014 = new google.visualization.DataTable();
-
-        dataTable2014.addColumn({ type: 'string', id: 'Term' });
-        dataTable2014.addColumn({ type: 'string', id: 'Name' });
-        dataTable2014.addColumn({ type: 'date', id: 'Start' });
-        dataTable2014.addColumn({ type: 'date', id: 'End' });
-        dataTable2014.addRows([
-            ['2014', '2014 北京迷笛音乐节', new Date(2014, 4, 1), new Date(2014, 4, 3)]
-        ]);
-        let options2014 = {
-            timeline: {
-                
-                
-                rowLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-                barLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-            }
-        };
-        chartEvents2014.draw(dataTable2014, options2014);
-    }
-    function eventsChart2015() {
-        let containerEvents2015 = document.getElementById('events-content2015');
-        let chartEvents2015 = new google.visualization.Timeline(containerEvents2015);
-        let dataTable2015 = new google.visualization.DataTable();
-
-        dataTable2015.addColumn({ type: 'string', id: 'Term' });
-        dataTable2015.addColumn({ type: 'string', id: 'Name' });
-        dataTable2015.addColumn({ type: 'date', id: 'Start' });
-        dataTable2015.addColumn({ type: 'date', id: 'End' });
-        dataTable2015.addRows([
-            ['2015', '2015 郑州优放音乐节', new Date(2015, 4, 1), new Date(2015, 4, 3)],
-            ['2015', '2015 张北草原音乐节', new Date(2015, 6, 24), new Date(2015, 6, 26)],
-            ['2015', '2015 南京森林音乐节', new Date(2015, 8, 26), new Date(2015, 8, 27)]
-        ]);
-        let options2015 = {
-            timeline: {
-                rowLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-                barLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-            }
-        };
-        chartEvents2015.draw(dataTable2015, options2015);
-    }
-    function eventsChart2016() {
-        let containerEvents2016 = document.getElementById('events-content2016');
-        let chartEvents2016 = new google.visualization.Timeline(containerEvents2016);
-        let dataTable2016 = new google.visualization.DataTable();
-
-        dataTable2016.addColumn({ type: 'string', id: 'Term' });
-        dataTable2016.addColumn({ type: 'string', id: 'Name' });
-        dataTable2016.addColumn({ type: 'date', id: 'Start' });
-        dataTable2016.addColumn({ type: 'date', id: 'End' });
-        dataTable2016.addRows([
-            ['2016', '李志 2016巡演-广州专场', new Date(2016, 3, 1), new Date(2016, 3, 1)],
-            ['2016', '2016 郑州优放音乐节', new Date(2016, 4, 7), new Date(2016, 4, 8)],
-            ['2016', '李志 “降噪”不插电音乐会', new Date(2016, 4, 29), new Date(2016, 4, 29)],
-            ['2016', '2016 天津草莓音乐节', new Date(2016, 9, 15), new Date(2016, 9, 16)],
-            ['2016', '草东没有派对 滔滔·2016丙申年冬巡回—北京专场', new Date(2016, 11, 31), new Date(2016, 11, 31)]
-        ]);
-        let options2016 = {
-            timeline: {
-                rowLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-                barLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-            }
-        };
-        chartEvents2016.draw(dataTable2016, options2016);
-    }
-    function eventsChart2017() {
-        let containerEvents2017 = document.getElementById('events-content2017');
-        let chartEvents2017 = new google.visualization.Timeline(containerEvents2017);
-        let dataTable2017 = new google.visualization.DataTable();
-
-        dataTable2017.addColumn({ type: 'string', id: 'Term' });
-        dataTable2017.addColumn({ type: 'string', id: 'Name' });
-        dataTable2017.addColumn({ type: 'date', id: 'Start' });
-        dataTable2017.addColumn({ type: 'date', id: 'End' });
-        dataTable2017.addRows([
-            ['2017', '2017 乐谷音乐节', new Date(2017, 4, 29), new Date(2017, 4, 30)],
-            ['2017', 'Casino Demon 2017巡演-北京专场', new Date(2017, 5, 10), new Date(2017, 5, 10)]
-        ]);
-        let options2017 = {
-            timeline: {
-                rowLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-                barLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-            }
-        };
-        chartEvents2017.draw(dataTable2017, options2017);
-    }
-    function eventsChart2018() {
-        let containerEvents2018 = document.getElementById('events-content2018');
-        let chartEvents2018 = new google.visualization.Timeline(containerEvents2018);
-        let dataTable2018 = new google.visualization.DataTable();
-
-        dataTable2018.addColumn({ type: 'string', id: 'Term' });
-        dataTable2018.addColumn({ type: 'string', id: 'Name' });
-        dataTable2018.addColumn({ type: 'date', id: 'Start' });
-        dataTable2018.addColumn({ type: 'date', id: 'End' });
-        dataTable2018.addRows([
-            ['2018', '2018 北京超级草莓音乐节', new Date(2018, 4, 1), new Date(2018, 4, 3)],
-            ['2018', '2018 北京麦田音乐节', new Date(2018, 8, 23), new Date(2018, 8, 24)],
-            ['2018', '2018 虎嗅F&M创新节', new Date(2018, 10, 24), new Date(2018, 10, 25)],
-            ['2018', 'Casino Demon 2018平安夜特别专场', new Date(2018, 11, 24), new Date(2018, 11, 25)],
-        ]);
-        let options2018 = {
-            timeline: {
-                rowLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-                barLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-            }
-        };
-        chartEvents2018.draw(dataTable2018, options2018);
-    }
-    function eventsChart2019() {
-        let containerEvents2019 = document.getElementById('events-content2019');
-        let chartEvents2019 = new google.visualization.Timeline(containerEvents2019);
-        let dataTable2019 = new google.visualization.DataTable();
-
-        dataTable2019.addColumn({ type: 'string', id: 'Term' });
-        dataTable2019.addColumn({ type: 'string', id: 'Name' });
-        dataTable2019.addColumn({ type: 'date', id: 'Start' });
-        dataTable2019.addColumn({ type: 'date', id: 'End' });
-        dataTable2019.addRows([
-            ['2019', '五条人乐队 2019巡演-北京专场', new Date(2019, 3, 5), new Date(2019, 3, 5)],
-            ['2019', '2019 MTA天漠音乐节', new Date(2019, 5, 28), new Date(2019, 5, 30)],
-            ['2019', '2019 虎嗅F&M创新节', new Date(2019, 10, 23), new Date(2019, 10, 24)]
-        ]);
-        let options2019 = {
-            timeline: {
-                rowLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-                barLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-            }
-        };
-        chartEvents2019.draw(dataTable2019, options2019);
-    }
-    function eventsChart2020() {
-        let containerEvents2020 = document.getElementById('events-content2020');
-        let chartEvents2020 = new google.visualization.Timeline(containerEvents2020);
-        let dataTable2020 = new google.visualization.DataTable();
-
-        dataTable2020.addColumn({ type: 'string', id: 'Term' });
-        dataTable2020.addColumn({ type: 'string', id: 'Name' });
-        dataTable2020.addColumn({ type: 'date', id: 'Start' });
-        dataTable2020.addColumn({ type: 'date', id: 'End' });
-        dataTable2020.addRows([
-            ['2020', '2020 北京设计周', new Date(2020, 8, 25), new Date(2020, 8, 26)],
-            ['2020', '2020 北京草莓音乐节', new Date(2020, 9, 5), new Date(2020, 9, 6)]
-        ]);
-        let options2020 = {
-            timeline: {
-                rowLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-                barLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-            }
-        };
-        chartEvents2020.draw(dataTable2020, options2020);
-    }
-    function eventsChart2021() {
-        let containerEvents2021 = document.getElementById('events-content2021');
-        let chartEvents2021 = new google.visualization.Timeline(containerEvents2021);
-        let dataTable2021 = new google.visualization.DataTable();
-
-        dataTable2021.addColumn({ type: 'string', id: 'Term' });
-        dataTable2021.addColumn({ type: 'string', id: 'Name' });
-        dataTable2021.addColumn({ type: 'date', id: 'Start' });
-        dataTable2021.addColumn({ type: 'date', id: 'End' });
-        dataTable2021.addRows([
-            ['2021', '2021 北京草莓音乐节', new Date(2021, 4, 2), new Date(2021, 4, 4)],
-            ['2021', '2021 北京设计周', new Date(2021, 8, 25), new Date(2021, 8, 25)]
-        ]);
-        let options2021 = {
-            timeline: {
-                rowLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-                barLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-            }
-        };
-        chartEvents2021.draw(dataTable2021, options2021);
-    }
-    function eventsChart2022() {
-        let containerEvents2022 = document.getElementById('events-content2022');
-        let chartEvents2022 = new google.visualization.Timeline(containerEvents2022);
-        let dataTable2022 = new google.visualization.DataTable();
-
-        dataTable2022.addColumn({ type: 'string', id: 'Term' });
-        dataTable2022.addColumn({ type: 'string', id: 'Name' });
-        dataTable2022.addColumn({ type: 'date', id: 'Start' });
-        dataTable2022.addColumn({ type: 'date', id: 'End' });
-        dataTable2022.addRows([
-            ['2022', 'None 🤷', new Date(2021,12,1), new Date(2022,11, 31)]
-        ]);
-        let options2022 = {
-            timeline: {
-                rowLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-                barLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-            }
-        };
-        chartEvents2022.draw(dataTable2022, options2022);
-    }
-    function eventsChart2023() {
-        let containerEvents2023 = document.getElementById('events-content2023');
-        let chartEvents2023 = new google.visualization.Timeline(containerEvents2023);
-        let dataTable2023 = new google.visualization.DataTable();
-
-        dataTable2023.addColumn({ type: 'string', id: 'Term' });
-        dataTable2023.addColumn({ type: 'string', id: 'Name' });
-        dataTable2023.addColumn({ type: 'date', id: 'Start' });
-        dataTable2023.addColumn({ type: 'date', id: 'End' });
-        dataTable2023.addRows([
-            ['2023', '2023 北京草莓音乐节', new Date(2023, 3, 29), new Date(2023, 4, 1)],
-            ['2023', '2023 虎嗅F&M创新节', new Date(2023, 10, 25), new Date(2023, 10, 26)]
-        ]);
-        let options2023 = {
-            timeline: {
-                rowLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-                barLabelStyle: { fontName: 'Times-Roman', fontSize: 12, color: '#603913', bold: true, },
-            }
-        };
-        chartEvents2023.draw(dataTable2023, options2023);
-    }
     function eventsChart2024() {
         let containerEvents2024 = document.getElementById('events-content2024');
         let chartEvents2024 = new google.visualization.Timeline(containerEvents2024);
@@ -614,7 +397,7 @@
         dataTable2024.addColumn({ type: 'date', id: 'Start' });
         dataTable2024.addColumn({ type: 'date', id: 'End' });
         dataTable2024.addRows([
-            ['2024', '2024 北京超级草莓音乐节', new Date(2024, 4, 4), new Date(2024, 4, 5)],
+            ['2024', '2024 北京草莓音乐节', new Date(2024, 4, 4), new Date(2024, 4, 5)],
             ['2024', '2024 A-Lin「A-LINK with PASSENGERS」巡回演唱会-郑州站', new Date(2024, 8, 8), new Date(2024, 8, 9)],
             ['2024', '2024 虎嗅F&M创新节', new Date(2024, 10, 23), new Date(2024, 10, 24)]
         ]);
@@ -633,6 +416,85 @@
 <h2>工作</h2>
 <div id="work-content" style="height: 220px;"></div>
 
+
+<script src="https://technod.cn/js/vue.min.js"></script>
+
+<link rel="stylesheet" href="https://technod.cn/css/element-ui-2.15.14.css">
+
+<script src="https://technod.cn/js/element-ui-2.15.14.js"></script>
+<style>
+.block-timeline {
+  ul, li {
+    list-style: none !important;
+    margin: 0;          
+    padding: 0;        
+  }
+}
+</style>
+<h2>最近</h2>
+<div id="app">
+<div class="block-timeline">
+  <el-timeline>
+    <el-timeline-item
+      v-for="(activity, index) in activities"
+      :key="index"
+      :icon="activity.icon"
+      :type="activity.type"
+      :color="activity.color"
+      :size="activity.size"
+      :timestamp="activity.timestamp">
+
+      {{ activity.content }}
+
+    </el-timeline-item>
+  </el-timeline>
+</div>
+</div>
+
+<script>
+var Main = {
+    data() {
+      return {
+        activities: [
+          {
+            content: 'now...',
+            timestamp: new Date().toLocaleDateString('en-CA'), 
+            size: 'large',
+            type: 'primary',
+            icon: 'el-icon-more'
+          },
+          {
+            content: '2025 虎嗅FM创新节',
+            timestamp: '2025-11-22 ~ 2025-11-23',
+            color: '#0bbd87'
+          },
+          {
+            content: '2024 虎嗅FM创新节',
+            timestamp: '2024-11-23 ~ 2024-11-24',
+            color: '#0bbd87'
+          },
+          {
+            content: '2024 A-Lin「A-LINK with PASSENGERS」巡回演唱会-郑州站',
+            timestamp: '2024-09-08',
+            color: '#0bbd87'
+          },
+          {
+            content: '2024 北京草莓音乐节',
+            timestamp: '2024-05-04 ~ 2024-05-05',
+            color: '#0bbd87'
+          },
+          {
+            content: '事件标题',
+            timestamp: '记录一些事件',
+            color: '#0bbd87'
+          },
+        ]
+      }
+    }
+};
+var Ctor = Vue.extend(Main)
+new Ctor().$mount('#app')
+</script>
 
 <script>
     $(document).ready(function() {
